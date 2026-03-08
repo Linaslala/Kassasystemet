@@ -1,22 +1,23 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace LinasKlubbLivs.BusinessLogic.MemberLogic.MemberDataManager
 {
     /// <summary>
     /// Innehåller filväg för medlemsdata.
-    /// 
-    /// Säkerställer att samma datakälla används överallt i prodrammet.
+    /// Säkerställer att samma datakälla används överallt i programmet.
+    /// Läser/Skriver från projektets Data-mapp.
     /// </summary>
     internal static class MemberFilePath
     {
-        private static readonly string BaseDir =
-            Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                "LinasKlubbLivs"
-            );
+        private static string EnsureDataDir()
+        {
+            var dir = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            Directory.CreateDirectory(dir);
+            return dir;
+        }
 
-        public static string MembersPath =>
-            Path.Combine(BaseDir, "members.txt");
+        private static readonly string DataDir = EnsureDataDir();
+
+        public static string MembersPath => Path.Combine(DataDir, "members.txt");
     }
 }

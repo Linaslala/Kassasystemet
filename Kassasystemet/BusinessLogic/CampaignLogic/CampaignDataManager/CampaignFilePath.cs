@@ -1,27 +1,22 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace LinasKlubbLivs.BusinessLogic.CampaignLogic.CampaignDataManager
 {
     /// <summary>
     /// Innehåller central filväg för kampanjdata.
-    /// 
-    /// Ansvarar för att definiera var kampanjer sparas och läses ifrån,
-    /// så att hela applikationen använder samma sökväg.
+    /// Läser/Skriver från projektets Data-mapp.
     /// </summary>
     internal static class CampaignFilePath
     {
-        private const string CampaignFileName = "campaigns.txt";
-
-        public static string Path
+        private static string EnsureDataDir()
         {
-            get
-            {
-                return System.IO.Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    CampaignFileName
-                );
-            }
+            var dir = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            Directory.CreateDirectory(dir);
+            return dir;
         }
+
+        private static readonly string DataDir = EnsureDataDir();
+
+        public static string Path => System.IO.Path.Combine(DataDir, "campaigns.txt");
     }
 }
