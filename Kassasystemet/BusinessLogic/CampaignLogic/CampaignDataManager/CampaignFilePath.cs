@@ -10,7 +10,7 @@ namespace LinasKlubbLivs.BusinessLogic.CampaignLogic.CampaignDataManager
     {
         private static string EnsureDataDir()
         {
-            var dir = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+            var dir = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Data");
             Directory.CreateDirectory(dir);
             return dir;
         }
