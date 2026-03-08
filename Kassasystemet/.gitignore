@@ -1,0 +1,15 @@
+
+# Build output (ska inte versioneras)
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# Lokala datafiler (riktiga kvitton)
+Data/receipts.txt
+Data/members.txt
+Data/products.txt
+Data/campaigns.txt
+Data/receiptDraft.txt
