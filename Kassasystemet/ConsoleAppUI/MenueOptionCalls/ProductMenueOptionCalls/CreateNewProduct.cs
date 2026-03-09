@@ -2,6 +2,7 @@
 using LinasKlubbLivs.BusinessLogic.ProductLogic.ProductDataManager;
 using LinasKlubbLivs.ConsoleAppUI.HelpMethods;
 using LinasKlubbLivs.BusinessLogic.ProductLogic;
+using System.Globalization;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -49,7 +50,10 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.ProductMenueOptionCalls
                 ? products.Max(p => p.ProductIdNumber) + 1
                 : 1;
 
-            decimal productPriceDecimalInput = decimal.Parse(productPriceInput);
+
+            decimal productPriceDecimalInput =
+                decimal.Parse(productPriceInput.Replace(',', '.'), 
+                CultureInfo.InvariantCulture);
 
             products.Add(new ProductModel(newProductId, productNameInput, productPriceDecimalInput, productPriceTypeInput));
             writer.SaveAll(products);
@@ -66,7 +70,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.ProductMenueOptionCalls
                 $"{"ProduktId",-12}{"Produktnamn",-25}{"Pris",-12}{"Pristyp",-15}";
 
             string infoRow =
-                $"{newProductId,-12}{productNameInput,-25}{productPriceDecimalInput + " kr",-12}{productPriceTypeInput,-15}";
+                $"{newProductId,-12}{productNameInput,-25}{productPriceDecimalInput.ToString("0.00", CultureInfo.CurrentCulture) + " kr", -12}" +
+                $"{productPriceTypeInput,-15}";
 
             // Skriv ut header, avskiljare och data
             CenterConsoleOutput.CenterTextToWindow(infoHeader);

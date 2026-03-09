@@ -2,21 +2,22 @@
 
 namespace LinasKlubbLivs.BusinessLogic.ProductLogic.ProductDataManager
 {
-    /// <summary>
-    /// Innehåller filvägar för produktdata.
-    /// Läser/Skriver från projektets Data-mapp.
-    /// </summary>
     internal static class ProductFilePath
     {
-        private static string EnsureDataDir()
+        private static string EnsureTextFilesDir()
         {
-            var dir = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Data");
-            Directory.CreateDirectory(dir); // skapar om den saknas
-            return dir;
+            var baseDir = AppContext.BaseDirectory;
+
+            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
+
+            var textFilesDir = System.IO.Path.Combine(projectDir, "TextFiles");
+
+            Directory.CreateDirectory(textFilesDir);
+            return textFilesDir;
         }
 
-        private static readonly string DataDir = EnsureDataDir();
+        private static readonly string TextFilesDir = EnsureTextFilesDir();
 
-        public static string Path => System.IO.Path.Combine(DataDir, "products.txt");
+        public static string Path => System.IO.Path.Combine(TextFilesDir, "products.txt");
     }
 }

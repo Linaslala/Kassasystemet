@@ -4,19 +4,24 @@ namespace LinasKlubbLivs.BusinessLogic.CampaignLogic.CampaignDataManager
 {
     /// <summary>
     /// Innehåller central filväg för kampanjdata.
-    /// Läser/Skriver från projektets Data-mapp.
+    /// Läser/Skriver från projektets TextFiles-mapp.
     /// </summary>
     internal static class CampaignFilePath
     {
-        private static string EnsureDataDir()
+        private static string EnsureTextFilesDir()
         {
-            var dir = System.IO.Path.Combine(Directory.GetCurrentDirectory(), "Data");
-            Directory.CreateDirectory(dir);
-            return dir;
+            var baseDir = AppContext.BaseDirectory;
+
+            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
+
+            var textFilesDir = System.IO.Path.Combine(projectDir, "TextFiles");
+            Directory.CreateDirectory(textFilesDir);
+
+            return textFilesDir;
         }
 
-        private static readonly string DataDir = EnsureDataDir();
+        private static readonly string TextFilesDir = EnsureTextFilesDir();
 
-        public static string Path => System.IO.Path.Combine(DataDir, "campaigns.txt");
+        public static string Path => System.IO.Path.Combine(TextFilesDir, "campaigns.txt");
     }
 }

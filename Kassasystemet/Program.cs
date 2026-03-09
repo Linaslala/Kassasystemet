@@ -1,5 +1,6 @@
 ﻿using LinasKlubbLivs.ConsoleAppUI.HelpMethods;
 using LinasKlubbLivs.UserInterface.Menues;
+using LinasKlubbLivs.BusinessLogic.Seed;
 
 namespace LinasKlubbLivs
 {
@@ -8,11 +9,15 @@ namespace LinasKlubbLivs
         /// <summary>
         /// Applikationens startpunkt.
         /// 
+        /// Seedar data för testning av programmet
+        /// 
         /// Initierar huvudmenyn och startar kassasystemet.
         /// </summary>
         static void Main(string[] args)
         {
             Console.Title = "Linas Klubb Livs – Kassasystem";
+
+            Seeder.SeedAll();
 
             while (true)
             {

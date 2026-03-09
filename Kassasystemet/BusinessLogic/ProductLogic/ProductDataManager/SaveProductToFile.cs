@@ -1,4 +1,5 @@
 ﻿using LinasKlubbLivs.BusinessLogic.ProductLogic.ProductInterfaces;
+using System.Globalization;
 using System.IO;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,13 @@ namespace LinasKlubbLivs.BusinessLogic.ProductLogic.ProductDataManager
 
             foreach (var product in products)
             {
-                writer.WriteLine($"{product.ProductIdNumber};{product.ProductName};{product.ProductPrice};{product.ProductPriceType}");
+
+                writer.WriteLine(
+                    $"{product.ProductIdNumber};{product.ProductName};" +
+                    $"{product.ProductPrice.ToString(CultureInfo.InvariantCulture)};" +
+                    $"{product.ProductPriceType}"
+                );
+
             }
         }
     }

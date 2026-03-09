@@ -5,19 +5,24 @@ namespace LinasKlubbLivs.BusinessLogic.MemberLogic.MemberDataManager
     /// <summary>
     /// Innehåller filväg för medlemsdata.
     /// Säkerställer att samma datakälla används överallt i programmet.
-    /// Läser/Skriver från projektets Data-mapp.
+    /// Läser/Skriver från projektets TextFiles-mapp.
     /// </summary>
     internal static class MemberFilePath
     {
-        private static string EnsureDataDir()
+        private static string EnsureTextFilesDir()
         {
-            var dir = Path.Combine(Directory.GetCurrentDirectory(), "Data");
-            Directory.CreateDirectory(dir);
-            return dir;
+            var baseDir = AppContext.BaseDirectory;
+
+            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
+
+            var textFilesDir = Path.Combine(projectDir, "TextFiles");
+            Directory.CreateDirectory(textFilesDir);
+
+            return textFilesDir;
         }
 
-        private static readonly string DataDir = EnsureDataDir();
+        private static readonly string TextFilesDir = EnsureTextFilesDir();
 
-        public static string MembersPath => Path.Combine(DataDir, "members.txt");
+        public static string MembersPath => Path.Combine(TextFilesDir, "members.txt");
     }
 }

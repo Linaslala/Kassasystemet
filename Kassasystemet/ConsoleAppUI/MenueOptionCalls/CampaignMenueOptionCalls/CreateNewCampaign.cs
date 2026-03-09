@@ -101,27 +101,33 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
 
             var percentCampaign = newCampaign as PercentOffCampaign;
 
+
             if (campaignProducts.Any())
             {
                 CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
                 Console.WriteLine();
 
-                string infoHeader = $"{"Produktnummer",-12}{"Produktnamn",-30} {"Rabattprocent",-30}";
-                CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
+                int tableWidth = 60; 
+                int leftPadding = (Console.WindowWidth - tableWidth) / 2;
+                string indent = new string(' ', Math.Max(0, leftPadding));
 
+                Console.WriteLine(
+                    indent + $"{"Produktnummer",-15}{"Produktnamn",-30}{"Rabattprocent",-15}"
+                );
 
-                foreach (var p in campaignProducts)
+                Console.WriteLine(indent + new string('-', 60));
+
+                foreach (var product in campaignProducts)
                 {
-                    CenterConsoleOutput.CenterTextToWindow(
-                        $"{p.ProductIdNumber,-12}" +
-                        $"{p.ProductName,-30}" +
-                        $"{percentCampaign.PercentOff.ToString("0.##", CultureInfo.InvariantCulture)} %");
+                    Console.WriteLine(
+                        indent + $"{product.ProductIdNumber,-15}{product.ProductName,-30}{percentOff + " %",-15}"
+                    );
                 }
             }
+
             else
             {
-               CenterConsoleOutput.CenterTextToWindow("OBS: Inga matchande produkter hittades för angivna produktnummer.");
+                CenterConsoleOutput.CenterTextToWindow("OBS: Inga matchande produkter hittades för angivna produktnummer.");
             }
 
             Console.ResetColor();
