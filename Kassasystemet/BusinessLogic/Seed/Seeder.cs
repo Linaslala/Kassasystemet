@@ -14,8 +14,8 @@ namespace LinasKlubbLivs.BusinessLogic.Seed
 {
     /// <summary>
     /// En klass som skapar testdata 
-    /// när programmet startar
-    /// om data saknas (Att testa med)
+    /// Data skapas direkt vid programstart
+    /// om data saknas (att testa med)
     /// </summary>
     public static class Seeder
     {
@@ -88,7 +88,21 @@ namespace LinasKlubbLivs.BusinessLogic.Seed
                 "Grovt grus 2st*1049.95|2099.90§" +
                 "Ananas 6st*60.00|360§" +
                 "Banan 5st*123.00|615§" +
-                "Rabatt: 50.0%25|-307.5"
+                "Rabatt: 50.0%25|-307.5",
+                "2; 4; 2026 - 03 - 09 20:58:52; 20; 2133.93; " +
+                "Grovt grus| 1049.95§" +
+                "Banan 16st * 123.00 | 1968§" +
+                "Rabatt: 50.0 % 25 | -984.0§" +
+                "Ananas | 60§" +
+                "Hushållspapper 2st * 19.99 | 39.98",
+                "3; 3; 2026 - 03 - 09 21:00:13; 16; 724.44; " +
+                "Banan 3st * 123.00 | 369§" +
+                "Rabatt: 50.0 % 25 | -184.5§" +
+                "Hushållspapper 6st * 19.99 | 119.94§" +
+                "Ananas 7st * 60.00 | 420",
+                "4; 3; 2026 - 03 - 09 21:00:38; 100; 6150.0; " +
+                "Banan 100st * 123.00 | 12300§" +
+                "Rabatt: 50.0 % 25 | -6150.0",
             });
         }
     }
