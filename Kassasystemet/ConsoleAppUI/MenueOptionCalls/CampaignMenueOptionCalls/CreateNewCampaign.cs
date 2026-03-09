@@ -99,18 +99,24 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
                 .OrderBy(p => p.ProductIdNumber)
                 .ToList();
 
+            var percentCampaign = newCampaign as PercentOffCampaign;
+
             if (campaignProducts.Any())
             {
                 CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
                 Console.WriteLine();
 
-                string infoHeader = $"{"ProduktId",-12}{"Produktnamn",-30}";
+                string infoHeader = $"{"Produktnummer",-12}{"Produktnamn",-30} {"Rabattprocent",-30}";
                 CenterConsoleOutput.CenterTextToWindow(infoHeader);
                 CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
 
+
                 foreach (var p in campaignProducts)
                 {
-                    CenterConsoleOutput.CenterTextToWindow($"{p.ProductIdNumber,-12}{p.ProductName,-30}");
+                    CenterConsoleOutput.CenterTextToWindow(
+                        $"{p.ProductIdNumber,-12}" +
+                        $"{p.ProductName,-30}" +
+                        $"{percentCampaign.PercentOff.ToString("0.##", CultureInfo.InvariantCulture)} %");
                 }
             }
             else

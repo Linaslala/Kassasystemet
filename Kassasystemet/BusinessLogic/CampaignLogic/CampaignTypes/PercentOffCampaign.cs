@@ -36,7 +36,7 @@ namespace LinasKlubbLivs.BusinessLogic.CampaignLogic.CampaignTypes
 
             PercentOff = percentOff;
         }
-        //Är kampanjen pågående
+       
         public bool IsActive(DateTime now) => now >= CampaignStartDate && now <= CampaignEndDate;
 
         private static void ValidateCommon(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers)
