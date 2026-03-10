@@ -14,13 +14,35 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
     /// </summary>
     public class ListAllReceipts
     {
+
         public void Run()
         {
-            IReadAllReceiptsFromFile reader = new ReadAllReceiptsFromFile();
+            var reader = new ReadAllReceiptsFromFile();
 
-            var receipts = reader.ReadAll()
-                .OrderByDescending(r => r.ReceiptNumber)
+            var baseDir = AppContext.BaseDirectory;
+            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
+            var textFilesDir = Path.Combine(projectDir, "TextFiles");
+
+            var allReceiptFiles = Directory
+                .EnumerateFiles(textFilesDir, "RECEIPT_*.txt")
+                .OrderBy(f => f)
                 .ToList();
+
+            var allReceipts = new List<IReceiptModel>();
+
+            foreach (var file in allReceiptFiles)
+            {
+                var receiptsFromFile = reader.ReadAllFromPath(file);
+                allReceipts.AddRange(receiptsFromFile);
+            }
+
+            var receipts = allReceipts
+                 .GroupBy(r => r.ReceiptNumber)
+                 .Select(g => g.OrderByDescending(x => x.ReceiptCreatedAt).First())
+                 .OrderByDescending(r => r.ReceiptCreatedAt)
+                 .ToList();
+
+            Console.Clear();
 
             var arrow = new ConsoleOptionsArrow();
             arrow.ShowArrow(
@@ -28,7 +50,6 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
                 new[] { "Tillbaka till startmenyn" },
                 renderAboveOptions: () =>
                 {
-                    Console.Clear();
                     CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
                     Console.WriteLine();
 
@@ -47,7 +68,6 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
                         ReceiptPrinter.PrintDetailed(receipt);
                     }
 
-                    //Avdelare mellan sista kvittot och menyn
                     CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
                     Console.WriteLine();
                 });

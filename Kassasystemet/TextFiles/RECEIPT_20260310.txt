@@ -1,0 +1,9 @@
+﻿-----KVITTOSTART-----
+1;1;2026-03-10 11:54:25;42;7397.23;Banan 5st*123.00\n615§Rabatt: 50.0%25\n-307.5§Ananas 30st*60.00\n1800§Grovt grus 5st*1049.95\n5249.75§Hushållspapper 2st*19.99\n39.98
+-----KVITTOSLUT-----
+-----KVITTOSTART-----
+2;2;2026-03-10 11:54:53;30;6372.15;Grovt grus 5st*1049.95\n5249.75§Hushållspapper 10st*19.99\n199.90§Banan 15st*123.00\n1845§Rabatt: 50.0%25\n-922.5
+-----KVITTOSLUT-----
+-----KVITTOSTART-----
+3;4;2026-03-10 11:55:31;124;3466.00;Hushållspapper 100st*19.99\n1999.00§Banan 18st*123.00\n2214§Rabatt: 50.0%25\n-1107.0§Ananas 6st*60.00\n360
+-----KVITTOSLUT-----
