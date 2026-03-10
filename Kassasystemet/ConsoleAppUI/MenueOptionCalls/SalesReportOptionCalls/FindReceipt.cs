@@ -21,12 +21,15 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
     {
         public void Run()
         {
+            Console.Clear();
+
             IReadAllReceiptsFromFile reader = new ReadAllReceiptsFromFile();
             IReceiptSearch finder = new ReceiptSearch(reader);
 
             while (true)
             {
                 Console.Clear();
+
                 CenterConsoleOutput.CenterTextToWindow("== SÖK KVITTO ==");
                 Console.WriteLine();
 
@@ -38,14 +41,15 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
                     .ToList();
 
                 var arrow = new ConsoleOptionsArrow();
-                int choice = arrow.ShowArrow(
-                    "Välj:",
-                    new[] { "Ny sökning", "Tillbaka till startmenyn" },
-                    renderAboveOptions: () =>
+
+                int choice = arrow.ShowArrow("Välj:", new[] { "Ny sökning", "Tillbaka till startmenyn" }, renderAboveOptions: () =>
                     {
                         Console.Clear();
-                        CenterConsoleOutput.CenterTextToWindow("== SÖK KVITTO ==");
+                        Console.SetCursorPosition(0, 0);
+
+                        CenterConsoleOutput.CenterTextToWindow("== HITTADE KVITTON ==");
                         Console.WriteLine();
+
 
                         if (!results.Any())
                         {
@@ -56,16 +60,15 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
                             return;
                         }
 
-                        CenterConsoleOutput.CenterTextToWindow("== HITTade KVITTON ==");
-                        Console.WriteLine();
-
                         foreach (var receipt in results)
                         {
                             CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
                             ReceiptPrinter.PrintDetailed(receipt);
                         }
 
-                        // ✅ Avdelare före menyn
+                        CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
+                        Console.WriteLine();
+
                         CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
                         Console.WriteLine();
                     });

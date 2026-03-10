@@ -28,12 +28,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             if (!File.Exists(path))
                 return new List<IReceiptModel>();
 
-            var firstNonEmpty = File.ReadLines(path).FirstOrDefault(l => !string.IsNullOrWhiteSpace(l)) ?? "";
-            bool looksLegacy =
-                firstNonEmpty.Contains("-----KVITTOSTART-----", StringComparison.OrdinalIgnoreCase)
-                || firstNonEmpty.Count(c => c == ';') >= 5;
-
-            return looksLegacy ? ReadLegacySerialized(path) : ReadReceiptPresentationFormat(path);
+            return ReadReceiptPresentationFormat(path);
         }
 
         private static List<IReceiptModel> ReadReceiptPresentationFormat(string path)
@@ -178,7 +173,6 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 i++;
         }
 
-
         private static bool TryParseMemberLine(string memberLine, out int memberIdNumber)
         {
             memberIdNumber = 0;
@@ -235,7 +229,6 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             text = "";
             amount = 0m;
 
-            // "<text> <amount>"
             int lastSpace = rowLine.LastIndexOf(' ');
             if (lastSpace <= 0) return false;
 
@@ -256,10 +249,8 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 if (string.IsNullOrWhiteSpace(line))
                     continue;
 
-                if (line == "-----KVITTOSTART-----" || line == "-----KVITTOSLUT-----")
-                    continue;
-
                 var parts = line.Split(';');
+
                 if (parts.Length < 6)
                     continue;
 
@@ -326,7 +317,6 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
 
                 receiptRows.Add(new ReceiptRowModel(receiptText, receiptAmount));
             }
-
             return receiptRows;
         }
 

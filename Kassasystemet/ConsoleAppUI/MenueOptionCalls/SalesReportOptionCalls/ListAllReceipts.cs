@@ -17,6 +17,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
 
         public void Run()
         {
+            Console.Clear();
+
             var reader = new ReadAllReceiptsFromFile();
 
             var baseDir = AppContext.BaseDirectory;
@@ -45,32 +47,34 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
             Console.Clear();
 
             var arrow = new ConsoleOptionsArrow();
-            arrow.ShowArrow(
-                "Välj:",
-                new[] { "Tillbaka till startmenyn" },
-                renderAboveOptions: () =>
+
+            arrow.ShowArrow("Välj:", new[] { "Tillbaka till startmenyn" }, renderAboveOptions: () =>
+
+            {
+                Console.Clear();
+                Console.SetCursorPosition(0, 0);
+
+                CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
+                Console.WriteLine();
+
+                if (!receipts.Any())
                 {
-                    CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
+                    Console.ResetColor();
                     Console.WriteLine();
+                    return;
+                }
 
-                    if (!receipts.Any())
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
-                        Console.ResetColor();
-                        Console.WriteLine();
-                        return;
-                    }
-
-                    foreach (var receipt in receipts)
-                    {
-                        CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                        ReceiptPrinter.PrintDetailed(receipt);
-                    }
-
+                foreach (var receipt in receipts)
+                {
                     CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                    Console.WriteLine();
-                });
+                    ReceiptPrinter.PrintDetailed(receipt);
+                }
+
+                CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
+                Console.WriteLine();
+            });
         }
     }
 }
