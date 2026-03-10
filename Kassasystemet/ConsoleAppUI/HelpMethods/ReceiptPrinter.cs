@@ -35,7 +35,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
             CenterConsoleOutput.CenterTextToWindow(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss"));
 
             if (receipt.MemberIdNumber != 0)
-                CenterConsoleOutput.CenterTextToWindow($"Kundnummer: {receipt.MemberIdNumber}");
+                CenterConsoleOutput.CenterTextToWindow($"Medlemsnummer: {receipt.MemberIdNumber}");
 
             CenterConsoleOutput.CenterTextToWindow(new string('-', 41));
 

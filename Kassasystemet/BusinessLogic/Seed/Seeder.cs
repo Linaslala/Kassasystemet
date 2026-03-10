@@ -24,7 +24,6 @@ namespace LinasKlubbLivs.BusinessLogic.Seed
             SeedProducts();
             SeedMembers();
             SeedCampaigns();
-            //SeedReceipts();
         }
 
         private static void SeedProducts()
@@ -74,54 +73,5 @@ namespace LinasKlubbLivs.BusinessLogic.Seed
                 "PercentOffCampaign; SuperMegaRea; 2026 - 04 - 01; 2026 - 04 - 30; 3,4; 70"
             });
         }
-
-        //private static void SeedReceipts()
-        //{
-        //    var path = ReceiptFilePath.TodayReceiptPath;
-
-        //    if (File.Exists(path) && new FileInfo(path).Length > 0)
-        //        return;
-
-        //    using var writer = new StreamWriter(path);
-
-        //    writer.WriteLine("-----KVITTOSTART-----");
-        //    writer.WriteLine(
-        //        "1;1;2026-03-09 20:32:54;13;2767.40;" +
-        //        "Grovtgrus2st*1049.95|2099.90§" +
-        //        "Ananas6st*60.00|360§" +
-        //        "Banan5st*123.00|615§" +
-        //        "Rabatt:50.0%25|-307.5"
-        //    );
-        //    writer.WriteLine("-----KVITTOSLUT-----");
-
-        //    writer.WriteLine("-----KVITTOSTART-----");
-        //    writer.WriteLine(
-        //        "2;4;2026-03-09 20:58:52;20;2133.93;" +
-        //        "Grovtgrus1st*1049.95|1049.95§" +
-        //        "Banan16st*123.00|1968§" +
-        //        "Rabatt:50.0%25|-984.0§" +
-        //        "Ananas1st*60.00|60§" +
-        //        "Hushållspapper2st*19.99|39.98"
-        //    );
-        //    writer.WriteLine("-----KVITTOSLUT-----");
-
-        //    writer.WriteLine("-----KVITTOSTART-----");
-        //    writer.WriteLine(
-        //        "3;3;2026-03-09 21:00:13;16;724.44;" +
-        //        "Banan3st*123.00|369§" +
-        //        "Rabatt:50.0%25|-184.5§" +
-        //        "Hushållspapper6st*19.99|119.94§" +
-        //        "Ananas7st*60.00|420"
-        //    );
-        //    writer.WriteLine("-----KVITTOSLUT-----");
-
-        //    writer.WriteLine("-----KVITTOSTART-----");
-        //    writer.WriteLine(
-        //        "4;3;2026-03-09 21:00:38;100;6150.0;" +
-        //        "Banan100st*123.00|12300§" +
-        //        "Rabatt:50.0%25|-6150.0"
-        //    );
-        //    writer.WriteLine("-----KVITTOSLUT-----");
-        //}
     }
 }

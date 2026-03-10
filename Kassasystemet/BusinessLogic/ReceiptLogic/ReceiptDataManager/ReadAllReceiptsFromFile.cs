@@ -178,27 +178,19 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 i++;
         }
 
+
         private static bool TryParseMemberLine(string memberLine, out int memberIdNumber)
         {
             memberIdNumber = 0;
             var t = (memberLine ?? "").Trim();
 
-            const string kund = "Kundnummer:";
-            const string medlem = "Medlemsnummer:";
+            const string member = "Medlemsnummer:";
 
-            if (t.StartsWith(kund, StringComparison.OrdinalIgnoreCase))
-            {
-                var part = t.Substring(kund.Length).Trim();
-                return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out memberIdNumber);
-            }
+            if (!t.StartsWith(member, StringComparison.OrdinalIgnoreCase))
+                return false;
 
-            if (t.StartsWith(medlem, StringComparison.OrdinalIgnoreCase))
-            {
-                var part = t.Substring(medlem.Length).Trim();
-                return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out memberIdNumber);
-            }
-
-            return false;
+            var part = t.Substring(member.Length).Trim();
+            return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out memberIdNumber);
         }
 
         private static bool TryGetNextNonEmpty(string[] lines, ref int i, out string value)

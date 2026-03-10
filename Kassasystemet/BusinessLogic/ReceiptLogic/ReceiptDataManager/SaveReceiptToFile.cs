@@ -53,7 +53,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             writer.WriteLine(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
             if (receipt.MemberIdNumber != 0)
-                writer.WriteLine($"Kundnummer: {receipt.MemberIdNumber}");
+                writer.WriteLine($"Medlemsnummer: {receipt.MemberIdNumber}");
 
             writer.WriteLine(Dash);
 
