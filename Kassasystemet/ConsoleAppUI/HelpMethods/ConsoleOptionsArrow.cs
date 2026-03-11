@@ -6,6 +6,13 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
     /// <summary>
     /// Hanterar menyval i konsolen med piltangenter.
     ///
+    /// Rensar konsolfönster med ANSI sequense:
+    /// Console.Clear();
+    /// Console.WriteLine("\x1b[3J");
+    /// Detta på grund av att 
+    /// jag kör med version av VS och Windows där 
+    /// Console.Clear() inte rensar scrollback buffer.
+    /// 
     /// Stödjer renderAboveOptions för korrekt scroll‑beteende.
     /// </summary>
     public class ConsoleOptionsArrow
@@ -17,6 +24,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
             while (true)
             {
                 Console.Clear();
+                Console.WriteLine("\x1b[3J");
+                
                 CenterConsoleOutput.CenterTextToWindow(title);
                 Console.WriteLine();
                 Console.WriteLine();

@@ -16,7 +16,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
     public class SaveReceiptToFile : ISaveReceiptToFile
     {
         private const int Width = 41;
-        private static readonly string Eq = new string('=', Width);
+        private static readonly string Equals = new string('=', Width);
         private static readonly string Dash = new string('-', Width);
 
         public void SaveAll(List<IReceiptModel> receipts)
@@ -48,7 +48,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
 
         private static void WriteReceipt(StreamWriter writer, IReceiptModel receipt)
         {
-            writer.WriteLine(Eq);
+            writer.WriteLine(Equals);
             writer.WriteLine($"KVITTO #{receipt.ReceiptNumber}");
             writer.WriteLine(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
@@ -69,7 +69,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             writer.WriteLine(Dash);
             writer.WriteLine($"Totalt antal varor: {receipt.TotalItems}");
             writer.WriteLine($"TOTALT: {receipt.TotalAmount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-            writer.WriteLine(Eq);
+            writer.WriteLine(Equals);
         }
     }
 }
