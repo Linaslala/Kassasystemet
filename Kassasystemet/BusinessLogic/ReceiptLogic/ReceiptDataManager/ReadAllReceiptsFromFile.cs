@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
 {
@@ -21,7 +22,22 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
     public class ReadAllReceiptsFromFile : IReadAllReceiptsFromFile
     {
         public List<IReceiptModel> ReadAll()
-            => ReadAllFromPath(ReceiptFilePath.TodayReceiptPath);
+        {
+            var baseDir = AppContext.BaseDirectory;
+            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
+            var textFilesDir = Path.Combine(projectDir, "TextFiles");
+
+            if (!Directory.Exists(textFilesDir))
+                return new List<IReceiptModel>();
+
+            var allReceipts = new List<IReceiptModel>();
+
+            foreach (var file in Directory.EnumerateFiles(textFilesDir, "RECEIPT_*.txt"))
+            {
+                allReceipts.AddRange(ReadAllFromPath(file));
+            }
+            return allReceipts;
+        }
 
         public List<IReceiptModel> ReadAllFromPath(string path)
         {
@@ -70,6 +86,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 }
 
                 i++;
+
                 if (!TryGetNextNonEmpty(lines, ref i, out var memberLine))
                     break;
 
@@ -80,10 +97,12 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 }
 
                 i++;
+
                 while (i < lines.Length && (IsSeparator(lines[i]) || string.IsNullOrWhiteSpace(lines[i])))
                     i++;
 
                 var rowModels = new List<ReceiptRowModel>();
+
                 while (i < lines.Length)
                 {
                     var t = (lines[i] ?? "").Trim();
@@ -101,8 +120,8 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                         break;
                     }
 
-                    if (TryParseRow(t, out var rowText, out var amount))
-                        rowModels.Add(new ReceiptRowModel(rowText, amount));
+                    if (TryParseRow(t, out var rowText, out var rowQuantity, out var rowAmount))
+                        rowModels.Add(new ReceiptRowModel(rowText, rowQuantity, rowAmount));
 
                     i++;
                 }
@@ -224,111 +243,131 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out receiptNumber);
         }
 
-        private static bool TryParseRow(string rowLine, out string text, out decimal amount)
+        private static bool TryParseRow(string rowLine, out string rowText, out int rowQuantity, out decimal rowAmount)
         {
-            text = "";
-            amount = 0m;
+            rowText = "";
+            rowQuantity = 0;
+            rowAmount = 0m;
 
             int lastSpace = rowLine.LastIndexOf(' ');
             if (lastSpace <= 0) return false;
 
             var amountPart = rowLine.Substring(lastSpace + 1).Trim();
-            if (!decimal.TryParse(amountPart, NumberStyles.Number, CultureInfo.InvariantCulture, out amount))
+            if (!decimal.TryParse(amountPart, NumberStyles.Number, CultureInfo.InvariantCulture, out rowAmount))
                 return false;
 
-            text = rowLine.Substring(0, lastSpace).TrimEnd();
-            return !string.IsNullOrWhiteSpace(text);
-        }
+            var left = rowLine.Substring(0, lastSpace).TrimEnd();
 
-        private static List<IReceiptModel> ReadLegacySerialized(string path)
-        {
-            var receiptsByNumber = new Dictionary<int, IReceiptModel>();
+            int sp = left.LastIndexOf(' ');
 
-            foreach (var line in File.ReadAllLines(path))
+            if (sp > 0)
             {
-                if (string.IsNullOrWhiteSpace(line))
-                    continue;
-
-                var parts = line.Split(';');
-
-                if (parts.Length < 6)
-                    continue;
-
-                if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int receiptNumber))
-                    continue;
-
-                if (!int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int memberIdNumber))
-                    memberIdNumber = 0;
-
-                if (!DateTime.TryParseExact(
-                        parts[2],
-                        "yyyy-MM-dd HH:mm:ss",
-                        CultureInfo.InvariantCulture,
-                        DateTimeStyles.None,
-                        out DateTime receiptCreatedAt))
-                    continue;
-
-                if (!int.TryParse(parts[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out int totalItems))
-                    totalItems = 0;
-
-                if (!decimal.TryParse(parts[4], NumberStyles.Number, CultureInfo.InvariantCulture, out decimal totalAmount))
-                    totalAmount = 0m;
-
-                var receiptRows = ParseReceiptRows(parts[5]);
-
-                var receipt = new ReceiptModel(
-                    receiptNumber,
-                    memberIdNumber,
-                    receiptCreatedAt,
-                    receiptRows,
-                    totalItems,
-                    totalAmount);
-
-                if (receiptsByNumber.TryGetValue(receiptNumber, out var existing))
+                var mabyeQuantityToken = left.Substring(sp + 1).Trim();
+                int idxSt = mabyeQuantityToken.IndexOf("st*", StringComparison.OrdinalIgnoreCase);
+                if (idxSt > 0 && int.TryParse(mabyeQuantityToken.Substring(0, idxSt), NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedQuantity))
                 {
-                    if (receipt.ReceiptCreatedAt >= existing.ReceiptCreatedAt)
-                        receiptsByNumber[receiptNumber] = receipt;
-                }
-                else
-                {
-                    receiptsByNumber[receiptNumber] = receipt;
+                    rowQuantity = parsedQuantity;
+                    rowText = left.Substring(0, sp).TrimEnd();
+                    return !string.IsNullOrWhiteSpace(rowText);
                 }
             }
 
-            return receiptsByNumber.Values.ToList();
+            rowText = left.Trim();
+            rowQuantity = 0;
+            return !string.IsNullOrWhiteSpace(rowText);
         }
 
-        private static List<ReceiptRowModel> ParseReceiptRows(string serializedRows)
-        {
-            var receiptRows = new List<ReceiptRowModel>();
-            if (string.IsNullOrWhiteSpace(serializedRows))
-                return receiptRows;
+        //private static List<IReceiptModel> ReadLegacySerialized(string path)
+        //{
+        //    var receiptsByNumber = new Dictionary<int, IReceiptModel>();
 
-            var rowParts = serializedRows.Split('§', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var rp in rowParts)
-            {
-                var two = rp.Split(new[] { "\\n" }, StringSplitOptions.None);
-                if (two.Length != 2)
-                    continue;
+        //    foreach (var line in File.ReadAllLines(path))
+        //    {
+        //        if (string.IsNullOrWhiteSpace(line))
+        //            continue;
 
-                string receiptText = Unescape(two[0]);
-                if (!decimal.TryParse(two[1], NumberStyles.Number, CultureInfo.InvariantCulture, out decimal receiptAmount))
-                    continue;
+        //        var parts = line.Split(';');
 
-                receiptRows.Add(new ReceiptRowModel(receiptText, receiptAmount));
-            }
-            return receiptRows;
-        }
+        //        if (parts.Length < 6)
+        //            continue;
 
-        private static string Unescape(string receiptText)
-        {
-            receiptText ??= "";
-            return receiptText
-                .Replace("%A7", "§")
-                .Replace("%7C", "\\n")
-                .Replace("%3B", ";")
-                .Replace("%25", "%")
-                .Trim();
-        }
+        //        if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int receiptNumber))
+        //            continue;
+
+        //        if (!int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int memberIdNumber))
+        //            memberIdNumber = 0;
+
+        //        if (!DateTime.TryParseExact(
+        //                parts[2],
+        //                "yyyy-MM-dd HH:mm:ss",
+        //                CultureInfo.InvariantCulture,
+        //                DateTimeStyles.None,
+        //                out DateTime receiptCreatedAt))
+        //            continue;
+
+        //        if (!int.TryParse(parts[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out int totalItems))
+        //            totalItems = 0;
+
+        //        if (!decimal.TryParse(parts[4], NumberStyles.Number, CultureInfo.InvariantCulture, out decimal totalAmount))
+        //            totalAmount = 0m;
+
+        //        var receiptRows = ParseReceiptRows(parts[5]);
+
+        //        var receipt = new ReceiptModel(
+        //            receiptNumber,
+        //            memberIdNumber,
+        //            receiptCreatedAt,
+        //            receiptRows,
+        //            totalItems,
+        //            totalAmount);
+
+        //        if (receiptsByNumber.TryGetValue(receiptNumber, out var existing))
+        //        {
+        //            if (receipt.ReceiptCreatedAt >= existing.ReceiptCreatedAt)
+        //                receiptsByNumber[receiptNumber] = receipt;
+        //        }
+        //        else
+        //        {
+        //            receiptsByNumber[receiptNumber] = receipt;
+        //        }
+        //    }
+
+        //    return receiptsByNumber.Values.ToList();
+        //}
+
+        //private static List<ReceiptRowModel> ParseReceiptRows(string serializedRows)
+        //{
+        //    int receiptQuantity = 0;
+
+        //    var receiptRows = new List<ReceiptRowModel>();
+        //    if (string.IsNullOrWhiteSpace(serializedRows))
+        //        return receiptRows;
+
+        //    var rowParts = serializedRows.Split('§', StringSplitOptions.RemoveEmptyEntries);
+        //    foreach (var rp in rowParts)
+        //    {
+        //        var two = rp.Split(new[] { "\\n" }, StringSplitOptions.None);
+        //        if (two.Length != 2)
+        //            continue;
+
+        //        string receiptText = Unescape(two[0]);
+        //        if (!decimal.TryParse(two[1], NumberStyles.Number, CultureInfo.InvariantCulture, out decimal receiptAmount))
+        //            continue;
+
+        //        receiptRows.Add(new ReceiptRowModel(receiptText, receiptQuantity, receiptAmount));
+        //    }
+        //    return receiptRows;
+        //}
+
+        //private static string Unescape(string receiptText)
+        //{
+        //    receiptText ??= "";
+        //    return receiptText
+        //        .Replace("%A7", "§")
+        //        .Replace("%7C", "\\n")
+        //        .Replace("%3B", ";")
+        //        .Replace("%25", "%")
+        //        .Trim();
+        //}
     }
 }

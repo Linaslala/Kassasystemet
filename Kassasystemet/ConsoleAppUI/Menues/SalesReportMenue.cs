@@ -10,7 +10,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.Menues
     {
         private readonly string[] _salesReportMenuOptions =
         {
-            "Lista alla kvitton",
+            "Försäljningsrapport",
             "Sök kvitto\n",
             "Tillbaka till huvudmenyn"
         };

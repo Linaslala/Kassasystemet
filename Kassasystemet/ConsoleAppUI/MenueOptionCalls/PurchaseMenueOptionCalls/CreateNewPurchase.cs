@@ -429,12 +429,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
             foreach (var item in cart)
             {
                 decimal lineTotal = item.LineTotal;
-
-                string productLine = item.ProductQuantity > 1
-                    ? $"{item.ProductName} {item.ProductQuantity}st*{item.UnitPrice.ToString("0.00", CultureInfo.InvariantCulture)}"
-                    : $"{item.ProductName}";
-
-                receiptRows.Add(new ReceiptRowModel(productLine, lineTotal));
+                receiptRows.Add(new ReceiptRowModel(item.ProductName, item.ProductQuantity, lineTotal));
 
                 var bestCampaign = campaigns
                     .Where(c => c.ProductIdNumbers != null && c.ProductIdNumbers.Contains(item.ProductIdNumber))
@@ -446,8 +441,9 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
                     decimal discount = Math.Round(lineTotal * (bestCampaign.PercentOff / 100m), 2);
                     if (discount > 0m)
                     {
+
                         receiptRows.Add(new ReceiptRowModel(
-                            $"Rabatt: {bestCampaign.PercentOff.ToString("0.0", CultureInfo.InvariantCulture)}%",
+                            $"Rabatt: {bestCampaign.PercentOff.ToString("0.0", CultureInfo.InvariantCulture)}%", 0,
                             -discount));
                     }
                 }

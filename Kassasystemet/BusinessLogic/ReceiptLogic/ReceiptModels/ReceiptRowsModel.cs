@@ -8,11 +8,13 @@
     public class ReceiptRowModel
     {
         public string ReceiptProductText { get; }
+        public int ReceiptProductQuantity { get; }
         public decimal ReceiptProductAmount { get; }
 
-        public ReceiptRowModel(string receiptProductText, decimal receiptProductAmount)
+        public ReceiptRowModel(string receiptProductText, int receiptProductQuantity, decimal receiptProductAmount)
         {
             ReceiptProductText = receiptProductText ?? "";
+            ReceiptProductQuantity = receiptProductQuantity;
             ReceiptProductAmount = receiptProductAmount;
         }
     }

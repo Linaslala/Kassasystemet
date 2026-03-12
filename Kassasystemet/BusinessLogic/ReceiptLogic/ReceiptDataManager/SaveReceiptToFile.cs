@@ -10,13 +10,13 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
 {
     /// <summary>
     /// Sparar kvitton i MÄNSKLIGT LÄSBART format
-    /// (samma layout som i försäljningsrapporten).
-    /// Varje dag -> en fil: RECEIPT_yyyyMMdd.txt
+    /// 
+    /// Varje dag en fil: RECEIPT_yyyyMMdd.txt
     /// </summary>
     public class SaveReceiptToFile : ISaveReceiptToFile
     {
         private const int Width = 41;
-        private static readonly string Equals = new string('=', Width);
+        private static readonly string equalsDivider = new string('=', Width);
         private static readonly string Dash = new string('-', Width);
 
         public void SaveAll(List<IReceiptModel> receipts)
@@ -25,30 +25,30 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
 
             var today = DateTime.Now.Date;
 
-            var onlyToday = receipts
+            var onlyTodaysReceipts = receipts
                 .Where(r => r.ReceiptCreatedAt.Date == today)
                 .GroupBy(r => r.ReceiptNumber)
                 .Select(g => g.OrderByDescending(x => x.ReceiptCreatedAt).First())
                 .OrderBy(r => r.ReceiptNumber)
                 .ToList();
 
-            var path = ReceiptFilePath.TodayReceiptPath;
-            var dir = Path.GetDirectoryName(path);
-            if (!string.IsNullOrWhiteSpace(dir) && !Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
+            var receiptPath = ReceiptFilePath.TodayReceiptPath;
+            var receiptDirectory = Path.GetDirectoryName(receiptPath);
+            if (!string.IsNullOrWhiteSpace(receiptDirectory) && !Directory.Exists(receiptDirectory))
+                Directory.CreateDirectory(receiptDirectory);
 
-            using var writer = new StreamWriter(path, append: false, Encoding.UTF8);
+            using var writer = new StreamWriter(receiptPath, append: false, Encoding.UTF8);
 
-            foreach (var receipt in onlyToday)
+            foreach (var receipt in onlyTodaysReceipts)
             {
                 WriteReceipt(writer, receipt);
-                writer.WriteLine(); 
+                writer.WriteLine();
             }
         }
 
         private static void WriteReceipt(StreamWriter writer, IReceiptModel receipt)
         {
-            writer.WriteLine(Equals);
+            writer.WriteLine(equalsDivider);
             writer.WriteLine($"KVITTO #{receipt.ReceiptNumber}");
             writer.WriteLine(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
@@ -61,15 +61,24 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             {
                 foreach (var row in receipt.ReceiptRows)
                 {
-                    writer.WriteLine(
-                        $"{row.ReceiptProductText} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
+                    if (row.ReceiptProductQuantity > 0)
+                    {
+                        var unit = row.ReceiptProductAmount / row.ReceiptProductQuantity;
+                        writer.WriteLine(
+                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unit.ToString("0.00", CultureInfo.InvariantCulture)} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
+                    }
+                    else
+                    {
+                        writer.WriteLine(
+                            $"{row.ReceiptProductText} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
+                    }
                 }
             }
 
             writer.WriteLine(Dash);
             writer.WriteLine($"Totalt antal varor: {receipt.TotalItems}");
             writer.WriteLine($"TOTALT: {receipt.TotalAmount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-            writer.WriteLine(Equals);
+            writer.WriteLine(equalsDivider);
         }
     }
 }

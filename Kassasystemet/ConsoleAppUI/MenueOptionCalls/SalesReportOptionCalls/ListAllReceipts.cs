@@ -1,6 +1,7 @@
 ﻿using LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager;
 using LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptInterfaces;
 using LinasKlubbLivs.ConsoleAppUI.HelpMethods;
+using System.Globalization;
 using System.Linq;
 
 namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
@@ -14,7 +15,6 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
     /// </summary>
     public class ListAllReceipts
     {
-
         public void Run()
         {
             Console.Clear();
@@ -44,35 +44,75 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
                  .OrderByDescending(r => r.ReceiptCreatedAt)
                  .ToList();
 
-            Console.Clear();
+            //Console.Clear();
 
             var arrow = new ConsoleOptionsArrow();
 
             arrow.ShowArrow("Välj:", new[] { "Tillbaka till startmenyn" }, renderAboveOptions: () =>
-
             {
-                Console.Clear();
-                Console.SetCursorPosition(0, 0);
+            Console.Clear();
+            Console.SetCursorPosition(0, 0);
 
-                CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
+            CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
+            Console.WriteLine();
+
+            if (!receipts.Any())
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
+                Console.ResetColor();
                 Console.WriteLine();
+                return;
+            }
 
-                if (!receipts.Any())
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
-                    Console.ResetColor();
-                    Console.WriteLine();
-                    return;
-                }
+            var byDay = receipts.GroupBy(r => r.ReceiptCreatedAt.Date).OrderByDescending(g => g.Key);
 
-                foreach (var receipt in receipts)
-                {
+
+            foreach (var dayGroup in byDay)
+            {
+                CenterConsoleOutput.CenterTextToWindow($"DATUM: {dayGroup.Key:yyyy-MM-dd}");
+                CenterConsoleOutput.CenterTextToWindow(new string('-', 50));
+
+                var products = dayGroup
+                    .SelectMany(r => r.ReceiptRows)
+                    .Where(x => x.ReceiptProductQuantity > 0) 
+                    .GroupBy(x => x.ReceiptProductText)
+                    .Select(g => new
+                    {
+                        Product = g.Key,
+                        Quantity = g.Sum(x => x.ReceiptProductQuantity),
+                        Amount = g.Sum(x => x.ReceiptProductAmount)
+                    })
+                    .OrderByDescending(x => x.Quantity)
+                    .ThenBy(x => x.Product);
+
+                    foreach (var p in products)
+                        CenterConsoleOutput.CenterTextToWindow(
+                            $"{p.Product} x{p.Quantity} {p.Amount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
+
+                    var discountTotal = dayGroup
+                        .SelectMany(r => r.ReceiptRows)
+                        .Where(x =>
+                            x.ReceiptProductQuantity == 0 &&
+                            x.ReceiptProductAmount < 0 &&
+                            x.ReceiptProductText.StartsWith("Rabatt", StringComparison.OrdinalIgnoreCase))
+                        .Sum(x => x.ReceiptProductAmount);
+
+                    if (discountTotal < 0)
+                    {
+                        CenterConsoleOutput.CenterTextToWindow(
+                            $"Dagens rabatter: {discountTotal.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
+                    }
+
+                    CenterConsoleOutput.CenterTextToWindow(new string('-', 50));
+
+                    var total = dayGroup.Sum(r => r.TotalAmount);
+                    CenterConsoleOutput.CenterTextToWindow(
+                        $"TOTALT FÖRSÄLJNINGSPRIS: {total.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
+
                     CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                    ReceiptPrinter.PrintDetailed(receipt);
+                    Console.WriteLine();
                 }
-
-                CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
                 Console.WriteLine();
             });
         }

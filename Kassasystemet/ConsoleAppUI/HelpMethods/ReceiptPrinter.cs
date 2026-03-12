@@ -32,6 +32,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
             CenterConsoleOutput.CenterTextToWindow(new string('=', 41));
 
             CenterConsoleOutput.CenterTextToWindow($"KVITTO #{receipt.ReceiptNumber}");
+
             CenterConsoleOutput.CenterTextToWindow(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss"));
 
             if (receipt.MemberIdNumber != 0)
@@ -43,8 +44,20 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
             {
                 foreach (var row in receipt.ReceiptRows)
                 {
-                    string amount = row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture);
-                    CenterConsoleOutput.CenterTextToWindow($"{row.ReceiptProductText} {amount}");
+                    if (row.ReceiptProductQuantity > 0)
+                    {
+                        var unit = row.ReceiptProductAmount / row.ReceiptProductQuantity;
+                        CenterConsoleOutput.CenterTextToWindow(
+                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unit.ToString("0.00", CultureInfo.InvariantCulture)} " +
+                            $"{row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}"
+                        );
+                    }
+                    else
+                    {
+                        CenterConsoleOutput.CenterTextToWindow(
+                            $"{row.ReceiptProductText} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}"
+                        );
+                    }
                 }
             }
 
