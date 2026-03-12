@@ -7,22 +7,22 @@
     {
         public int ProductIdNumber { get; }
         public string ProductName { get; }
-        public decimal UnitPrice { get; }
+        public decimal ProductPrice { get; }
         public string PriceType { get; }
         public int ProductQuantity { get; }
 
-        public CartItemModel(int productIdNumber, string productName, decimal unitPrice, string priceType, int productQuantity)
+        public CartItemModel(int productIdNumber, string productName, decimal productPrice, string priceType, int productQuantity)
         {
             ProductIdNumber = productIdNumber;
             ProductName = productName ?? "";
-            UnitPrice = unitPrice;
+            ProductPrice = productPrice;
             PriceType = priceType ?? "";
             ProductQuantity = productQuantity;
         }
 
-        public decimal LineTotal => UnitPrice * ProductQuantity;
+        public decimal LineTotal => ProductPrice * ProductQuantity;
 
         public CartItemModel WithQuantity(int newQuantity)
-            => new CartItemModel(ProductIdNumber, ProductName, UnitPrice, PriceType, newQuantity);
+            => new CartItemModel(ProductIdNumber, ProductName, ProductPrice, PriceType, newQuantity);
     }
 }

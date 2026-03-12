@@ -180,46 +180,43 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
             }
         }
 
-        private static void AddProductPrompt(List<CartItemModel> cart, Dictionary<int, IProductModel> productById)
+        private static void AddProductPrompt(List<CartItemModel> cart, Dictionary<int, IProductModel> productByIdNumber)
         {
             Console.Clear();
             CenterConsoleOutput.CenterTextToWindow("== Lägg till produkt ==");
             Console.WriteLine();
 
-            string productInput = UserInputPlacer.ReadCenteredText("Produktnummer: ").Trim();
-            if (!int.TryParse(productInput, NumberStyles.Integer, CultureInfo.InvariantCulture, out int productId) || productId <= 0)
+            string lineInput = UserInputPlacer.ReadCenteredText("Ange: Produktnummer Antal (ex: 1 2): ").Trim();
+
+            var tokens = lineInput.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (tokens.Length != 2
+                || !int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productIdNumber)
+                || productIdNumber <= 0
+                || !int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productQuantity)
+                || productQuantity <= 0)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Ogiltigt produktnummer. Ange ett heltal större än 0.");
+                CenterConsoleOutput.CenterTextToWindow("Ogiltig inmatning. Skriv exakt: Produktnummer Antal (ex: 1 2).");
                 Console.ResetColor();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }
 
-            if (!productById.TryGetValue(productId, out var product))
+            if (!productByIdNumber.TryGetValue(productIdNumber, out var product))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow($"Ingen produkt hittades med Produktnummer {productId}.");
+                CenterConsoleOutput.CenterTextToWindow($"Ingen produkt hittades med Produktnummer {productIdNumber}.");
                 Console.ResetColor();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }
 
-            string qtyInput = UserInputPlacer.ReadCenteredText("Antal: ").Trim();
-            if (!int.TryParse(qtyInput, NumberStyles.Integer, CultureInfo.InvariantCulture, out int qty) || qty <= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Ogiltigt antal. Ange ett heltal större än 0.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                return;
-            }
-
-            var existing = cart.FirstOrDefault(x => x.ProductIdNumber == productId);
+            var existing = cart.FirstOrDefault(x => x.ProductIdNumber == productIdNumber);
             if (existing != null)
             {
                 cart.Remove(existing);
-                cart.Add(existing.WithQuantity(existing.ProductQuantity + qty));
+                cart.Add(existing.WithQuantity(existing.ProductQuantity + productQuantity));
             }
             else
             {
@@ -228,11 +225,11 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
                     product.ProductName,
                     product.ProductPrice,
                     product.ProductPriceType,
-                    qty));
+                    productQuantity));
             }
 
             Console.ForegroundColor = ConsoleColor.Green;
-            CenterConsoleOutput.CenterTextToWindow($"Tillagd: {product.ProductName} x{qty}");
+            CenterConsoleOutput.CenterTextToWindow($"Tillagd: {product.ProductName} x{productQuantity}");
             Console.ResetColor();
             Console.ReadKey(true);
         }
