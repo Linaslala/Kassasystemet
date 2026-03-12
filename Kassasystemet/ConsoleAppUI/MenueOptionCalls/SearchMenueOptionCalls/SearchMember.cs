@@ -24,7 +24,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SearchMenueOptionCalls
                 CenterConsoleOutput.CenterTextToWindow("== Hitta medlem ==");
                 Console.WriteLine();
 
-                string queryInput = UserInputPlacer.ReadCenteredText("Sök på medlemsnummer eller namn: ").Trim();
+                string queryInput = UserInputPlacer.ReadCenteredText("Sök på medlemsnummer eller namn (tryck enter för alla): ").Trim();
 
                 var results = finder.Search(queryInput);
 

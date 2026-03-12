@@ -48,7 +48,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
 
             var arrow = new ConsoleOptionsArrow();
 
-            arrow.ShowArrow("Välj:", new[] { "Tillbaka till startmenyn" }, renderAboveOptions: () =>
+            arrow.ShowArrow("Välj:", new[] { "Tillbaka till huvudmenyn" }, renderAboveOptions: () =>
             {
             Console.Clear();
             Console.SetCursorPosition(0, 0);

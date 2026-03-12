@@ -25,7 +25,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SearchMenueOptionCalls
                 Console.WriteLine();
 
                 string queryInput = UserInputPlacer
-                    .ReadCenteredText("Sök på produktnummer eller produktnamn: ")
+                    .ReadCenteredText("Sök på produktnummer eller produktnamn (tryck enter för alla): ")
                     .Trim();
 
                 var results = finder.Search(queryInput);
@@ -108,7 +108,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SearchMenueOptionCalls
         {
             var productDisplay = products
                 .OrderBy(p => p.ProductIdNumber)
-                .Select(p => $"{p.ProductIdNumber,-6} {p.ProductFullName}")
+                .Select(p => $"{p.ProductFullName}")
                 .ToArray();
 
             var arrow = new ConsoleOptionsArrow();
