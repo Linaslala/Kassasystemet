@@ -24,22 +24,21 @@ namespace LinasKlubbLivs.BusinessLogic.CampaignLogic.CampaignTypes
 
         public PercentOffCampaign(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers, decimal percentOff)
         {
-            ValidateCommon(campaignName, campaignStartDate, campaignEndDate, productIdNumbers);
+            ValidateCampaignParts(campaignName, campaignStartDate, campaignEndDate, productIdNumbers);
 
             if (percentOff <= 0m || percentOff > 100m)
-                throw new ArgumentException("PercentOff måste vara > 0 och <= 100.", nameof(percentOff));
+                throw new ArgumentException("Rabattprocenten måste vara > 0 och <= 100.", nameof(percentOff));
 
             CampaignName = campaignName.Trim();
             CampaignStartDate = campaignStartDate;
             CampaignEndDate = campaignEndDate;
             ProductIdNumbers = productIdNumbers.Distinct().Where(n => n > 0).ToList();
-
             PercentOff = percentOff;
         }
        
         public bool IsActive(DateTime now) => now >= CampaignStartDate && now <= CampaignEndDate;
 
-        private static void ValidateCommon(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers)
+        private static void ValidateCampaignParts(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers)
         {
             if (string.IsNullOrWhiteSpace(campaignName))
                 throw new ArgumentException("Namn får inte vara tomt.", nameof(campaignName));

@@ -10,12 +10,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
     /// Sökvy för kvitton.
     /// 
     /// Funktion:
-    /// - Användaren kan söka på kvittonummer eller kundnummer.
-    /// - Alla träffar visas med full kvittoutskrift.
+    /// Användaren kan söka på kvittonummer eller kundnummer.
     /// 
-    /// UI-princip:
-    /// - renderAboveOptions används konsekvent för att:
-    /// visa resultat ovanför meny
     /// </summary>
     public class FindReceipt
     {

@@ -10,6 +10,7 @@ namespace LinasKlubbLivs
         /// Applikationens startpunkt.
         /// 
         /// Seedar data för testning av programmet
+        /// om det inte finns datafiler
         /// 
         /// Initierar huvudmenyn och startar kassasystemet.
         /// </summary>

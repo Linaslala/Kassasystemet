@@ -63,9 +63,10 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 {
                     if (row.ReceiptProductQuantity > 0)
                     {
-                        var unit = row.ReceiptProductAmount / row.ReceiptProductQuantity;
+                        var unitPrice = row.ReceiptProductAmount / row.ReceiptProductQuantity;
+
                         writer.WriteLine(
-                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unit.ToString("0.00", CultureInfo.InvariantCulture)} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
+                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unitPrice.ToString("0.00", CultureInfo.InvariantCulture)} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
                     }
                     else
                     {

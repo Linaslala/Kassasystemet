@@ -44,7 +44,6 @@ namespace LinasKlubbLivs.BusinessLogic.ProductLogic.ProductDataManager
                     productPrice,
                     parts[3]));
             }
-
             return products;
         }
     }

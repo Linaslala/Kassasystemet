@@ -27,12 +27,11 @@ namespace LinasKlubbLivs.BusinessLogic.MemberLogic.MemberDataManager
                 var parts = line.Split(';');
                 if (parts.Length != 3) continue;
 
-                if (int.TryParse(parts[0], out int id))
+                if (int.TryParse(parts[0], out int memberId))
                 {
-                    members.Add(new MemberModel(id, parts[1], parts[2]));
+                    members.Add(new MemberModel(memberId, parts[1], parts[2]));
                 }
             }
-
             return members;
         }
     }

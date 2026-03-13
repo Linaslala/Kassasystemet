@@ -30,7 +30,6 @@ namespace LinasKlubbLivs.BusinessLogic.ProductLogic.ProductDataManager
                     $"{product.ProductPrice.ToString(CultureInfo.InvariantCulture)};" +
                     $"{product.ProductPriceType}"
                 );
-
             }
         }
     }

@@ -22,25 +22,24 @@ namespace LinasKlubbLivs.BusinessLogic.MemberLogic
 
         public List<IMemberModel> Search(string searchMemberText)
         {
-            var all = _reader.ReadAll();
+            var allMembers = _reader.ReadAll();
 
             if (string.IsNullOrWhiteSpace(searchMemberText))
-                return all;
+                return allMembers;
 
-            string query = searchMemberText.Trim().ToLowerInvariant();
+            string userQuery = searchMemberText.Trim().ToLowerInvariant();
 
-            return all
+            return allMembers
                 .Where(m =>
                 {
-                    // Null-säker text
-                    string first = (m.MemberFirstName ?? "").ToLowerInvariant();
-                    string last = (m.MemberLastName ?? "").ToLowerInvariant();
-                    string full = (m.MemberFullName ?? "").ToLowerInvariant();
+                    string firstName = (m.MemberFirstName ?? "").ToLowerInvariant();
+                    string lastName = (m.MemberLastName ?? "").ToLowerInvariant();
+                    string fullName = (m.MemberFullName ?? "").ToLowerInvariant();
 
-                    return m.MemberIdNumber.ToString().Contains(query)
-                           || first.Contains(query)
-                           || last.Contains(query)
-                           || full.Contains(query);
+                    return m.MemberIdNumber.ToString().Contains(userQuery)
+                           || firstName.Contains(userQuery)
+                           || lastName.Contains(userQuery)
+                           || fullName.Contains(userQuery);
                 })
                 .ToList();
         }

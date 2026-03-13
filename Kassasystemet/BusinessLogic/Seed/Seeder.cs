@@ -14,8 +14,9 @@ namespace LinasKlubbLivs.BusinessLogic.Seed
 {
     /// <summary>
     /// En klass som skapar testdata 
+    /// för produkter, medelmmar och kampanjer
     /// Data skapas direkt vid programstart
-    /// om data saknas (att testa med)
+    /// om datafiler saknas.
     /// </summary>
     public static class Seeder
     {

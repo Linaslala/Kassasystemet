@@ -67,12 +67,11 @@ namespace LinasKlubbLivs.BusinessLogic.CampaignLogic.CampaignDataManager
                 }
 
             }
-
             return campaigns;
         }
 
-        private static List<int> ParseIdNumbers(string idNumbersTxt) =>
-                    (idNumbersTxt ?? "")
+        private static List<int> ParseIdNumbers(string idNumbersText) =>
+                    (idNumbersText ?? "")
                         .Split(',', StringSplitOptions.RemoveEmptyEntries)
                         .Select(i => i.Trim())
                         .Where(i => int.TryParse(i, NumberStyles.Integer, CultureInfo.InvariantCulture, out _))

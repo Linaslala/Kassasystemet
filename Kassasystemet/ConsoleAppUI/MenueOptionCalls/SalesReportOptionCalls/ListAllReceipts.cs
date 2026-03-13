@@ -7,11 +7,8 @@ using System.Linq;
 namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
 {
     /// <summary>
-    /// Visar en alla existerande kvitton (inte summering) i konsolen.
+    /// Visar alla existerande summerade (per dag) köp i konsolen.
     /// 
-    /// Funktion:
-    /// - Listar alla kvitton i fallande ordning (senaste först).
-    /// - Varje kvitto visas med tydlig avdelare.
     /// </summary>
     public class ListAllReceipts
     {
@@ -44,47 +41,44 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.SalesReportOptionCalls
                  .OrderByDescending(r => r.ReceiptCreatedAt)
                  .ToList();
 
-            //Console.Clear();
-
             var arrow = new ConsoleOptionsArrow();
 
             arrow.ShowArrow("Välj:", new[] { "Tillbaka till huvudmenyn" }, renderAboveOptions: () =>
             {
-            Console.Clear();
-            Console.SetCursorPosition(0, 0);
+                Console.Clear();
+                Console.SetCursorPosition(0, 0);
 
-            CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
-            Console.WriteLine();
-
-            if (!receipts.Any())
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
-                Console.ResetColor();
+                CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
                 Console.WriteLine();
-                return;
-            }
 
-            var byDay = receipts.GroupBy(r => r.ReceiptCreatedAt.Date).OrderByDescending(g => g.Key);
+                if (!receipts.Any())
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
+                    Console.ResetColor();
+                    Console.WriteLine();
+                    return;
+                }
 
+                var byDay = receipts.GroupBy(r => r.ReceiptCreatedAt.Date).OrderByDescending(g => g.Key);
 
-            foreach (var dayGroup in byDay)
-            {
-                CenterConsoleOutput.CenterTextToWindow($"DATUM: {dayGroup.Key:yyyy-MM-dd}");
-                CenterConsoleOutput.CenterTextToWindow(new string('-', 50));
+                foreach (var dayGroup in byDay)
+                {
+                    CenterConsoleOutput.CenterTextToWindow($"DATUM: {dayGroup.Key:yyyy-MM-dd}");
+                    CenterConsoleOutput.CenterTextToWindow(new string('-', 50));
 
-                var products = dayGroup
-                    .SelectMany(r => r.ReceiptRows)
-                    .Where(x => x.ReceiptProductQuantity > 0) 
-                    .GroupBy(x => x.ReceiptProductText)
-                    .Select(g => new
-                    {
-                        Product = g.Key,
-                        Quantity = g.Sum(x => x.ReceiptProductQuantity),
-                        Amount = g.Sum(x => x.ReceiptProductAmount)
-                    })
-                    .OrderByDescending(x => x.Quantity)
-                    .ThenBy(x => x.Product);
+                    var products = dayGroup
+                        .SelectMany(r => r.ReceiptRows)
+                        .Where(x => x.ReceiptProductQuantity > 0)
+                        .GroupBy(x => x.ReceiptProductText)
+                        .Select(g => new
+                        {
+                            Product = g.Key,
+                            Quantity = g.Sum(x => x.ReceiptProductQuantity),
+                            Amount = g.Sum(x => x.ReceiptProductAmount)
+                        })
+                        .OrderByDescending(x => x.Quantity)
+                        .ThenBy(x => x.Product);
 
                     foreach (var p in products)
                         CenterConsoleOutput.CenterTextToWindow(

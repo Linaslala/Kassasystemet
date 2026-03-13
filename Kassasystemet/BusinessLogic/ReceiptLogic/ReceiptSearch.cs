@@ -10,13 +10,10 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic
     /// Sökmotor för kvitton.
     /// 
     /// Stödjer sökning på:
-    /// - Kvittonummer
-    /// - Kundnummer
+    /// Kvittonummer
+    /// Kundnummer
     /// 
-    /// Beteende:
-    /// - Tom söksträng returnerar alla kvitton.
-    /// - Använder enkel textmatchning (Contains) för konsekvent UX
-    ///   i linje med sökning av produkter och medlemmar.
+    /// Tom söksträng returnerar alla kvitton.
     /// </summary>
     public class ReceiptSearch : IReceiptSearch
     {
@@ -34,11 +31,11 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic
             if (string.IsNullOrWhiteSpace(searchText))
                 return all;
 
-            string query = searchText.Trim();
+            string userReceiptQuery = searchText.Trim();
 
             return all.Where(r =>
-                   r.ReceiptNumber.ToString().Contains(query)
-                || r.MemberIdNumber.ToString().Contains(query)
+                   r.ReceiptNumber.ToString().Contains(userReceiptQuery)
+                || r.MemberIdNumber.ToString().Contains(userReceiptQuery)
             ).ToList();
         }
     }

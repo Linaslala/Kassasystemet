@@ -13,9 +13,9 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
     /// Läser kvitton från fil och återskapar ReceiptModel-objekt.
     ///
     /// Stödjer två format:
-    /// 1) "Presentationsformat" (snyggt kvitto, flerradigt):
+    /// "Presentationsformat" (snyggt kvitto, flerradigt):
     ///
-    /// 2) "Maskinformat" (en rad med separatorer och escapes)
+    /// "Maskinformat" (en rad med separatorer och escapes)
     ///
     /// Dedupe: ReceiptNumber (senaste ReceiptCreatedAt prioriteras).
     /// </summary>
@@ -52,114 +52,114 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             var lines = File.ReadAllLines(path);
             var byNumber = new Dictionary<int, IReceiptModel>();
 
-            int i = 0;
-            while (i < lines.Length)
+            int t = 0;
+            while (t < lines.Length)
             {
-                var line = (lines[i] ?? "").Trim();
+                var line = (lines[t] ?? "").Trim();
 
                 if (!line.StartsWith("KVITTO #", StringComparison.OrdinalIgnoreCase))
                 {
-                    i++;
+                    t++;
                     continue;
                 }
 
                 if (!TryParseReceiptNumber(line, out int receiptNumber))
                 {
-                    i++;
+                    t++;
                     continue;
                 }
 
-                i++;
+                t++;
 
-                if (!TryGetNextNonEmpty(lines, ref i, out var dateLine))
+                if (!TryGetNextNonEmpty(lines, ref t, out var dateTextLine))
                     break;
 
                 if (!DateTime.TryParseExact(
-                        dateLine,
+                        dateTextLine,
                         "yyyy-MM-dd HH:mm:ss",
                         CultureInfo.InvariantCulture,
                         DateTimeStyles.None,
                         out var createdAt))
                 {
-                    ResyncToNextReceipt(lines, ref i);
+                    SkipToNextReceipt(lines, ref t);
                     continue;
                 }
 
-                i++;
+                t++;
 
-                if (!TryGetNextNonEmpty(lines, ref i, out var memberLine))
+                if (!TryGetNextNonEmpty(lines, ref t, out var memberLine))
                     break;
 
                 if (!TryParseMemberLine(memberLine, out int memberIdNumber))
                 {
-                    ResyncToNextReceipt(lines, ref i);
+                    SkipToNextReceipt(lines, ref t);
                     continue;
                 }
 
-                i++;
+                t++;
 
-                while (i < lines.Length && (IsSeparator(lines[i]) || string.IsNullOrWhiteSpace(lines[i])))
-                    i++;
+                while (t < lines.Length && (IsSeparator(lines[t]) || string.IsNullOrWhiteSpace(lines[t])))
+                    t++;
 
                 var rowModels = new List<ReceiptRowModel>();
 
-                while (i < lines.Length)
+                while (t < lines.Length)
                 {
-                    var t = (lines[i] ?? "").Trim();
+                    var rowLine = (lines[t] ?? "").Trim();
 
-                    if (string.IsNullOrWhiteSpace(t) || IsSeparator(t))
+                    if (string.IsNullOrWhiteSpace((string)rowLine) || IsSeparator((string)rowLine))
                     {
-                        i++;
+                        t++;
                         continue;
                     }
 
-                    if (t.StartsWith("Totalt antal varor:", StringComparison.OrdinalIgnoreCase) ||
-                        t.StartsWith("TOTALT:", StringComparison.OrdinalIgnoreCase) ||
-                        t.StartsWith("KVITTO #", StringComparison.OrdinalIgnoreCase))
+                    if (rowLine.StartsWith("Totalt antal varor:", StringComparison.OrdinalIgnoreCase) ||
+                        rowLine.StartsWith("TOTALT:", StringComparison.OrdinalIgnoreCase) ||
+                        rowLine.StartsWith("KVITTO #", StringComparison.OrdinalIgnoreCase))
                     {
                         break;
                     }
 
-                    if (TryParseRow(t, out var rowText, out var rowQuantity, out var rowAmount))
+                    if (TryParseRow(rowLine, out var rowText, out var rowQuantity, out var rowAmount))
                         rowModels.Add(new ReceiptRowModel(rowText, rowQuantity, rowAmount));
 
-                    i++;
+                    t++;
                 }
 
                 int totalItems = 0;
                 decimal totalAmount = 0m;
 
-                while (i < lines.Length)
+                while (t < lines.Length)
                 {
-                    var t = (lines[i] ?? "").Trim();
+                    var totalsLine = (lines[t] ?? "").Trim();
 
-                    if (string.IsNullOrWhiteSpace(t) || IsSeparator(t))
+                    if (string.IsNullOrWhiteSpace(totalsLine) || IsSeparator(totalsLine))
                     {
-                        i++;
+                        t++;
                         continue;
                     }
 
-                    if (t.StartsWith("Totalt antal varor:", StringComparison.OrdinalIgnoreCase))
+                    if (totalsLine.StartsWith("Totalt antal varor:", StringComparison.OrdinalIgnoreCase))
                     {
-                        var part = t.Substring("Totalt antal varor:".Length).Trim();
+                        var part = totalsLine.Substring("Totalt antal varor:".Length).Trim();
                         int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out totalItems);
-                        i++;
+                        t++;
                         continue;
                     }
 
-                    if (t.StartsWith("TOTALT:", StringComparison.OrdinalIgnoreCase))
+                    if (totalsLine.StartsWith("TOTALT:", StringComparison.OrdinalIgnoreCase))
                     {
-                        var part = t.Substring("TOTALT:".Length).Trim();
+                        var part = totalsLine.Substring("TOTALT:".Length).Trim();
                         part = part.Replace("SEK", "", StringComparison.OrdinalIgnoreCase).Trim();
                         decimal.TryParse(part, NumberStyles.Number, CultureInfo.InvariantCulture, out totalAmount);
-                        i++;
+                        t++;
                         continue;
                     }
 
-                    if (t.StartsWith("KVITTO #", StringComparison.OrdinalIgnoreCase))
+                    if (totalsLine.StartsWith("KVITTO #", StringComparison.OrdinalIgnoreCase))
                         break;
 
-                    i++;
+                    t++;
                 }
 
                 var receipt = new ReceiptModel(
@@ -170,9 +170,9 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                     totalItems,
                     totalAmount);
 
-                if (byNumber.TryGetValue(receiptNumber, out var existing))
+                if (byNumber.TryGetValue(receiptNumber, out var receiptExists))
                 {
-                    if (receipt.ReceiptCreatedAt >= existing.ReceiptCreatedAt)
+                    if (receipt.ReceiptCreatedAt >= receiptExists.ReceiptCreatedAt)
                         byNumber[receiptNumber] = receipt;
                 }
                 else
@@ -186,7 +186,7 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
                 .ToList();
         }
 
-        private static void ResyncToNextReceipt(string[] lines, ref int i)
+        private static void SkipToNextReceipt(string[] lines, ref int i)
         {
             while (i < lines.Length && !(lines[i] ?? "").Trim().StartsWith("KVITTO #", StringComparison.OrdinalIgnoreCase))
                 i++;
@@ -195,14 +195,15 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
         private static bool TryParseMemberLine(string memberLine, out int memberIdNumber)
         {
             memberIdNumber = 0;
-            var t = (memberLine ?? "").Trim();
+
+            var m = (memberLine ?? "").Trim();
 
             const string member = "Medlemsnummer:";
 
-            if (!t.StartsWith(member, StringComparison.OrdinalIgnoreCase))
+            if (!m.StartsWith(member, StringComparison.OrdinalIgnoreCase))
                 return false;
 
-            var part = t.Substring(member.Length).Trim();
+            var part = m.Substring(member.Length).Trim();
             return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out memberIdNumber);
         }
 
@@ -236,10 +237,10 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
         private static bool TryParseReceiptNumber(string line, out int receiptNumber)
         {
             receiptNumber = 0;
-            int idx = line.IndexOf('#');
-            if (idx < 0) return false;
+            int receiptIdIndex = line.IndexOf('#');
+            if (receiptIdIndex < 0) return false;
 
-            var part = line.Substring(idx + 1).Trim();
+            var part = line.Substring(receiptIdIndex + 1).Trim();
             return int.TryParse(part, NumberStyles.Integer, CultureInfo.InvariantCulture, out receiptNumber);
         }
 
@@ -258,16 +259,16 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
 
             var left = rowLine.Substring(0, lastSpace).TrimEnd();
 
-            int sp = left.LastIndexOf(' ');
+            int lastSpaceIndex = left.LastIndexOf(' ');
 
-            if (sp > 0)
+            if (lastSpaceIndex > 0)
             {
-                var mabyeQuantityToken = left.Substring(sp + 1).Trim();
-                int idxSt = mabyeQuantityToken.IndexOf("st*", StringComparison.OrdinalIgnoreCase);
-                if (idxSt > 0 && int.TryParse(mabyeQuantityToken.Substring(0, idxSt), NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedQuantity))
+                var mabyeQuantityToken = left.Substring(lastSpaceIndex + 1).Trim();
+                int stIndex = mabyeQuantityToken.IndexOf("st*", StringComparison.OrdinalIgnoreCase);
+                if (stIndex > 0 && int.TryParse(mabyeQuantityToken.Substring(0, stIndex), NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedQuantity))
                 {
                     rowQuantity = parsedQuantity;
-                    rowText = left.Substring(0, sp).TrimEnd();
+                    rowText = left.Substring(0, lastSpaceIndex).TrimEnd();
                     return !string.IsNullOrWhiteSpace(rowText);
                 }
             }
@@ -276,98 +277,5 @@ namespace LinasKlubbLivs.BusinessLogic.ReceiptLogic.ReceiptDataManager
             rowQuantity = 0;
             return !string.IsNullOrWhiteSpace(rowText);
         }
-
-        //private static List<IReceiptModel> ReadLegacySerialized(string path)
-        //{
-        //    var receiptsByNumber = new Dictionary<int, IReceiptModel>();
-
-        //    foreach (var line in File.ReadAllLines(path))
-        //    {
-        //        if (string.IsNullOrWhiteSpace(line))
-        //            continue;
-
-        //        var parts = line.Split(';');
-
-        //        if (parts.Length < 6)
-        //            continue;
-
-        //        if (!int.TryParse(parts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int receiptNumber))
-        //            continue;
-
-        //        if (!int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int memberIdNumber))
-        //            memberIdNumber = 0;
-
-        //        if (!DateTime.TryParseExact(
-        //                parts[2],
-        //                "yyyy-MM-dd HH:mm:ss",
-        //                CultureInfo.InvariantCulture,
-        //                DateTimeStyles.None,
-        //                out DateTime receiptCreatedAt))
-        //            continue;
-
-        //        if (!int.TryParse(parts[3], NumberStyles.Integer, CultureInfo.InvariantCulture, out int totalItems))
-        //            totalItems = 0;
-
-        //        if (!decimal.TryParse(parts[4], NumberStyles.Number, CultureInfo.InvariantCulture, out decimal totalAmount))
-        //            totalAmount = 0m;
-
-        //        var receiptRows = ParseReceiptRows(parts[5]);
-
-        //        var receipt = new ReceiptModel(
-        //            receiptNumber,
-        //            memberIdNumber,
-        //            receiptCreatedAt,
-        //            receiptRows,
-        //            totalItems,
-        //            totalAmount);
-
-        //        if (receiptsByNumber.TryGetValue(receiptNumber, out var existing))
-        //        {
-        //            if (receipt.ReceiptCreatedAt >= existing.ReceiptCreatedAt)
-        //                receiptsByNumber[receiptNumber] = receipt;
-        //        }
-        //        else
-        //        {
-        //            receiptsByNumber[receiptNumber] = receipt;
-        //        }
-        //    }
-
-        //    return receiptsByNumber.Values.ToList();
-        //}
-
-        //private static List<ReceiptRowModel> ParseReceiptRows(string serializedRows)
-        //{
-        //    int receiptQuantity = 0;
-
-        //    var receiptRows = new List<ReceiptRowModel>();
-        //    if (string.IsNullOrWhiteSpace(serializedRows))
-        //        return receiptRows;
-
-        //    var rowParts = serializedRows.Split('§', StringSplitOptions.RemoveEmptyEntries);
-        //    foreach (var rp in rowParts)
-        //    {
-        //        var two = rp.Split(new[] { "\\n" }, StringSplitOptions.None);
-        //        if (two.Length != 2)
-        //            continue;
-
-        //        string receiptText = Unescape(two[0]);
-        //        if (!decimal.TryParse(two[1], NumberStyles.Number, CultureInfo.InvariantCulture, out decimal receiptAmount))
-        //            continue;
-
-        //        receiptRows.Add(new ReceiptRowModel(receiptText, receiptQuantity, receiptAmount));
-        //    }
-        //    return receiptRows;
-        //}
-
-        //private static string Unescape(string receiptText)
-        //{
-        //    receiptText ??= "";
-        //    return receiptText
-        //        .Replace("%A7", "§")
-        //        .Replace("%7C", "\\n")
-        //        .Replace("%3B", ";")
-        //        .Replace("%25", "%")
-        //        .Trim();
-        //}
     }
 }

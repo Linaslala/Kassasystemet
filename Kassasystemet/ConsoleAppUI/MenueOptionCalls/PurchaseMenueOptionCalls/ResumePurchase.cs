@@ -8,7 +8,8 @@ using System.IO;
 namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
 {
     /// <summary>
-    /// UI‑flöde för att uppdatera produktinformation.
+    /// UI‑flöde för att uppdatera produktinformation
+    /// från ett sparat kvitto (cart).
     /// </summary>
     public class ResumePurchase
     {

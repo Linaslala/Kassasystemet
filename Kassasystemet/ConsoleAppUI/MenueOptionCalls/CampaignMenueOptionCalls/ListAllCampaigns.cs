@@ -52,28 +52,27 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
 
             foreach (var campaign in campaigns)
             {
-                // Produkter som "1 Mjölk, 2 Bröd"
                 string productsText = string.Join(", ",
                     campaign.ProductIdNumbers
                         .OrderBy(id => id)
                         .Select(id =>
-                            productLookup.TryGetValue(id, out var name)
-                                ? $"{id} {name}"
+                            productLookup.TryGetValue(id, out var productName)
+                                ? $"{id} {productName}"
                                 : $"{id} (okänd)")
                 );
 
-                string discountText = campaign is PercentOffCampaign poc
-                    ? poc.PercentOff.ToString("0.##", CultureInfo.InvariantCulture) + "%"
+                string discountText = campaign is PercentOffCampaign percentOffCampaign
+                    ? percentOffCampaign.PercentOff.ToString("0.##", CultureInfo.InvariantCulture) + "%"
                     : "-";
 
-                string row =
+                string campaingListRows =
                     $"{campaign.CampaignName,-20}" +
                     $"{campaign.CampaignStartDate,-15:yyyy-MM-dd}" +
                     $"{campaign.CampaignEndDate,-15:yyyy-MM-dd}" +
                     $"{productsText,-35}" +
                     $"{discountText,-10}";
 
-                CenterConsoleOutput.CenterTextToWindow(row);
+                CenterConsoleOutput.CenterTextToWindow(campaingListRows);
             }
 
             Console.WriteLine();

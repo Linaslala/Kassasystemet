@@ -100,8 +100,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
                         "Nej, tillbaka"
                     };
 
-                    int deleteChoice = confirmMenu.ShowArrow(
-                        "Är du säker?",
+                    int deleteChoice = confirmMenu.ShowArrow("Är du säker?",
                         confirmOptions,
                         renderAboveOptions: () =>
                         {
@@ -164,7 +163,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
                     string name,
                     DateTime start,
                     DateTime end,
-                    List<int> productIds,
+                    List<int> productIdNumber,
                     decimal percentOff,
                     Dictionary<int, string> productLookup)
         {
@@ -172,10 +171,10 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
             Console.WriteLine();
 
             string productsInline = string.Join(", ",
-                productIds.OrderBy(id => id)
+                productIdNumber.OrderBy(id => id)
                           .Select(id =>
-                              productLookup.TryGetValue(id, out var pname)
-                                  ? $"{id} {pname}"
+                              productLookup.TryGetValue(id, out var productName)
+                                  ? $"{id} {productName}"
                                   : $"{id} (okänd)"));
 
             string infoHeader =

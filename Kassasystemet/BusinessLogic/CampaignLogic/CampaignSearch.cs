@@ -20,7 +20,6 @@ namespace LinasKlubbLivs.BusinessLogic.CampaignLogic
             _reader = reader;
         }
 
-
         public List<ICampaignModel> Search(string searchCampaignText)
         {
             if (string.IsNullOrWhiteSpace(searchCampaignText))

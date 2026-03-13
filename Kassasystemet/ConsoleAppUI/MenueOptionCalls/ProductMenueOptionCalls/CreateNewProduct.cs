@@ -19,7 +19,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.ProductMenueOptionCalls
             string productHeader = "== Registrera ny Produkt ==";
             string productNamePrompt = "Produktnamn: ";
             string productPricePrompt = "Pris (kr): ";
-            string productPriceTypePrompt = "Pristyp (styckpris eller kilopris): ";
+            string productPriceTypePrompt = "Pristyp ( skriv styckpris eller kilopris): ";
 
             string productNameInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                 productHeader,
@@ -67,7 +67,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.ProductMenueOptionCalls
             Console.WriteLine();
 
             string infoHeader =
-                $"{"ProduktId",-12}{"Produktnamn",-25}{"Pris",-12}{"Pristyp",-15}";
+                $"{"Produktnummer",-12}{"Produktnamn",-25}{"Pris",-12}{"Pristyp",-15}";
 
             string infoRow =
                 $"{newProductId,-12}{productNameInput,-25}{productPriceDecimalInput.ToString("0.00", CultureInfo.CurrentCulture) + " kr", -12}" +

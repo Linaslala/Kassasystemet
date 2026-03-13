@@ -114,7 +114,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.MemberMenueOptionCalls
                     if (editChoice == 0)
                     {
                         memberFirstName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera medlem ==",
+                            "== Uppdatera medlem ==\n",
                             "Nytt förnamn: ",
                             ValidateMemberFirstName
                         );
@@ -122,7 +122,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.MemberMenueOptionCalls
                     else if (editChoice == 1)
                     {
                         memberLastName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera medlem ==",
+                            "== Uppdatera medlem ==\n",
                             "Nytt efternamn: ",
                             ValidateMemberLastName
                         );

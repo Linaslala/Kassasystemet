@@ -15,6 +15,10 @@ using System.Linq;
 
 namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
 {
+    /// <summary>
+    /// UI-del för att skapa nytt köp
+    /// 
+    /// </summary>
     public class CreateNewPurchase
     {
         public void Run()
@@ -346,14 +350,14 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.PurchaseMenueOptionCalls
 
         private static IProductModel SelectProductFromList(List<IProductModel> products)
         {
-  var ordered = products
-                .OrderBy(p => p.ProductIdNumber)
-                .ToList();
+            var ordered = products
+                          .OrderBy(p => p.ProductIdNumber)
+                          .ToList();
 
-           var rows = ordered
-                .Select(p =>
-                    $"{p.ProductIdNumber,-20} {p.ProductName,-20} {p.ProductPrice,-20} {p.ProductPriceType,-20}")
-                .ToArray();
+            var rows = ordered
+                 .Select(p =>
+                     $"{p.ProductIdNumber,-20} {p.ProductName,-20} {p.ProductPrice,-20} {p.ProductPriceType,-20}")
+                 .ToArray();
 
             var arrow = new ConsoleOptionsArrow();
 

@@ -72,7 +72,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
                 DateTime originalEnd = selectedCampaign.CampaignEndDate;
                 var originalProductIds = selectedCampaign.ProductIdNumbers?.ToList() ?? new List<int>();
 
-                decimal originalPercentOff = selectedCampaign is PercentOffCampaign poc ? poc.PercentOff : 0m;
+                decimal originalPercentOff = selectedCampaign is PercentOffCampaign percentOffCampaign ? percentOffCampaign.PercentOff : 0m;
 
                 string campaignName = originalName;
                 DateTime campaignStartDate = originalStart;
@@ -257,7 +257,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
             CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
             Console.WriteLine();
 
-            string infoHeaderTwo = $"{"ProduktId",-12}{"Produktnamn",-30}{"Rabatt",-10}";
+            string infoHeaderTwo = $"{"ProduktNummer",-12}{"Produktnamn",-30}{"Rabatt",-10}";
             CenterConsoleOutput.CenterTextToWindow(infoHeaderTwo);
             CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeaderTwo.Length));
 
@@ -265,8 +265,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
 
             foreach (var id in productIdNumbers.OrderBy(x => x))
             {
-                string name = productLookup.TryGetValue(id, out var n) ? n : "(okänd produkt)";
-                CenterConsoleOutput.CenterTextToWindow($"{id,-12}{name,-30}{percentOffText,-10}");
+                string productName = productLookup.TryGetValue(id, out var n) ? n : "(okänd produkt)";
+                CenterConsoleOutput.CenterTextToWindow($"{id,-12}{productName,-30}{percentOffText,-10}");
             }
 
             Console.WriteLine();
@@ -323,8 +323,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
 
         private static void ValidatePercent(string percentOffInput)
         {
-            decimal value = ParseDecimalInvariant(percentOffInput);
-            if (value <= 0m || value > 100m)
+            decimal percentValue = ParseDecimalInvariant(percentOffInput);
+            if (percentValue <= 0m || percentValue > 100m)
                 throw new ArgumentException("Ogiltig procent: ange ett tal mellan 1 och 100.");
         }
 
@@ -340,12 +340,12 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
                 .ToList();
         }
 
-        private static decimal ParseDecimalInvariant(string input)
+        private static decimal ParseDecimalInvariant(string userInput)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            if (string.IsNullOrWhiteSpace(userInput))
                 throw new ArgumentException("Ogiltigt tal: får inte vara tomt.");
 
-            string normalized = input.Trim().Replace(',', '.');
+            string normalized = userInput.Trim().Replace(',', '.');
             if (!decimal.TryParse(normalized, NumberStyles.Number, CultureInfo.InvariantCulture, out decimal value))
                 throw new ArgumentException("Ogiltigt tal: ange ett numeriskt värde.");
 

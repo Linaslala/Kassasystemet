@@ -101,7 +101,6 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
 
             var percentCampaign = newCampaign as PercentOffCampaign;
 
-
             if (campaignProducts.Any())
             {
                 CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
@@ -119,9 +118,7 @@ namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.CampaignMenueOptionCalls
 
                 foreach (var product in campaignProducts)
                 {
-                    Console.WriteLine(
-                        indent + $"{product.ProductIdNumber,-15}{product.ProductName,-30}{percentOff + " %",-15}"
-                    );
+                    Console.WriteLine(indent + $"{product.ProductIdNumber,-15}{product.ProductName,-30}{percentOff + " %",-15}");
                 }
             }
 

@@ -8,7 +8,7 @@ namespace LinasKlubbLivs.BusinessLogic.ProductLogic
     /// <summary>
     /// Representerar en produkt i sortimentet.
     /// 
-    /// Innehåller pris, pristyp (kilopris eller styckpris) och produktnamn.
+    /// Innehåller produktnummer, produktnamn, pris och pristyp (kilopris eller styckpris)
     /// </summary>
     public class ProductModel : IProductModel
     {

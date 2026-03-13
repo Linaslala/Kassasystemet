@@ -10,7 +10,6 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
     /// </summary>
     public static class UserInputPlacer
     {
-        /// <summary>Places user input after prompt line</summary>
         public static string ReadCenteredText(string textPrompt)
         {
             textPrompt = textPrompt.Replace("\r", "").Replace("\n", "");

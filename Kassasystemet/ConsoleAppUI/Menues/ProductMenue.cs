@@ -26,10 +26,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.Menues
 
             while (true)
             {
-                // ShowArrow sköter render + upp/ner + enter och returnerar valt index
                 int selectedIndex = arrowProductMenu.ShowArrow("=== Produktsida ===", _productMenueOptions);
 
-                // HandleSelection avgör om vi ska avsluta (Logga ut = true)
                 if (HandleProductMenueSelection(selectedIndex))
                     return;
             }

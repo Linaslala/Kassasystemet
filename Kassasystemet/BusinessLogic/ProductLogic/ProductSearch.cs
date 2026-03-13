@@ -26,20 +26,20 @@ namespace LinasKlubbLivs.BusinessLogic.ProductLogic
             if (string.IsNullOrWhiteSpace(searchProductText))
                 return all;
 
-            string query = searchProductText.Trim().ToLowerInvariant();
+            string userProductQuery = searchProductText.Trim().ToLowerInvariant();
 
             return all
                 .Where(p =>
                 {
-                    string name = (p.ProductName ?? "").ToLowerInvariant();
-                    string type = (p.ProductPriceType ?? "").ToLowerInvariant();
-                    string full = (p.ProductFullName ?? "").ToLowerInvariant();
+                    string productName = (p.ProductName ?? "").ToLowerInvariant();
+                    string productType = (p.ProductPriceType ?? "").ToLowerInvariant();
+                    string fullProductName = (p.ProductFullName ?? "").ToLowerInvariant();
 
-                    return p.ProductIdNumber.ToString().Contains(query)
-                           || name.Contains(query)
-                           || type.Contains(query)
-                           || full.Contains(query)
-                           || p.ProductPrice.ToString().Contains(query);
+                    return p.ProductIdNumber.ToString().Contains(userProductQuery)
+                           || productName.Contains(userProductQuery)
+                           || productType.Contains(userProductQuery)
+                           || fullProductName.Contains(userProductQuery)
+                           || p.ProductPrice.ToString().Contains(userProductQuery);
                 })
                 .ToList();
         }

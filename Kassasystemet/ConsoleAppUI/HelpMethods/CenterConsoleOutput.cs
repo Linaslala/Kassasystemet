@@ -8,7 +8,6 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
     /// <summary>
     /// Hjälpklass för att skriva centrerad text i konsolfönstret.
     /// 
-    /// Används för konsekvent layout i hela applikationen.
     /// </summary>
     public static class CenterConsoleOutput
     {
@@ -24,8 +23,8 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
                     continue;
                 }
 
-                int padding = (Console.WindowWidth / 2) + (line.Length / 2);
-                Console.WriteLine(string.Format("{0," + padding + "}", line));
+                int windowPadding = (Console.WindowWidth / 2) + (line.Length / 2);
+                Console.WriteLine(string.Format("{0," + windowPadding + "}", line));
             }
         }
     }

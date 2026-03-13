@@ -9,6 +9,9 @@ using System.Text;
 
 namespace LinasKlubbLivs.ConsoleAppUI.MenueOptionCalls.MemberMenueOptionCalls
 {
+    /// <summary>
+    /// UI‑flöde för att radera befintliga medlemmar.
+    /// </summary>
     public class DeleteMember
     {
         public void Run()

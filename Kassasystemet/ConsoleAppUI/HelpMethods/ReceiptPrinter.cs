@@ -8,21 +8,20 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
     /// Ansvarar för utskrift av kvitton i konsolen.
     /// 
     /// PrintDetailed:
-    /// - Skriver ut fullständig kvittostruktur:
-    ///     • Kvittonummer
-    ///     • Datum och tid
-    ///     • Kundnummer (om finns)
-    ///     • Alla kvittorader (produkter + rabatter)
-    ///     • Totalt antal varor
-    ///     • Totalsumma
+    /// Skriver ut fullständig kvittostruktur:
+    /// Kvittonummer
+    /// Datum och tid
+    /// Kundnummer (om finns)
+    /// Alla kvittorader (produkter + rabatter)
+    /// Totalt antal varor
+    /// Totalsumma
     /// 
-    /// UI-princip:
-    /// - Alla rader och avdelare centreras via CenterConsoleOutput
-    ///   för konsekvent och läsbar presentation.
-    /// - Används av:
-    ///     • Köpfunktionen
-    ///     • Försäljningsrapport
-    ///     • Sök kvitto
+    /// UI:
+    /// Alla rader och avdelare centreras via CenterConsoleOutput
+    /// för konsekvent och läsbar presentation.
+    /// Används av:
+    /// Köpfunktionen
+    /// Sök kvitto
     /// </summary>
 
     public static class ReceiptPrinter
@@ -46,9 +45,10 @@ namespace LinasKlubbLivs.ConsoleAppUI.HelpMethods
                 {
                     if (row.ReceiptProductQuantity > 0)
                     {
-                        var unit = row.ReceiptProductAmount / row.ReceiptProductQuantity;
+                        var unitPrice = row.ReceiptProductAmount / row.ReceiptProductQuantity;
+
                         CenterConsoleOutput.CenterTextToWindow(
-                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unit.ToString("0.00", CultureInfo.InvariantCulture)} " +
+                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unitPrice.ToString("0.00", CultureInfo.InvariantCulture)} " +
                             $"{row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}"
                         );
                     }

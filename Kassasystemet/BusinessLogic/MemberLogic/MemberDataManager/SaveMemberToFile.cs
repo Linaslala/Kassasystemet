@@ -9,8 +9,7 @@ namespace LinasKlubbLivs.BusinessLogic.MemberLogic.MemberDataManager
     /// <summary>
     /// Sparar medlemsdata till fil.
     /// 
-    /// Varje medlem sparas i ett läsbart textformat.
-    /// </summary>
+/// </summary>
     public class SaveMemberToFile : ISaveMemberToFile
     {
         public void SaveAll(List<IMemberModel> members)
