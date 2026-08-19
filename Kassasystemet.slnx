@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="Kassasystemet/LinasKlubbLivs.csproj" />
+  <Project Path="Kassasystemet_refac/Kassasystemet_refac.csproj" Id="e5b88093-39ff-4121-bdf0-95f38bea7d75" />
 </Solution>
