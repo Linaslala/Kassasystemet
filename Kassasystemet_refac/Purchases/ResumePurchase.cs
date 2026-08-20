@@ -17,7 +17,7 @@ namespace Kassasystemet_refac
                 return;
             }
 
-            if (!TryLoadReceiptDraft(out int memberIdNUmber, out List<(int productIdNumber, int productQuantity)> items))
+            if (!DraftPurchaseService.TryLoadReceiptDraft(out int memberIdNUmber, out List<(int productIdNumber, int productQuantity)> items))
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;
@@ -32,36 +32,36 @@ namespace Kassasystemet_refac
             new CreateNewPurchase().Run(memberIdNUmber, items);
         }
 
-        private static bool TryLoadReceiptDraft(out int memberIdNumber, out List<(int productIdNumber, int productQuantity)> items)
-        {
-            memberIdNumber = 0;
-            items = new List<(int, int)>();
+        //private static bool TryLoadReceiptDraft(out int memberIdNumber, out List<(int productIdNumber, int productQuantity)> items)
+        //{
+        //    memberIdNumber = 0;
+        //    items = new List<(int, int)>();
 
-            string content = File.ReadAllText(ReceiptFilePath.ReceiptDraftPath);
-            if (string.IsNullOrWhiteSpace(content))
-                return false;
+        //    string content = File.ReadAllText(ReceiptFilePath.ReceiptDraftPath);
+        //    if (string.IsNullOrWhiteSpace(content))
+        //        return false;
 
-            var receiptParts = content.Split(';');
-            if (receiptParts.Length < 2)
-                return false;
+        //    var receiptParts = content.Split(';');
+        //    if (receiptParts.Length < 2)
+        //        return false;
 
-            int.TryParse(receiptParts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out memberIdNumber);
+        //    int.TryParse(receiptParts[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out memberIdNumber);
 
-            var receiptRows = receiptParts[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
-            foreach (var row in receiptRows)
-            {
-                var two = row.Split(',');
-                if (two.Length != 2) continue;
+        //    var receiptRows = receiptParts[1].Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        //    foreach (var row in receiptRows)
+        //    {
+        //        var two = row.Split(',');
+        //        if (two.Length != 2) continue;
 
-                if (int.TryParse(two[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productIdNumber) &&
-                    int.TryParse(two[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productQuantity) &&
-                    productIdNumber > 0 && productQuantity > 0)
-                {
-                    items.Add((productIdNumber, productQuantity));
-                }
-            }
+        //        if (int.TryParse(two[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productIdNumber) &&
+        //            int.TryParse(two[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productQuantity) &&
+        //            productIdNumber > 0 && productQuantity > 0)
+        //        {
+        //            items.Add((productIdNumber, productQuantity));
+        //        }
+        //    }
 
-            return true;
-        }
+        //    return true;
+        //}
     }
 }

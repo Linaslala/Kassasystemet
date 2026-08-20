@@ -150,7 +150,7 @@ namespace Kassasystemet_refac
 
                         if (footerChoice == 4)
                         {
-                            SavePurchaseDraft(memberIdNumber, cart);
+                            DraftPurchaseService.SavePurchaseDraft(memberIdNumber, cart);
                             Console.Clear();
                             Console.ForegroundColor = ConsoleColor.Green;
                             CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
@@ -311,7 +311,7 @@ namespace Kassasystemet_refac
             }
 
             ReceiptModel receipt = CompletePayment(memberIdNumber, cart);
-            ClearPurchaseDraft();
+            DraftPurchaseService.ClearPurchaseDraft();
 
             Console.Clear();
             CenterConsoleOutput.CenterTextToWindow("== KVITTO ==");
@@ -531,18 +531,18 @@ namespace Kassasystemet_refac
             return int.Parse(input.Trim(), CultureInfo.InvariantCulture);
         }
 
-        private static void SavePurchaseDraft(int memberIdNumber, List<CartItemModel> cart)
-        {
-            string items = string.Join("\n", cart.Select(c => $"{c.ProductIdNumber},{c.ProductQuantity}"));
-            string line = $"{memberIdNumber};{items}";
-            File.WriteAllText(ReceiptFilePath.ReceiptDraftPath, line);
-        }
+        //private static void SavePurchaseDraft(int memberIdNumber, List<CartItemModel> cart)
+        //{
+        //    string items = string.Join("\n", cart.Select(c => $"{c.ProductIdNumber},{c.ProductQuantity}"));
+        //    string line = $"{memberIdNumber};{items}";
+        //    File.WriteAllText(ReceiptFilePath.ReceiptDraftPath, line);
+        //}
 
-        private static void ClearPurchaseDraft()
-        {
-            if (File.Exists(ReceiptFilePath.ReceiptDraftPath))
-                File.Delete(ReceiptFilePath.ReceiptDraftPath);
-        }
+        //private static void ClearPurchaseDraft()
+        //{
+        //    if (File.Exists(ReceiptFilePath.ReceiptDraftPath))
+        //        File.Delete(ReceiptFilePath.ReceiptDraftPath);
+        //}
 
         private static List<CartItemModel> LoadCartFromSavedItems(List<(int productIdNumber, int productQuantity)> savedItems)
         {
@@ -579,20 +579,6 @@ namespace Kassasystemet_refac
                 throw new ArgumentException("Måste vara större än 0.");
         }
     }
-
-    
-
-    
-
-   
-
-    
-
-   
-
-   
-
-    
 }
 
 
