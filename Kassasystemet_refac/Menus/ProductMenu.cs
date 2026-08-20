@@ -1,46 +1,46 @@
 ﻿namespace Kassasystemet_refac
 {
-    public class MemberMenu
+    public class ProductMenu
     {
-        private readonly string[] _memberMenuOptions =
+        private readonly string[] _productMenuOptions =
     {
-            "Redistrera ny medlem\n",
-            "Uppdatera klubbmedlem",
-            "Lista alla klubbmedlemmar",
-            "Avsluta medlemsskap\n",
+            "Redistrera ny produkt\n",
+            "Uppdatera produkt",
+            "Lista alla produkter",
+            "Ta bort produkt\n",
             "Tillbaka till huvudmenyn"
         };
 
         public void Run()
         {
-            var arrowMemberMenu = new ConsoleOptionsArrow();
+            var arrowProductMenu = new ConsoleOptionsArrow();
 
             while (true)
             {
-                int selectedIndex = arrowMemberMenu.ShowArrow("=== Medlemssida ===", _memberMenuOptions);
+                int selectedIndex = arrowProductMenu.ShowArrow("=== Produktsida ===", _productMenuOptions);
 
-                if (HandleMemberMenuSelection(selectedIndex))
+                if (HandleProductMenuSelection(selectedIndex))
                     return;
             }
         }
-        private static bool HandleMemberMenuSelection(int index)
+        private static bool HandleProductMenuSelection(int index)
         {
             switch (index)
             {
                 case 0:
-                    new CreateNewMember().Run();
+                    new CreateNewProduct().Run();
                     return false;
 
                 case 1:
-                    new UpdateMember().Run();
+                    new UpdateProduct().Run();
                     return false;
 
                 case 2:
-                    new ListAllMembers().Run();
+                    new ListAllProducts().Run();
                     return false;
 
                 case 3:
-                    new DeleteMember().Run();
+                    new DeleteProduct().Run();
                     return false;
 
                 case 4:
@@ -52,7 +52,6 @@
                     Console.ReadKey(true);
                     return false;
             }
-
         }
     }
 }

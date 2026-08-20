@@ -1,46 +1,46 @@
 ﻿namespace Kassasystemet_refac
 {
-    public class MemberMenu
+    public class CampaignMenu
     {
-        private readonly string[] _memberMenuOptions =
-    {
-            "Redistrera ny medlem\n",
-            "Uppdatera klubbmedlem",
-            "Lista alla klubbmedlemmar",
-            "Avsluta medlemsskap\n",
+        private readonly string[] _campaignMenuOptions =
+        {
+            "Skapa ny kampanj\n",
+            "Uppdatera kampanj",
+            "Lista kampanjer",
+            "Ta bort kampanj\n",
             "Tillbaka till huvudmenyn"
         };
 
         public void Run()
         {
-            var arrowMemberMenu = new ConsoleOptionsArrow();
+            var arrowCampaignMenu = new ConsoleOptionsArrow();
 
             while (true)
             {
-                int selectedIndex = arrowMemberMenu.ShowArrow("=== Medlemssida ===", _memberMenuOptions);
+                int selectedIndex = arrowCampaignMenu.ShowArrow("=== Kampanjsida ===", _campaignMenuOptions);
 
-                if (HandleMemberMenuSelection(selectedIndex))
+                if (HandleCampaignMenuSelection(selectedIndex))
                     return;
             }
         }
-        private static bool HandleMemberMenuSelection(int index)
+        private bool HandleCampaignMenuSelection(int index)
         {
             switch (index)
             {
                 case 0:
-                    new CreateNewMember().Run();
+                    new CreateNewCampaign().Run();
                     return false;
 
                 case 1:
-                    new UpdateMember().Run();
+                    new UpdateCampaign().Run();
                     return false;
 
                 case 2:
-                    new ListAllMembers().Run();
+                    new ListAllCampaigns().Run();
                     return false;
 
                 case 3:
-                    new DeleteMember().Run();
+                    new DeleteCampaign().Run();
                     return false;
 
                 case 4:
@@ -52,7 +52,6 @@
                     Console.ReadKey(true);
                     return false;
             }
-
         }
     }
 }
