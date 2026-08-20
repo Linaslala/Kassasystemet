@@ -46,10 +46,11 @@ namespace Kassasystemet_refac
                 mainMenue.Run();
             }
         }
-        public class MainMenue
+    }
+    public class MainMenue
+    {
+        private readonly string[] _mainMenueOptions =
         {
-            private readonly string[] _mainMenueOptions =
-            {
             "Registrera nytt köp\n",
             "Sök",
             "Hantera kunder",
@@ -59,68 +60,68 @@ namespace Kassasystemet_refac
             "Logga ut"
         };
 
-            public void Run()
+        public void Run()
+        {
+            var arrowMainMenu = new ConsoleOptionsArrow();
+
+            while (true)
             {
-                var arrowMainMenu = new ConsoleOptionsArrow();
+                int selectedIndex = arrowMainMenu.ShowArrow("Välj funktion", _mainMenueOptions);
 
-                while (true)
-                {
-                    int selectedIndex = arrowMainMenu.ShowArrow("Välj funktion", _mainMenueOptions);
-
-                    if (HandleMainMenueSelection(selectedIndex))
-                        return;
-                }
-            }
-
-            private bool HandleMainMenueSelection(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        var newPurchase = new PurchaseMenue();
-                        newPurchase.Run();
-                        return false;
-
-                    case 1:
-                        var searchMenue = new SearchMenue();
-                        searchMenue.Run();
-                        return false;
-
-                    case 2:
-                        var memberMenue = new MemberMenue();
-                        memberMenue.Run();
-                        return false;
-
-                    case 3:
-                        var productMenue = new ProductMenue();
-                        productMenue.Run();
-                        return false;
-
-                    case 4:
-                        var campaignMenue = new CampaignMenue();
-                        campaignMenue.Run();
-                        return false;
-
-                    case 5:
-                        var salesReportMenue = new SalesReportMenue();
-                        salesReportMenue.Run();
-                        return false;
-
-                    case 6:
-                        return true;
-
-                    default:
-                        Console.Clear();
-                        CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
-                        Console.ReadKey(true);
-                        return false;
-                }
+                if (HandleMainMenueSelection(selectedIndex))
+                    return;
             }
         }
-        public class MemberMenue
+
+        private bool HandleMainMenueSelection(int index)
         {
-            private readonly string[] _memberMenueOptions =
-        {
+            switch (index)
+            {
+                case 0:
+                    var newPurchase = new PurchaseMenue();
+                    newPurchase.Run();
+                    return false;
+
+                case 1:
+                    var searchMenue = new SearchMenue();
+                    searchMenue.Run();
+                    return false;
+
+                case 2:
+                    var memberMenue = new MemberMenue();
+                    memberMenue.Run();
+                    return false;
+
+                case 3:
+                    var productMenue = new ProductMenue();
+                    productMenue.Run();
+                    return false;
+
+                case 4:
+                    var campaignMenue = new CampaignMenue();
+                    campaignMenue.Run();
+                    return false;
+
+                case 5:
+                    var salesReportMenue = new SalesReportMenue();
+                    salesReportMenue.Run();
+                    return false;
+
+                case 6:
+                    return true;
+
+                default:
+                    Console.Clear();
+                    CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
+                    Console.ReadKey(true);
+                    return false;
+            }
+        }
+    }
+    public class MemberMenue
+    {
+        private readonly string[] _memberMenueOptions =
+    {
             "Redistrera ny medlem\n",
             "Uppdatera klubbmedlem",
             "Lista alla klubbmedlemmar",
@@ -128,54 +129,54 @@ namespace Kassasystemet_refac
             "Tillbaka till huvudmenyn"
         };
 
-            public void Run()
+        public void Run()
+        {
+            var arrowMemberMenu = new ConsoleOptionsArrow();
+
+            while (true)
             {
-                var arrowMemberMenu = new ConsoleOptionsArrow();
+                int selectedIndex = arrowMemberMenu.ShowArrow("=== Medlemssida ===", _memberMenueOptions);
 
-                while (true)
-                {
-                    int selectedIndex = arrowMemberMenu.ShowArrow("=== Medlemssida ===", _memberMenueOptions);
-
-                    if (HandleMemberMenueSelection(selectedIndex))
-                        return;
-                }
-            }
-            private static bool HandleMemberMenueSelection(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        new CreateNewMember().Run();
-                        return false;
-
-                    case 1:
-                        new UpdateMember().Run();
-                        return false;
-
-                    case 2:
-                        new ListAllMembers().Run();
-                        return false;
-
-                    case 3:
-                        new DeleteMember().Run();
-                        return false;
-
-                    case 4:
-                        return true;
-
-                    default:
-                        Console.Clear();
-                        CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
-                        Console.ReadKey(true);
-                        return false;
-                }
-
+                if (HandleMemberMenueSelection(selectedIndex))
+                    return;
             }
         }
-        public class ProductMenue
+        private static bool HandleMemberMenueSelection(int index)
         {
-            private readonly string[] _productMenueOptions =
-        {
+            switch (index)
+            {
+                case 0:
+                    new CreateNewMember().Run();
+                    return false;
+
+                case 1:
+                    new UpdateMember().Run();
+                    return false;
+
+                case 2:
+                    new ListAllMembers().Run();
+                    return false;
+
+                case 3:
+                    new DeleteMember().Run();
+                    return false;
+
+                case 4:
+                    return true;
+
+                default:
+                    Console.Clear();
+                    CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
+                    Console.ReadKey(true);
+                    return false;
+            }
+
+        }
+    }
+    public class ProductMenue
+    {
+        private readonly string[] _productMenueOptions =
+    {
             "Redistrera ny produkt\n",
             "Uppdatera produkt",
             "Lista alla produkter",
@@ -183,289 +184,185 @@ namespace Kassasystemet_refac
             "Tillbaka till huvudmenyn"
         };
 
-            public void Run()
+        public void Run()
+        {
+            var arrowProductMenu = new ConsoleOptionsArrow();
+
+            while (true)
             {
-                var arrowProductMenu = new ConsoleOptionsArrow();
+                int selectedIndex = arrowProductMenu.ShowArrow("=== Produktsida ===", _productMenueOptions);
 
-                while (true)
-                {
-                    int selectedIndex = arrowProductMenu.ShowArrow("=== Produktsida ===", _productMenueOptions);
-
-                    if (HandleProductMenueSelection(selectedIndex))
-                        return;
-                }
-            }
-            private static bool HandleProductMenueSelection(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        new CreateNewProduct().Run();
-                        return false;
-
-                    case 1:
-                        new UpdateProduct().Run();
-                        return false;
-
-                    case 2:
-                        new ListAllProducts().Run();
-                        return false;
-
-                    case 3:
-                        new DeleteProduct().Run();
-                        return false;
-
-                    case 4:
-                        return true;
-
-                    default:
-                        Console.Clear();
-                        CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
-                        Console.ReadKey(true);
-                        return false;
-                }
+                if (HandleProductMenueSelection(selectedIndex))
+                    return;
             }
         }
-
-        public class PurchaseMenue
+        private static bool HandleProductMenueSelection(int index)
         {
-            private readonly string[] _purchaseMenuOptions =
+            switch (index)
             {
+                case 0:
+                    new CreateNewProduct().Run();
+                    return false;
+
+                case 1:
+                    new UpdateProduct().Run();
+                    return false;
+
+                case 2:
+                    new ListAllProducts().Run();
+                    return false;
+
+                case 3:
+                    new DeleteProduct().Run();
+                    return false;
+
+                case 4:
+                    return true;
+
+                default:
+                    Console.Clear();
+                    CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
+                    Console.ReadKey(true);
+                    return false;
+            }
+        }
+    }
+
+    public class PurchaseMenue
+    {
+        private readonly string[] _purchaseMenuOptions =
+        {
             "Starta nytt köp\n",
             "Återuppta pågående köp\n",
             "Tillbaka till huvudmenyn"
         };
 
-            public void Run()
+        public void Run()
+        {
+            var arrowPurchaseMenu = new ConsoleOptionsArrow();
+
+            while (true)
             {
-                var arrowPurchaseMenu = new ConsoleOptionsArrow();
+                int selectedIndex = arrowPurchaseMenu.ShowArrow("=== Köp ===", _purchaseMenuOptions);
 
-                while (true)
-                {
-                    int selectedIndex = arrowPurchaseMenu.ShowArrow("=== Köp ===", _purchaseMenuOptions);
-
-                    if (HandlePurchaseSelection(selectedIndex))
-                        return;
-                }
-            }
-            private bool HandlePurchaseSelection(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        new CreateNewPurchase().Run();
-                        return false;
-
-                    case 1:
-                        new ResumePurchase().Run();
-                        return false;
-
-                    case 2:
-                        return true;
-
-                    default:
-                        Console.Clear();
-                        CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
-                        Console.ReadKey(true);
-                        return false;
-                }
+                if (HandlePurchaseSelection(selectedIndex))
+                    return;
             }
         }
-        public class SalesReportMenue
+        private bool HandlePurchaseSelection(int index)
         {
-            private readonly string[] _salesReportMenuOptions =
+            switch (index)
             {
+                case 0:
+                    new CreateNewPurchase().Run();
+                    return false;
+
+                case 1:
+                    new ResumePurchase().Run();
+                    return false;
+
+                case 2:
+                    return true;
+
+                default:
+                    Console.Clear();
+                    CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
+                    Console.ReadKey(true);
+                    return false;
+            }
+        }
+    }
+    public class SalesReportMenue
+    {
+        private readonly string[] _salesReportMenuOptions =
+        {
             "Försäljningsrapport",
             "Sök kvitto\n",
             "Tillbaka till huvudmenyn"
         };
 
-            public void Run()
+        public void Run()
+        {
+            var arrowMenu = new ConsoleOptionsArrow();
+
+            while (true)
             {
-                var arrowMenu = new ConsoleOptionsArrow();
+                int selectedIndex = arrowMenu.ShowArrow("=== Försäljningsrapport ===", _salesReportMenuOptions);
 
-                while (true)
-                {
-                    int selectedIndex = arrowMenu.ShowArrow("=== Försäljningsrapport ===", _salesReportMenuOptions);
-
-                    if (HandleReportSelection(selectedIndex))
-                        return;
-                }
-            }
-
-            private bool HandleReportSelection(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        new ListAllReceipts().Run();
-                        return false;
-
-                    case 1:
-                        new FindReceipt().Run();
-                        return false;
-
-                    case 2:
-                        return true;
-
-                    default:
-                        return false;
-                }
+                if (HandleReportSelection(selectedIndex))
+                    return;
             }
         }
-        public class SearchMenue
+
+        private bool HandleReportSelection(int index)
         {
-            private readonly string[] _searchMenueOptions =
+            switch (index)
             {
+                case 0:
+                    new ListAllReceipts().Run();
+                    return false;
+
+                case 1:
+                    new FindReceipt().Run();
+                    return false;
+
+                case 2:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+    }
+    public class SearchMenue
+    {
+        private readonly string[] _searchMenueOptions =
+        {
             "Sök klubbmedlem",
             "Sök produkt\n",
             "Tillbaka till huvudmenyn"
         };
 
-            public void Run()
+        public void Run()
+        {
+            var arrowSearchMenu = new ConsoleOptionsArrow();
+
+            while (true)
             {
-                var arrowSearchMenu = new ConsoleOptionsArrow();
+                int selectedIndex = arrowSearchMenu.ShowArrow("=== Sök ===", _searchMenueOptions);
 
-                while (true)
-                {
-                    int selectedIndex = arrowSearchMenu.ShowArrow("=== Sök ===", _searchMenueOptions);
-
-                    if (HandleSearchMenueSelection(selectedIndex))
-                        return;
-                }
-            }
-            private bool HandleSearchMenueSelection(int index)
-            {
-                switch (index)
-                {
-                    case 0:
-                        var memberSearch = new SearchMemberMenu();
-                        memberSearch.Run();
-                        return false;
-
-                    case 1:
-                        var productSearch = new SearchProductMenu();
-                        productSearch.Run();
-                        return false;
-
-                    case 2:
-                        return true;
-
-                    default:
-                        Console.Clear();
-                        CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
-                        Console.ReadKey(true);
-                        return false;
-                }
+                if (HandleSearchMenueSelection(selectedIndex))
+                    return;
             }
         }
-        public class SearchProductMenu
+        private bool HandleSearchMenueSelection(int index)
         {
-            public void Run()
+            switch (index)
             {
-                IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-                ISearchProduct finder = new ProductSearch(reader);
+                case 0:
+                    var memberSearch = new SearchMemberMenu();
+                    memberSearch.Run();
+                    return false;
 
-                while (true)
-                {
+                case 1:
+                    var productSearch = new SearchProductMenu();
+                    productSearch.Run();
+                    return false;
+
+                case 2:
+                    return true;
+
+                default:
                     Console.Clear();
-                    CenterConsoleOutput.CenterTextToWindow("== Hitta produkt ==");
-                    Console.WriteLine();
-
-                    string queryInput = UserInputPlacer
-                        .ReadCenteredText("Sök på produktnummer eller produktnamn (tryck enter för alla): ")
-                        .Trim();
-
-                    var results = finder.Search(queryInput);
-
-                    if (results.Count == 0)
-                    {
-                        var arrowNoResult = new ConsoleOptionsArrow();
-                        var noResultOptions = new[]
-                        {
-                        "Ny sökning",
-                        "Tillbaka till huvudmenyn"
-                    };
-
-                        int choice = arrowNoResult.ShowArrow(
-                            "Välj:",
-                            noResultOptions,
-                            renderAboveOptions: () =>
-                            {
-                                Console.Clear();
-                                CenterConsoleOutput.CenterTextToWindow("== Hitta produkt ==");
-                                Console.WriteLine();
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                CenterConsoleOutput.CenterTextToWindow(
-                                    "Produkten du söker finns inte i systemet.");
-                                Console.ResetColor();
-                                Console.WriteLine();
-                            });
-
-                        if (choice == 0)
-                            continue;
-
-                        return;
-                    }
-
-                    var selected = results.Count == 1
-                        ? results[0]
-                        : SelectProduct(results);
-
-                    var arrowAfterFound = new ConsoleOptionsArrow();
-                    var afterFoundOptions = new[]
-                    {
-                    "Ny sökning",
-                    "Tillbaka till huvudmenyn"
-                };
-
-                    int afterChoice = arrowAfterFound.ShowArrow(
-                        "Välj:",
-                        afterFoundOptions,
-                        renderAboveOptions: () =>
-                        {
-                            Console.Clear();
-                            CenterConsoleOutput.CenterTextToWindow("== Produkt ==");
-                            Console.WriteLine();
-                            Console.WriteLine();
-
-                            string header =
-                                $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
-
-                            string row =
-                                $"{selected.ProductIdNumber,-20}" +
-                                $"{selected.ProductName,-20}" +
-                                $"{selected.ProductPrice,-20}" +
-                                $"{selected.ProductPriceType,-20}";
-
-                            CenterConsoleOutput.CenterTextToWindow(header);
-                            CenterConsoleOutput.CenterTextToWindow(new string('-', header.Length));
-                            CenterConsoleOutput.CenterTextToWindow(row);
-
-                            Console.WriteLine();
-                        });
-
-                    if (afterChoice == 0)
-                        continue;
-
-                    return;
-                }
-            }
-
-            private static IProductModel SelectProduct(List<IProductModel> products)
-            {
-                var productDisplay = products
-                    .OrderBy(p => p.ProductIdNumber)
-                    .Select(p => $"{p.ProductFullName}")
-                    .ToArray();
-
-                var arrow = new ConsoleOptionsArrow();
-                int index = arrow.ShowArrow("Välj produkt:", productDisplay);
-                return products[index];
+                    CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent...");
+                    Console.ReadKey(true);
+                    return false;
             }
         }
     }
-   
+    
+
+
 
 
 
