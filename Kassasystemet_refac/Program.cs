@@ -68,52 +68,7 @@ namespace Kassasystemet_refac
     
 
 
-    public static class ReceiptPrinter
-    {
-        public static void PrintDetailed(IReceiptModel receipt)
-        {
-            CenterConsoleOutput.CenterTextToWindow(new string('=', 41));
-
-            CenterConsoleOutput.CenterTextToWindow($"KVITTO #{receipt.ReceiptNumber}");
-
-            CenterConsoleOutput.CenterTextToWindow(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss"));
-
-            if (receipt.MemberIdNumber != 0)
-                CenterConsoleOutput.CenterTextToWindow($"Medlemsnummer: {receipt.MemberIdNumber}");
-
-            CenterConsoleOutput.CenterTextToWindow(new string('-', 41));
-
-            if (receipt.ReceiptRows != null)
-            {
-                foreach (var row in receipt.ReceiptRows)
-                {
-                    if (row.ReceiptProductQuantity > 0)
-                    {
-                        var unitPrice = row.ReceiptProductAmount / row.ReceiptProductQuantity;
-
-                        CenterConsoleOutput.CenterTextToWindow(
-                            $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unitPrice.ToString("0.00", CultureInfo.InvariantCulture)} " +
-                            $"{row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}"
-                        );
-                    }
-                    else
-                    {
-                        CenterConsoleOutput.CenterTextToWindow(
-                            $"{row.ReceiptProductText} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}"
-                        );
-                    }
-                }
-            }
-
-            CenterConsoleOutput.CenterTextToWindow(new string('-', 41));
-
-            CenterConsoleOutput.CenterTextToWindow($"Totalt antal varor: {receipt.TotalItems}");
-            CenterConsoleOutput.CenterTextToWindow($"TOTALT: {receipt.TotalAmount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-
-            CenterConsoleOutput.CenterTextToWindow(new string('=', 41));
-            Console.WriteLine();
-        }
-    }
+    
 
 
 
@@ -145,25 +100,7 @@ namespace Kassasystemet_refac
         List<IReceiptModel> ReadAll();
     }
 
-    internal static class ReceiptFilePath
-    {
-        private static string EnsureTextFilesDir()
-        {
-            var baseDir = AppContext.BaseDirectory;
-            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
-            var textFilesDir = Path.Combine(projectDir, "TextFiles");
-            Directory.CreateDirectory(textFilesDir);
-            return textFilesDir;
-        }
-
-        private static readonly string TextFilesDir = EnsureTextFilesDir();
-
-        public static string TodayReceiptPath =>
-            Path.Combine(TextFilesDir, $"RECEIPT_{DateTime.Now:yyyyMMdd}.txt");
-
-        public static string ReceiptDraftPath =>
-            Path.Combine(TextFilesDir, "receiptDraft.txt");
-    }
+    
 
     public class ProductSearch : ISearchProduct
     {
@@ -433,18 +370,7 @@ namespace Kassasystemet_refac
     {
         List<ICampaignModel> ReadAll();
     }
-    public interface ICampaignModel
-    {
-        string CampaignName { get; }
-        CampaignType TypeOfCampaign { get; }
 
-        DateTime CampaignStartDate { get; }
-        DateTime CampaignEndDate { get; }
-
-        IReadOnlyList<int> ProductIdNumbers { get; }
-
-        bool IsActive(DateTime now);
-    }
 
 
 
@@ -467,180 +393,15 @@ namespace Kassasystemet_refac
         public static string Path => System.IO.Path.Combine(TextFilesDir, "campaigns.txt");
     }
 
-    public interface ISearchCampaign
-    {
-        List<ICampaignModel> Search(string searchCampaignText);
-    }
+
 
     
 
 
 
-    public class ListAllReceipts
-    {
-        public void Run()
-        {
-            Console.Clear();
+   
 
-            var reader = new ReadAllReceiptsFromFile();
-
-            var baseDir = AppContext.BaseDirectory;
-            var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
-            var textFilesDir = Path.Combine(projectDir, "TextFiles");
-
-            var allReceiptFiles = Directory
-                .EnumerateFiles(textFilesDir, "RECEIPT_*.txt")
-                .OrderBy(f => f)
-                .ToList();
-
-            var allReceipts = new List<IReceiptModel>();
-
-            foreach (var file in allReceiptFiles)
-            {
-                var receiptsFromFile = reader.ReadAllFromPath(file);
-                allReceipts.AddRange(receiptsFromFile);
-            }
-
-            var receipts = allReceipts
-                 .GroupBy(r => r.ReceiptNumber)
-                 .Select(g => g.OrderByDescending(x => x.ReceiptCreatedAt).First())
-                 .OrderByDescending(r => r.ReceiptCreatedAt)
-                 .ToList();
-
-            var arrow = new ConsoleOptionsArrow();
-
-            arrow.ShowArrow("Välj:", new[] { "Tillbaka till huvudmenyn" }, renderAboveOptions: () =>
-            {
-                Console.Clear();
-                Console.SetCursorPosition(0, 0);
-
-                CenterConsoleOutput.CenterTextToWindow("== FÖRSÄLJNINGSRAPPORT ==");
-                Console.WriteLine();
-
-                if (!receipts.Any())
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
-                    Console.ResetColor();
-                    Console.WriteLine();
-                    return;
-                }
-
-                var byDay = receipts.GroupBy(r => r.ReceiptCreatedAt.Date).OrderByDescending(g => g.Key);
-
-                foreach (var dayGroup in byDay)
-                {
-                    CenterConsoleOutput.CenterTextToWindow($"DATUM: {dayGroup.Key:yyyy-MM-dd}");
-                    CenterConsoleOutput.CenterTextToWindow(new string('-', 50));
-
-                    var products = dayGroup
-                        .SelectMany(r => r.ReceiptRows)
-                        .Where(x => x.ReceiptProductQuantity > 0)
-                        .GroupBy(x => x.ReceiptProductText)
-                        .Select(g => new
-                        {
-                            Product = g.Key,
-                            Quantity = g.Sum(x => x.ReceiptProductQuantity),
-                            Amount = g.Sum(x => x.ReceiptProductAmount)
-                        })
-                        .OrderByDescending(x => x.Quantity)
-                        .ThenBy(x => x.Product);
-
-                    foreach (var p in products)
-                        CenterConsoleOutput.CenterTextToWindow(
-                            $"{p.Product} x{p.Quantity} {p.Amount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-
-                    var discountTotal = dayGroup
-                        .SelectMany(r => r.ReceiptRows)
-                        .Where(x =>
-                            x.ReceiptProductQuantity == 0 &&
-                            x.ReceiptProductAmount < 0 &&
-                            x.ReceiptProductText.StartsWith("Rabatt", StringComparison.OrdinalIgnoreCase))
-                        .Sum(x => x.ReceiptProductAmount);
-
-                    if (discountTotal < 0)
-                    {
-                        CenterConsoleOutput.CenterTextToWindow(
-                            $"Dagens rabatter: {discountTotal.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-                    }
-
-                    CenterConsoleOutput.CenterTextToWindow(new string('-', 50));
-
-                    var total = dayGroup.Sum(r => r.TotalAmount);
-                    CenterConsoleOutput.CenterTextToWindow(
-                        $"TOTALT FÖRSÄLJNINGSPRIS: {total.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-
-                    CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                    Console.WriteLine();
-                }
-                Console.WriteLine();
-            });
-        }
-    }
-
-    public class FindReceipt
-    {
-        public void Run()
-        {
-            Console.Clear();
-
-            IReadAllReceiptsFromFile reader = new ReadAllReceiptsFromFile();
-            IReceiptSearch finder = new ReceiptSearch(reader);
-
-            while (true)
-            {
-                Console.Clear();
-
-                CenterConsoleOutput.CenterTextToWindow("== SÖK KVITTO ==");
-                Console.WriteLine();
-
-                string query = UserInputPlacer.ReadCenteredText(
-                    "Sök på kvittonummer eller kundnummer: ").Trim();
-
-                var results = finder.Search(query)
-                    .OrderByDescending(r => r.ReceiptNumber)
-                    .ToList();
-
-                var arrow = new ConsoleOptionsArrow();
-
-                int choice = arrow.ShowArrow("Välj:", new[] { "Ny sökning", "Tillbaka till startmenyn" }, renderAboveOptions: () =>
-                {
-                    Console.Clear();
-                    Console.SetCursorPosition(0, 0);
-
-                    CenterConsoleOutput.CenterTextToWindow("== HITTADE KVITTON ==");
-                    Console.WriteLine();
-
-
-                    if (!results.Any())
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Inget kvitto hittades.");
-                        Console.ResetColor();
-                        Console.WriteLine();
-                        return;
-                    }
-
-                    foreach (var receipt in results)
-                    {
-                        CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                        ReceiptPrinter.PrintDetailed(receipt);
-                    }
-
-                    CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                    Console.WriteLine();
-
-                    CenterConsoleOutput.CenterTextToWindow(new string('=', 50));
-                    Console.WriteLine();
-                });
-
-                if (choice == 0)
-                    continue;
-
-                return;
-            }
-        }
-    }
+   
 
     public class ResumePurchase
     {
