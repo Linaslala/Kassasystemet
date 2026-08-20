@@ -75,30 +75,13 @@ namespace Kassasystemet_refac
    
 
 
-    public interface ISaveReceiptToFile
-    {
-        void SaveAll(List<IReceiptModel> receipts);
-    }
 
-    public interface IReceiptSearch
-    {
-        List<IReceiptModel> Search(string searchReceiptText);
-    }
 
-    public interface IReceiptModel
-    {
-        int ReceiptNumber { get; }
-        int MemberIdNumber { get; }
-        DateTime ReceiptCreatedAt { get; }
-        IReadOnlyList<ReceiptRowModel> ReceiptRows { get; }
-        int TotalItems { get; }
-        decimal TotalAmount { get; }
-    }
 
-    public interface IReadAllReceiptsFromFile
-    {
-        List<IReceiptModel> ReadAll();
-    }
+
+   
+
+   
 
     
 
@@ -137,29 +120,12 @@ namespace Kassasystemet_refac
         }
     }
 
-    public interface ISearchProduct
-    {
-        List<IProductModel> Search(string searchProductText);
-    }
 
-    public interface ISaveProductToFile
-    {
-        void SaveAll(List<IProductModel> products);
-    }
 
-    public interface IReadAllProductsFromFile
-    {
-        List<IProductModel> ReadAll();
-    }
 
-    public interface IProductModel
-    {
-        int ProductIdNumber { get; }
-        string ProductName { get; }
-        decimal ProductPrice { get; }
-        string ProductPriceType { get; }
-        string ProductFullName { get; }
-    }
+
+   
+
 
 
 
@@ -184,27 +150,12 @@ namespace Kassasystemet_refac
 
 
 
-    public interface ISearchMember
-    {
-        List<IMemberModel> Search(string searchMemberText);
-    }
-    public interface ISaveMemberToFile
-    {
-        void SaveAll(List<IMemberModel> members);
-    }
 
-    public interface IReadAllMembersFromFile
-    {
-        List<IMemberModel> ReadAll();
-    }
 
-    public interface IMemberModel
-    {
-        int MemberIdNumber { get; }
-        string MemberFirstName { get; }
-        string MemberLastName { get; }
-        string MemberFullName { get; }
-    }
+
+    
+
+
 
 
 
@@ -362,14 +313,8 @@ namespace Kassasystemet_refac
         PercentOffCampaign
     }
 
-    public interface ISaveCampaignToFile
-    {
-        void SaveAll(List<ICampaignModel> campaigns);
-    }
-    public interface IReadAllCampaignsFromFile
-    {
-        List<ICampaignModel> ReadAll();
-    }
+
+
 
 
 
