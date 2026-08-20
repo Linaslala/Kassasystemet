@@ -3101,25 +3101,7 @@ namespace Kassasystemet_refac
                 return campaigns[index];
             }
         }
-        public static class CenterConsoleOutput
-        {
-            public static void CenterTextToWindow(string text)
-            {
-                foreach (var textLine in text.Split('\n'))
-                {
-                    var line = textLine.TrimEnd('\r');
-
-                    if (string.IsNullOrEmpty(line))
-                    {
-                        Console.WriteLine();
-                        continue;
-                    }
-
-                    int windowPadding = (Console.WindowWidth / 2) + (line.Length / 2);
-                    Console.WriteLine(string.Format("{0," + windowPadding + "}", line));
-                }
-            }
-        }
+        
         public class ConsoleOptionsArrow
         {
             public int ShowArrow(string title, IReadOnlyList<string> options)
