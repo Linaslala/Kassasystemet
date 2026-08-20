@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
-using static Kassasystemet_refac.SearchMember;
+using static Kassasystemet_refac.SearchMemberMenu;
 
 namespace Kassasystemet_refac
 {

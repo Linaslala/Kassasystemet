@@ -1,5 +1,5 @@
 ﻿using System.Globalization;
-using static Kassasystemet_refac.SearchMember;
+using static Kassasystemet_refac.SearchMemberMenu;
 
 namespace Kassasystemet_refac
 {
