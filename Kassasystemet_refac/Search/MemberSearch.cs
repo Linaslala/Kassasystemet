@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using static Kassasystemet_refac.SearchMemberMenu;
-
-namespace Kassasystemet_refac
+﻿namespace Kassasystemet_refac
 {
     public class MemberSearch : ISearchMember
     {
