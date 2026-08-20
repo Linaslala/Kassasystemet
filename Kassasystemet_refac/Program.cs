@@ -117,7 +117,7 @@ namespace Kassasystemet_refac
                     case ConsoleKey.Enter:
                         if (selectedIndex == 0)
                         {
-                            AddProductPrompt(cart, productById);
+                            CartService.AddProductPrompt(cart, productById);
                             break;
                         }
 
@@ -125,20 +125,20 @@ namespace Kassasystemet_refac
 
                         if (footerChoice == 0)
                         {
-                            if (TryPayAndShowReceipt(ref memberIdNumber, cart))
+                            if (ReceiptService.TryPayAndShowReceipt(ref memberIdNumber, cart))
                                 return;
                             break;
                         }
 
                         if (footerChoice == 1)
                         {
-                            ShowInlineProductSearchAndPresent();
+                            PurchaseProductSearchService.ShowInlineProductSearchAndPresent();
                             break;
                         }
 
                         if (footerChoice == 2)
                         {
-                            RemoveProductFromCart(cart);
+                            CartService.RemoveProductFromCart(cart);
                             break;
                         }
 
@@ -194,7 +194,7 @@ namespace Kassasystemet_refac
             Console.WriteLine();
             Console.WriteLine();
 
-            PrintCart(cart);
+            CartService.PrintCart(cart);
             Console.WriteLine();
 
             CenterConsoleOutput.CenterTextToWindow($"Antal varor: {cart.Sum(x => x.ProductQuantity)}");
@@ -214,293 +214,92 @@ namespace Kassasystemet_refac
             }
         }
 
-        private static void AddProductPrompt(List<CartItemModel> cart, Dictionary<int, IProductModel> productByIdNumber)
-        {
-            Console.Clear();
-            CenterConsoleOutput.CenterTextToWindow("== Lägg till produkt ==");
-            Console.WriteLine();
+        //private static void ShowInlineProductSearchAndPresent()
+        //{
+        //    IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
+        //    ISearchProduct finder = new ProductSearch(reader);
 
-            string lineInput = UserInputPlacer.ReadCenteredText("Ange: Produktnummer Antal (ex: 1 2): ").Trim();
+        //    while (true)
+        //    {
+        //        Console.Clear();
+        //        CenterConsoleOutput.CenterTextToWindow("== Hitta produkt ==");
+        //        Console.WriteLine();
 
-            var tokens = lineInput.Split(new[] { ' ', '\t' }, StringSplitOptions.RemoveEmptyEntries);
+        //        string queryInput = UserInputPlacer
+        //            .ReadCenteredText("Sök på produktnummer eller produktnamn (tomt = tillbaka): ")
+        //            .Trim();
 
-            if (tokens.Length != 2
-                || !int.TryParse(tokens[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productIdNumber)
-                || productIdNumber <= 0
-                || !int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productQuantity)
-                || productQuantity <= 0)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Ogiltig inmatning. Skriv exakt: Produktnummer Antal (ex: 1 2).");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                return;
-            }
+        //        if (string.IsNullOrWhiteSpace(queryInput))
+        //            return;
 
-            if (!productByIdNumber.TryGetValue(productIdNumber, out var product))
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow($"Ingen produkt hittades med Produktnummer {productIdNumber}.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                return;
-            }
+        //        var results = finder.Search(queryInput);
 
-            var existing = cart.FirstOrDefault(x => x.ProductIdNumber == productIdNumber);
-            if (existing != null)
-            {
-                cart.Remove(existing);
-                cart.Add(existing.WithQuantity(existing.ProductQuantity + productQuantity));
-            }
-            else
-            {
-                cart.Add(new CartItemModel(
-                    product.ProductIdNumber,
-                    product.ProductName,
-                    product.ProductPrice,
-                    product.ProductPriceType,
-                    productQuantity));
-            }
+        //        if (results.Count == 0)
+        //        {
+        //            Console.ForegroundColor = ConsoleColor.Red;
+        //            CenterConsoleOutput.CenterTextToWindow("Produkten du söker finns inte i systemet.");
+        //            Console.ResetColor();
+        //            ValidatedConsoleInput.PauseCentered();
+        //            continue;
+        //        }
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            CenterConsoleOutput.CenterTextToWindow($"Tillagd: {product.ProductName} x{productQuantity}");
-            Console.ResetColor();
-            Console.ReadKey(true);
-        }
+        //        var selected = results.Count == 1
+        //            ? results[0]
+        //            : PurchaseProductSearchService.SelectProductFromList(results);
 
-        private bool TryPayAndShowReceipt(ref int memberIdNumber, List<CartItemModel> cart)
-        {
-            if (cart.Count == 0)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Du kan inte betala ett tomt köp.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                return false;
-            }
+        //        Console.Clear();
+        //        CenterConsoleOutput.CenterTextToWindow("== Produkt ==");
+        //        Console.WriteLine();
+        //        Console.WriteLine();
 
-            if (memberIdNumber <= 0)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Du måste ange kundnummer innan betalning.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                memberIdNumber = ReadMemberIdNumber();
-            }
+        //        string header = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris (kr)",-20}{"Pristyp",-20}";
+        //        string row =
+        //            $"{selected.ProductIdNumber,-20}" +
+        //            $"{selected.ProductName,-20}" +
+        //            $"{selected.ProductPrice,-20}" +
+        //            $"{selected.ProductPriceType,-20}";
 
-            var memberReader = new ReadAllMembersFromFile();
-            var members = memberReader.ReadAll();
+        //        CenterConsoleOutput.CenterTextToWindow(header);
+        //        CenterConsoleOutput.CenterTextToWindow(new string('-', header.Length));
+        //        CenterConsoleOutput.CenterTextToWindow(row);
 
-            int memberIdSnapshot = memberIdNumber;
+        //        Console.WriteLine();
+        //        CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent för att återgå...");
+        //        Console.ResetColor();
+        //        Console.ReadKey(true);
+        //        return;
+        //    }
+        //}
 
-            bool customerExists = members.Any(m => m.MemberIdNumber == memberIdSnapshot);
+        //private static IProductModel SelectProductFromList(List<IProductModel> products)
+        //{
+        //    var ordered = products
+        //                  .OrderBy(p => p.ProductIdNumber)
+        //                  .ToList();
 
-            if (!customerExists)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow(
-                    $"Ingen kund hittades med kundnummer {memberIdNumber}.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
+        //    var rows = ordered
+        //         .Select(p =>
+        //             $"{p.ProductIdNumber,-20} {p.ProductName,-20} {p.ProductPrice,-20} {p.ProductPriceType,-20}")
+        //         .ToArray();
 
-                memberIdNumber = 0;
-                return false;
-            }
+        //    var arrow = new ConsoleOptionsArrow();
 
-            ReceiptModel receipt = CompletePayment(memberIdNumber, cart);
-            DraftPurchaseService.ClearPurchaseDraft();
+        //    int index = arrow.ShowArrow(
+        //        "Välj produkt:",
+        //        rows,
+        //        renderAboveOptions: () =>
+        //        {
+        //            CenterConsoleOutput.CenterTextToWindow("== Produkt ==");
+        //            Console.WriteLine();
+        //            Console.WriteLine();
 
-            Console.Clear();
-            CenterConsoleOutput.CenterTextToWindow("== KVITTO ==");
-            Console.WriteLine();
-            ReceiptPrinter.PrintDetailed(receipt);
-            ValidatedConsoleInput.PauseCentered("Tryck valfri tangent för att gå tillbaka...");
-            return true;
-        }
+        //            string header = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
+        //            CenterConsoleOutput.CenterTextToWindow(header);
+        //            CenterConsoleOutput.CenterTextToWindow(new string('-', header.Length));
+        //        });
 
-        private static void ShowInlineProductSearchAndPresent()
-        {
-            IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISearchProduct finder = new ProductSearch(reader);
-
-            while (true)
-            {
-                Console.Clear();
-                CenterConsoleOutput.CenterTextToWindow("== Hitta produkt ==");
-                Console.WriteLine();
-
-                string queryInput = UserInputPlacer
-                    .ReadCenteredText("Sök på produktnummer eller produktnamn (tomt = tillbaka): ")
-                    .Trim();
-
-                if (string.IsNullOrWhiteSpace(queryInput))
-                    return;
-
-                var results = finder.Search(queryInput);
-
-                if (results.Count == 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    CenterConsoleOutput.CenterTextToWindow("Produkten du söker finns inte i systemet.");
-                    Console.ResetColor();
-                    ValidatedConsoleInput.PauseCentered();
-                    continue;
-                }
-
-                var selected = results.Count == 1
-                    ? results[0]
-                    : SelectProductFromList(results);
-
-                Console.Clear();
-                CenterConsoleOutput.CenterTextToWindow("== Produkt ==");
-                Console.WriteLine();
-                Console.WriteLine();
-
-                string header = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris (kr)",-20}{"Pristyp",-20}";
-                string row =
-                    $"{selected.ProductIdNumber,-20}" +
-                    $"{selected.ProductName,-20}" +
-                    $"{selected.ProductPrice,-20}" +
-                    $"{selected.ProductPriceType,-20}";
-
-                CenterConsoleOutput.CenterTextToWindow(header);
-                CenterConsoleOutput.CenterTextToWindow(new string('-', header.Length));
-                CenterConsoleOutput.CenterTextToWindow(row);
-
-                Console.WriteLine();
-                CenterConsoleOutput.CenterTextToWindow("Tryck valfri tangent för att återgå...");
-                Console.ResetColor();
-                Console.ReadKey(true);
-                return;
-            }
-        }
-
-        private static IProductModel SelectProductFromList(List<IProductModel> products)
-        {
-            var ordered = products
-                          .OrderBy(p => p.ProductIdNumber)
-                          .ToList();
-
-            var rows = ordered
-                 .Select(p =>
-                     $"{p.ProductIdNumber,-20} {p.ProductName,-20} {p.ProductPrice,-20} {p.ProductPriceType,-20}")
-                 .ToArray();
-
-            var arrow = new ConsoleOptionsArrow();
-
-            int index = arrow.ShowArrow(
-                "Välj produkt:",
-                rows,
-                renderAboveOptions: () =>
-                {
-                    CenterConsoleOutput.CenterTextToWindow("== Produkt ==");
-                    Console.WriteLine();
-                    Console.WriteLine();
-
-                    string header = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
-                    CenterConsoleOutput.CenterTextToWindow(header);
-                    CenterConsoleOutput.CenterTextToWindow(new string('-', header.Length));
-                });
-
-            return ordered[index];
-        }
-
-        private void RemoveProductFromCart(List<CartItemModel> cart)
-        {
-            if (cart.Count == 0)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Varukorgen är tom.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                return;
-            }
-
-            var purchaseDisplay = cart
-                .Select(c => $"{c.ProductIdNumber,-6} {c.ProductName} Antal: {c.ProductQuantity}")
-                .ToArray();
-
-            var arrow = new ConsoleOptionsArrow();
-            int index = arrow.ShowArrow("Välj produkt att ta bort:", purchaseDisplay);
-            cart.RemoveAt(index);
-        }
-
-        private static void PrintCart(List<CartItemModel> cart)
-        {
-            if (cart.Count == 0)
-            {
-                CenterConsoleOutput.CenterTextToWindow("Varukorg: (tom)");
-                return;
-            }
-
-            CenterConsoleOutput.CenterTextToWindow("Varukorg:");
-            Console.WriteLine();
-
-            foreach (var item in cart.OrderBy(x => x.ProductIdNumber))
-            {
-                CenterConsoleOutput.CenterTextToWindow(
-                    $"{item.ProductIdNumber} {item.ProductName} {item.ProductQuantity} st {item.LineTotal.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-            }
-        }
-
-        private ReceiptModel CompletePayment(int memberIdNumber, List<CartItemModel> cart)
-        {
-            var campaigns = new ReadAllCampaignsFromFile()
-                .ReadAll()
-                .OfType<PercentOffCampaign>()
-                .Where(c => c.IsActive(DateTime.Now))
-                .ToList();
-
-            var receiptRows = new List<ReceiptRowModel>();
-
-            foreach (var item in cart)
-            {
-                decimal lineTotal = item.LineTotal;
-                receiptRows.Add(new ReceiptRowModel(item.ProductName, item.ProductQuantity, lineTotal));
-
-                var bestCampaign = campaigns
-                    .Where(c => c.ProductIdNumbers != null && c.ProductIdNumbers.Contains(item.ProductIdNumber))
-                    .OrderByDescending(c => c.PercentOff)
-                    .FirstOrDefault();
-
-                if (bestCampaign != null && bestCampaign.PercentOff > 0m)
-                {
-                    decimal discount = Math.Round(lineTotal * (bestCampaign.PercentOff / 100m), 2);
-                    if (discount > 0m)
-                    {
-
-                        receiptRows.Add(new ReceiptRowModel(
-                            $"Rabatt: {bestCampaign.PercentOff.ToString("0.0", CultureInfo.InvariantCulture)}%", 0,
-                            -discount));
-                    }
-                }
-            }
-
-            decimal totalAmount = receiptRows.Sum(r => r.ReceiptProductAmount);
-            int totalItems = cart.Sum(x => x.ProductQuantity);
-
-            var receiptReader = new ReadAllReceiptsFromFile();
-            var receiptWriter = new SaveReceiptToFile();
-            var receipts = receiptReader.ReadAll();
-
-            int nextReceiptNumber = receipts.Any() ? receipts.Max(r => r.ReceiptNumber) + 1 : 1;
-
-            var receipt = new ReceiptModel(
-                nextReceiptNumber,
-                memberIdNumber,
-                DateTime.Now,
-                receiptRows,
-                totalItems,
-                totalAmount);
-
-            receipts.Add(receipt);
-            receiptWriter.SaveAll(receipts);
-            return receipt;
-        }
+        //    return ordered[index];
+        //}
 
         private static int ReadCustomerNumberOrSkip()
         {
@@ -521,7 +320,7 @@ namespace Kassasystemet_refac
             return value;
         }
 
-        private static int ReadMemberIdNumber()
+        public static int ReadMemberIdNumber()
         {
             string input = ValidatedConsoleInput.ReadValidatedCenteredText(
                 "== Kundnummer ==",
@@ -530,19 +329,6 @@ namespace Kassasystemet_refac
 
             return int.Parse(input.Trim(), CultureInfo.InvariantCulture);
         }
-
-        //private static void SavePurchaseDraft(int memberIdNumber, List<CartItemModel> cart)
-        //{
-        //    string items = string.Join("\n", cart.Select(c => $"{c.ProductIdNumber},{c.ProductQuantity}"));
-        //    string line = $"{memberIdNumber};{items}";
-        //    File.WriteAllText(ReceiptFilePath.ReceiptDraftPath, line);
-        //}
-
-        //private static void ClearPurchaseDraft()
-        //{
-        //    if (File.Exists(ReceiptFilePath.ReceiptDraftPath))
-        //        File.Delete(ReceiptFilePath.ReceiptDraftPath);
-        //}
 
         private static List<CartItemModel> LoadCartFromSavedItems(List<(int productIdNumber, int productQuantity)> savedItems)
         {
