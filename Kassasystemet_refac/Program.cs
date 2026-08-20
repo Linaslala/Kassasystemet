@@ -3877,23 +3877,7 @@ namespace Kassasystemet_refac
                     .ToList();
             }
         }
-        public class ProductModel : IProductModel
-        {
-            public int ProductIdNumber { get; }
-            public string ProductName { get; }
-            public decimal ProductPrice { get; }
-            public string ProductPriceType { get; }
-
-            public string ProductFullName => $"{ProductIdNumber} {ProductName} {ProductPrice} {ProductPriceType}";
-
-            public ProductModel(int productIdNumber, string productName, decimal productPrice, string productPriceType)
-            {
-                ProductIdNumber = productIdNumber;
-                ProductName = productName;
-                ProductPrice = productPrice;
-                ProductPriceType = productPriceType;
-            }
-        }
+        
         public interface ISearchProduct
         {
             List<IProductModel> Search(string searchProductText);
