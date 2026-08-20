@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using Kassasystemet_refac.Data;
+using System.Globalization;
 using System.Text;
 using static Kassasystemet_refac.SearchMemberMenu;
 
