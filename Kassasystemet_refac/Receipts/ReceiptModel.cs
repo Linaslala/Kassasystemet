@@ -1,6 +1,6 @@
 ﻿using static Kassasystemet_refac.SearchMember;
 
-namespace Kassasystemet_refac.Receipts
+namespace Kassasystemet_refac
 {
     public class ReceiptModel : IReceiptModel
     {
