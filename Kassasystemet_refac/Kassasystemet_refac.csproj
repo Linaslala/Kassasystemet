@@ -7,4 +7,15 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Menus\" />
+    <Folder Include="Campaigns\" />
+    <Folder Include="Data\" />
+    <Folder Include="Interfaces\" />
+    <Folder Include="Utilities\" />
+    <Folder Include="Receipts\" />
+    <Folder Include="Purchases\" />
+    <Folder Include="Products\" />
+  </ItemGroup>
+
 </Project>
