@@ -80,7 +80,8 @@
                             break;
                         }
 
-                        int footerChoice = selectedIndex - 1;
+                        PurchaseMenuChoice footerChoice =
+                            (PurchaseMenuChoice)(selectedIndex -1);
 
                         if (HandleFooterChoice(
                             footerChoice,
@@ -118,12 +119,12 @@
         }
 
         public bool HandleFooterChoice(
-            int footerChoice,
+            PurchaseMenuChoice footerChoice,
             ref int memberIdNumber,
             List<CartItemModel> cart,
             Dictionary<int, IProductModel> productById)
         {
-            if (footerChoice == 0)
+            if (footerChoice == PurchaseMenuChoice.Pay)
             {
                 if (ReceiptService.TryPayAndShowReceipt(ref memberIdNumber, cart))
                 {
@@ -132,25 +133,25 @@
                 return false;
             }
 
-            if (footerChoice == 1)
+            if (footerChoice == PurchaseMenuChoice.SearchProduct)
             {
                 PurchaseProductSearchService.ShowInlineProductSearchAndPresent();
                 return false;
             }
 
-            if (footerChoice == 2)
+            if (footerChoice == PurchaseMenuChoice.RemoveProduct)
             {
                 CartService.RemoveProductFromCart(cart);
                 return false;
             }
 
-            if (footerChoice == 3)
+            if (footerChoice == PurchaseMenuChoice.ChangeCustomer)
             {
                 memberIdNumber = PurchaseInputService.ReadMemberIdNumber();
                 return false;
             }
 
-            if (footerChoice == 4)
+            if (footerChoice == PurchaseMenuChoice.SaveAndExit)
             {
                 PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
                 Console.Clear();
@@ -163,6 +164,15 @@
             }
 
             return true;
+        }
+
+        public enum PurchaseMenuChoice
+        {
+            Pay = 0,
+            SearchProduct = 1,
+            RemoveProduct = 2,
+            ChangeCustomer = 3,
+            SaveAndExit = 4
         }
     }
 }
