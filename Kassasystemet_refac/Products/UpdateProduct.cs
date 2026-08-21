@@ -128,15 +128,19 @@
                         {
                             NotificationService.ShowError(
                                 "Kunde inte spara: Produkten finns inte");
+
+                            ValidatedConsoleInput
+                                .PauseCentered();
+
+                            return;
                         }
 
                         products[index] = new ProductModel(productId, productName, productPrice, productPriceType);
                         productWriter.SaveAll(products);
 
 
-                        NotificationService.ShowSuccess(
+                        NotificationService.ShowSuccessHeader(
                            "=== Produktinformation uppdaterad ===");
-
 
                         CenterConsoleOutput.CenterTextToWindow($"{productId} {productName} {productPrice} {productPriceType}");
 

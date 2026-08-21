@@ -4,8 +4,7 @@
     {
         public static void ShowError(
             string message)
-        {
-            Console.Clear();
+        {            
             Console.ForegroundColor =
                 ConsoleColor.Red;
 
@@ -13,25 +12,21 @@
                 .CenterTextToWindow(message);
 
             Console.ResetColor();
-
-            ValidatedConsoleInput
-                .PauseCentered();
         }
 
-        public static void ShowSuccess(
-            string message)
+
+        public static void ShowSuccessHeader(string header)
         {
             Console.Clear();
             Console.ForegroundColor =
                 ConsoleColor.Green;
 
-            CenterConsoleOutput
-                .CenterTextToWindow(message);
+            CenterConsoleOutput.CenterTextToWindow(
+                header);
 
             Console.ResetColor();
 
-            ValidatedConsoleInput
-                .PauseCentered();
+            Console.WriteLine();
         }
     }
 }

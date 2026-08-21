@@ -27,10 +27,12 @@ namespace Kassasystemet_refac
             if (cart.Count == 0)
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Varukorgen är tom.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
+                NotificationService.ShowError(
+                    "Varukorgen är tom");
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow("Varukorgen är tom.");
+                //Console.ResetColor();
+                //ValidatedConsoleInput.PauseCentered();
                 return;
             }
 
@@ -58,18 +60,23 @@ namespace Kassasystemet_refac
                 || !int.TryParse(tokens[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int productQuantity)
                 || productQuantity <= 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Ogiltig inmatning. Skriv exakt: Produktnummer Antal (ex: 1 2).");
-                Console.ResetColor();
+                NotificationService.ShowError(
+                             "Ogiltig inmatning. Skriv exakt: Produktnummer Antal (ex: 1 2).");
+
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow("Ogiltig inmatning. Skriv exakt: Produktnummer Antal (ex: 1 2).");
+                //Console.ResetColor();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }
 
             if (!productByIdNumber.TryGetValue(productIdNumber, out var product))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow($"Ingen produkt hittades med Produktnummer {productIdNumber}.");
-                Console.ResetColor();
+                NotificationService.ShowError(
+                             $"Ingen produkt hittades med Produktnummer {productIdNumber}.");
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow($"Ingen produkt hittades med Produktnummer {productIdNumber}.");
+                //Console.ResetColor();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }
@@ -90,9 +97,12 @@ namespace Kassasystemet_refac
                     productQuantity));
             }
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            CenterConsoleOutput.CenterTextToWindow($"Tillagd: {product.ProductName} x{productQuantity}");
-            Console.ResetColor();
+            NotificationService.ShowSuccessHeader(
+                         $"Tillagd: {product.ProductName} x{productQuantity}");
+
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //CenterConsoleOutput.CenterTextToWindow($"Tillagd: {product.ProductName} x{productQuantity}");
+            //Console.ResetColor();
             Console.ReadKey(true);
         }
     }

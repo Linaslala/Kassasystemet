@@ -118,12 +118,17 @@
                         {
                             NotificationService.ShowError(
                                 "Kunde inte spara: Kunden finns inte");
+
+                            ValidatedConsoleInput
+                                .PauseCentered();
+
+                            return;
                         }
 
                         members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
                         memberWriter.SaveAll(members);
 
-                        NotificationService.ShowSuccess(
+                        NotificationService.ShowSuccessHeader(
                            "=== Medlemsinformation uppdaterad ===");
 
                         string headerRow = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
