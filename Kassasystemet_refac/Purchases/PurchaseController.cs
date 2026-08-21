@@ -60,35 +60,36 @@
                 switch (key)
                 {
                     case ConsoleKey.UpArrow:
-                        selectedIndex = selectedIndex <= 0 ? footerOptions.Length : selectedIndex - 1;
-                        break;
-
                     case ConsoleKey.DownArrow:
-                        selectedIndex = selectedIndex >= footerOptions.Length ? 0 : selectedIndex + 1;
-                        break;
-
-                    case ConsoleKey.Enter:
-                        if (selectedIndex == 0)
-                        {
-                            CartService.AddProductPrompt(cart, productById);
-                            break;
-                        }
-
-                        int footerChoice = selectedIndex - 1;
-
-                        if (HandleFooterChoice(
-                            footerChoice,
-                            ref memberIdNumber,
-                            cart,
-                            productById))
-                        {
-                            return;
-                        }
-                        break;
-
-                    default:
+                        selectedIndex =
+                            HandleNavigationKey(
+                                key,
+                                selectedIndex,
+                                footerOptions.Length);
                         break;
                 }
+            }
+        }
+
+        private static int HandleNavigationKey(
+            ConsoleKey key,
+            int selectedIndex,
+            int maxIndex)
+        {
+            switch (key)
+            {
+                case ConsoleKey.UpArrow:
+                    return selectedIndex <= 0
+                        ? maxIndex
+                        : selectedIndex - 1;
+
+                case ConsoleKey.DownArrow:
+                    return selectedIndex >= maxIndex
+                        ? 0
+                        : selectedIndex + 1;
+
+                default:
+                    return selectedIndex;
             }
         }
 
