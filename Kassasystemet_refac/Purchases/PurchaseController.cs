@@ -76,48 +76,68 @@
 
                         int footerChoice = selectedIndex - 1;
 
-                        if (footerChoice == 0)
+                        if (HandleFooterChoice(
+                            footerChoice,
+                            ref memberIdNumber,
+                            cart,
+                            productById))
                         {
-                            if (ReceiptService.TryPayAndShowReceipt(ref memberIdNumber, cart))
-                                return;
-                            break;
-                        }
-
-                        if (footerChoice == 1)
-                        {
-                            PurchaseProductSearchService.ShowInlineProductSearchAndPresent();
-                            break;
-                        }
-
-                        if (footerChoice == 2)
-                        {
-                            CartService.RemoveProductFromCart(cart);
-                            break;
-                        }
-
-                        if (footerChoice == 3)
-                        {
-                            memberIdNumber = PurchaseInputService.ReadMemberIdNumber();
-                            break;
-                        }
-
-                        if (footerChoice == 4)
-                        {
-                            PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
-                            Console.ResetColor();
-                            ValidatedConsoleInput.PauseCentered();
                             return;
                         }
-
-                        return;
+                        break;
 
                     default:
                         break;
                 }
             }
+        }
+
+        public bool HandleFooterChoice(
+            int footerChoice,
+            ref int memberIdNumber,
+            List<CartItemModel> cart,
+            Dictionary<int, IProductModel> productById)
+        {
+            if (footerChoice == 0)
+            {
+                if (ReceiptService.TryPayAndShowReceipt(ref memberIdNumber, cart))
+                {
+                    return true;
+                }
+                return false;
+            }
+
+            if (footerChoice == 1)
+            {
+                PurchaseProductSearchService.ShowInlineProductSearchAndPresent();
+                return false;
+            }
+
+            if (footerChoice == 2)
+            {
+                CartService.RemoveProductFromCart(cart);
+                return false;
+            }
+
+            if (footerChoice == 3)
+            {
+                memberIdNumber = PurchaseInputService.ReadMemberIdNumber();
+                return false;
+            }
+
+            if (footerChoice == 4)
+            {
+                PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
+                Console.ResetColor();
+                ValidatedConsoleInput.PauseCentered();
+
+                return true;
+            }
+
+            return true;
         }
     }
 }
