@@ -32,10 +32,14 @@
                         Console.Clear();
                         CenterConsoleOutput.CenterTextToWindow("== Avsluta medlemskap ==");
                         Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Medlemmen du söker finns inte i systemet.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+
+                        NotificationService.ShowError(
+                            "Medlemmen du söker finns inte i systemet.");
+
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow("Medlemmen du söker finns inte i systemet.");
+                        //Console.ResetColor();
+                        //Console.WriteLine();
                     });
 
                     if (choice == 0)
@@ -104,9 +108,13 @@
                     if (removed == 0)
                     {
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Kunde inte radera: medlem hittades inte längre i listan.");
-                        Console.ResetColor();
+
+                        NotificationService.ShowError(
+                            "Kunde inte radera: medlem hittades inte längre i listan.");
+
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow("Kunde inte radera: medlem hittades inte längre i listan.");
+                        //Console.ResetColor();
                         ValidatedConsoleInput.PauseCentered();
                         return;
                     }
@@ -114,11 +122,16 @@
                     memberWriter.SaveAll(members);
 
                     Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    CenterConsoleOutput.CenterTextToWindow("Medlem raderad");
-                    Console.ResetColor();
 
-                    Console.WriteLine();
+                    //Detta syns inte i respektive vy!
+                    NotificationService.ShowSuccessHeader(
+                        "Medlem raderad");
+
+                    //Console.ForegroundColor = ConsoleColor.Green;
+                    //CenterConsoleOutput.CenterTextToWindow("Medlem raderad");
+                    //Console.ResetColor();
+
+                    //Console.WriteLine();
 
                     var afterDeleteMemberMenu = new ConsoleOptionsArrow();
                     var afterDeleteMemberOptions = new[]

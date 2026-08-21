@@ -40,10 +40,13 @@ namespace Kassasystemet_refac
                         Console.Clear();
                         CenterConsoleOutput.CenterTextToWindow("== Ta bort kampanj ==");
                         Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Kampanjen du söker finns inte i systemet.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+
+                        NotificationService.ShowError(
+                            "Kampanjen du söker finns inte i systemet.");
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow("Kampanjen du söker finns inte i systemet.");
+                        //Console.ResetColor();
+                        //Console.WriteLine();
                     });
 
                     if (choice == 0)
@@ -114,10 +117,14 @@ namespace Kassasystemet_refac
                     if (removed == 0)
                     {
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow(
+
+                        NotificationService.ShowError(
                             "Kunde inte radera: kampanjen hittades inte längre i listan.");
-                        Console.ResetColor();
+
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow(
+                        //    "Kunde inte radera: kampanjen hittades inte längre i listan.");
+                        //Console.ResetColor();
                         ValidatedConsoleInput.PauseCentered();
                         return;
                     }
@@ -125,10 +132,14 @@ namespace Kassasystemet_refac
                     campaignWriter.SaveAll(campaigns);
 
                     Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    CenterConsoleOutput.CenterTextToWindow("Kampanj raderad");
-                    Console.ResetColor();
-                    Console.WriteLine();
+
+                    NotificationService.ShowSuccessHeader(
+                        "Kampanj raderad");
+
+                    //Console.ForegroundColor = ConsoleColor.Green;
+                    //CenterConsoleOutput.CenterTextToWindow("Kampanj raderad");
+                    //Console.ResetColor();
+                    //Console.WriteLine();
 
                     var afterDeleteMenu = new ConsoleOptionsArrow();
                     var afterDeleteOptions = new[]

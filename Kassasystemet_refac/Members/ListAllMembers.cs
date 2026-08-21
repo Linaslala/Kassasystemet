@@ -16,11 +16,14 @@
 
             if (!members.Any())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Inga medlemmar finns registrerade.");
-                Console.ResetColor();
+                NotificationService.ShowError(
+                 "Inga medlemmar finns registrerade.");
 
-                Console.WriteLine();
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow("Inga medlemmar finns registrerade.");
+                //Console.ResetColor();
+
+                //Console.WriteLine();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }

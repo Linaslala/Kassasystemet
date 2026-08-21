@@ -32,10 +32,14 @@
                         Console.Clear();
                         CenterConsoleOutput.CenterTextToWindow("== Ta bort produkt ==");
                         Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Produkten du söker finns inte i systemet.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+
+                        NotificationService.ShowError(
+                            "Produkten du söker finns inte i systemet.");
+
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow("Produkten du söker finns inte i systemet.");
+                        //Console.ResetColor();
+                        //Console.WriteLine();
                     });
 
                     if (choice == 0)
@@ -105,9 +109,13 @@
                     if (removed == 0)
                     {
                         Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Kunde inte radera: produkten hittades inte längre i listan.");
-                        Console.ResetColor();
+
+                        NotificationService.ShowError(
+                            "Kunde inte radera: produkten hittades inte längre i listan.");
+
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow("Kunde inte radera: produkten hittades inte längre i listan.");
+                        //Console.ResetColor();
                         ValidatedConsoleInput.PauseCentered();
                         return;
                     }
@@ -115,11 +123,16 @@
                     productWriter.SaveAll(products);
 
                     Console.Clear();
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    CenterConsoleOutput.CenterTextToWindow("Produkt raderad");
-                    Console.ResetColor();
 
-                    Console.WriteLine();
+                    //Detta syns inte i respektive vy!
+                    NotificationService.ShowSuccessHeader(
+                        "Produkt raderad");
+
+                    //Console.ForegroundColor = ConsoleColor.Green;
+                    //CenterConsoleOutput.CenterTextToWindow("Produkt raderad");
+                    //Console.ResetColor();
+
+                    //Console.WriteLine();
 
                     var afterDeleteProductMenu = new ConsoleOptionsArrow();
                     var afterDeleteProductOptions = new[]

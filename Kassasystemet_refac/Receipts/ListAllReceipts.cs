@@ -45,10 +45,13 @@ namespace Kassasystemet_refac
 
                 if (!receipts.Any())
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
-                    Console.ResetColor();
-                    Console.WriteLine();
+                    NotificationService.ShowError(
+                        "Det finns inga registrerade köp.");
+
+                    //Console.ForegroundColor = ConsoleColor.Red;
+                    //CenterConsoleOutput.CenterTextToWindow("Det finns inga registrerade köp.");
+                    //Console.ResetColor();
+                    //Console.WriteLine();
                     return;
                 }
 

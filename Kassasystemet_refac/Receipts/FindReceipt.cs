@@ -36,10 +36,13 @@
 
                     if (!results.Any())
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Inget kvitto hittades.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+                        NotificationService.ShowError(
+                            "Inget kvitto hittades.");
+
+                        //Console.ForegroundColor = ConsoleColor.Red;
+                        //CenterConsoleOutput.CenterTextToWindow("Inget kvitto hittades.");
+                        //Console.ResetColor();
+                        //Console.WriteLine();
                         return;
                     }
 

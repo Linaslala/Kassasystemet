@@ -50,11 +50,14 @@ namespace Kassasystemet_refac
 
 
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
 
-            // Rubrik
-            CenterConsoleOutput.CenterTextToWindow("== Ny produkt sparad ==");
-            Console.WriteLine();
+            NotificationService.ShowSuccessHeader(
+                 "=== Ny produkt sparad ===");
+
+            //Console.ForegroundColor = ConsoleColor.Green;
+
+            //CenterConsoleOutput.CenterTextToWindow("== Ny produkt sparad ==");
+            //Console.WriteLine();
 
             string infoHeader =
                 $"{"Produktnummer",-12}{"Produktnamn",-25}{"Pris",-12}{"Pristyp",-15}";

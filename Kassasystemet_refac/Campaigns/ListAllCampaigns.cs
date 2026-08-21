@@ -20,10 +20,13 @@ namespace Kassasystemet_refac
 
             if (!campaigns.Any())
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Inga kampanjer finns registrerade.");
-                Console.ResetColor();
-                Console.WriteLine();
+                NotificationService.ShowError(
+                  "Inga kampanjer finns registrerade.");
+
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow("Inga kampanjer finns registrerade.");
+                //Console.ResetColor();
+                //Console.WriteLine();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }

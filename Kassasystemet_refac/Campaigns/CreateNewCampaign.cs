@@ -30,9 +30,13 @@ namespace Kassasystemet_refac
             while (campaignEndDate < campaignStartDate)
             {
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Slutdatum kan inte vara före startdatum.");
-                Console.ResetColor();
+
+                NotificationService.ShowError(
+                    "Slutdatum kan inte vara före startdatum.");
+
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow("Slutdatum kan inte vara före startdatum.");
+                //Console.ResetColor();
 
                 campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                     campaignHeader, campaignEndDatePrompt, ValidateCampaignDate, clearConsoleEachAttempt: false);
@@ -65,9 +69,13 @@ namespace Kassasystemet_refac
             campaignWriter.SaveAll(campaigns);
 
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
-            CenterConsoleOutput.CenterTextToWindow("== Ny kampanj skapad ==");
-            Console.WriteLine();
+
+            NotificationService.ShowSuccessHeader(
+             "=== Ny kampanj skapad ===");
+
+            //Console.ForegroundColor = ConsoleColor.Green;
+            //CenterConsoleOutput.CenterTextToWindow("== Ny kampanj skapad ==");
+            //Console.WriteLine();
 
             CenterConsoleOutput.CenterTextToWindow($"Kampanj: {newCampaign.CampaignName} ({newCampaign.TypeOfCampaign})");
 

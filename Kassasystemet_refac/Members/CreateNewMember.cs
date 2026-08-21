@@ -34,10 +34,13 @@
             memberWriter.SaveAll(members);
 
             Console.Clear();
-            Console.ForegroundColor = ConsoleColor.Green;
+            //Console.ForegroundColor = ConsoleColor.Green;
 
-            CenterConsoleOutput.CenterTextToWindow("Ny medlem sparad:");
-            Console.WriteLine();
+            //CenterConsoleOutput.CenterTextToWindow("Ny medlem sparad:");
+            //Console.WriteLine();
+
+            NotificationService.ShowSuccessHeader(
+                "=== Ny medlem sparad ===");
 
             string memberHeaderRow = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
             string memberDataRow = $"{newMemberIdNumber,-20}{memberFirstNameInput,-20}{memberLastNameInput,-20}";

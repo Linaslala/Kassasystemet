@@ -155,9 +155,13 @@
             {
                 PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
                 Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
-                Console.ResetColor();
+                
+                NotificationService.ShowSuccessHeader(
+                    "Pågående köp sparat. Du kan återuppta senare.");
+
+                //Console.ForegroundColor = ConsoleColor.Green;
+                //CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
+                //Console.ResetColor();
                 ValidatedConsoleInput.PauseCentered();
 
                 return true;

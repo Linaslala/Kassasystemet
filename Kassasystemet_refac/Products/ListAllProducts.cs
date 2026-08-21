@@ -21,11 +21,14 @@
             {
                 Console.Clear();
 
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Det finns inga produkter i lager");
-                Console.ResetColor();
+                NotificationService.ShowError(
+                      "Det finns inga produkter i lager");
 
-                Console.WriteLine();
+                //Console.ForegroundColor = ConsoleColor.Red;
+                //CenterConsoleOutput.CenterTextToWindow("Det finns inga produkter i lager");
+                //Console.ResetColor();
+
+                //Console.WriteLine();
                 ValidatedConsoleInput.PauseCentered();
                 return;
             }
