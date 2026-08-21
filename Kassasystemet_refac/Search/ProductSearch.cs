@@ -2,16 +2,16 @@
 {
     public class ProductSearch : ISearchProduct
     {
-        private readonly IReadAllProductsFromFile _reader;
+        private readonly IReadAllProductsFromFile _productReader;
 
-        public ProductSearch(IReadAllProductsFromFile reader)
+        public ProductSearch(IReadAllProductsFromFile productReader)
         {
-            _reader = reader;
+            _productReader = productReader;
         }
 
         public List<IProductModel> Search(string searchProductText)
         {
-            var all = _reader.ReadAll();
+            var all = _productReader.ReadAll();
 
             if (string.IsNullOrWhiteSpace(searchProductText))
                 return all;

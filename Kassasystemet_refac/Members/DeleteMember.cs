@@ -4,9 +4,9 @@
     {
         public void Run()
         {
-            IReadAllMembersFromFile reader = new ReadAllMembersFromFile();
-            ISaveMemberToFile writer = new SaveMemberToFile();
-            ISearchMember finder = new MemberSearch(reader);
+            IReadAllMembersFromFile memberReader = new ReadAllMembersFromFile();
+            ISaveMemberToFile memberWriter = new SaveMemberToFile();
+            ISearchMember memberFinder = new MemberSearch(memberReader);
 
             while (true)
             {
@@ -16,7 +16,7 @@
                 Console.WriteLine();
 
                 string queryInput = UserInputPlacer.ReadCenteredText("Sök på medlemsnummer eller namn: ");
-                var searchMemberResult = finder.Search(queryInput);
+                var searchMemberResult = memberFinder.Search(queryInput);
 
                 if (searchMemberResult.Count == 0)
                 {
@@ -98,7 +98,7 @@
                         return;
                     }
 
-                    var members = reader.ReadAll();
+                    var members = memberReader.ReadAll();
                     int removed = members.RemoveAll(m => m.MemberIdNumber == memberId);
 
                     if (removed == 0)
@@ -111,7 +111,7 @@
                         return;
                     }
 
-                    writer.SaveAll(members);
+                    memberWriter.SaveAll(members);
 
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;

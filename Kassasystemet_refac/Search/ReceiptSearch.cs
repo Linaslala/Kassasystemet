@@ -2,16 +2,16 @@
 {
     public class ReceiptSearch : IReceiptSearch
     {
-        private readonly IReadAllReceiptsFromFile _reader;
+        private readonly IReadAllReceiptsFromFile _receiptReader;
 
-        public ReceiptSearch(IReadAllReceiptsFromFile reader)
+        public ReceiptSearch(IReadAllReceiptsFromFile receiptReader)
         {
-            _reader = reader;
+            _receiptReader = receiptReader;
         }
 
         public List<IReceiptModel> Search(string searchText)
         {
-            var all = _reader.ReadAll();
+            var all = _receiptReader.ReadAll();
 
             if (string.IsNullOrWhiteSpace(searchText))
                 return all;

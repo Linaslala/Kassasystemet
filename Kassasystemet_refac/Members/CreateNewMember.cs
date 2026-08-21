@@ -21,17 +21,17 @@
                 clearConsoleEachAttempt: false
             );
 
-            IReadAllMembersFromFile reader = new ReadAllMembersFromFile();
-            ISaveMemberToFile writer = new SaveMemberToFile();
+            IReadAllMembersFromFile memberReader = new ReadAllMembersFromFile();
+            ISaveMemberToFile memberWriter = new SaveMemberToFile();
 
-            var members = reader.ReadAll();
+            var members = memberReader.ReadAll();
 
             int newMemberIdNumber = members.Any()
                 ? members.Max(m => m.MemberIdNumber) + 1
                 : 1;
 
             members.Add(new MemberModel(newMemberIdNumber, memberFirstNameInput, memberLastNameInput));
-            writer.SaveAll(members);
+            memberWriter.SaveAll(members);
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;

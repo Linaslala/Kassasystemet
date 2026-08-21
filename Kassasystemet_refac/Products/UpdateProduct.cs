@@ -5,8 +5,8 @@
         public void Run()
         {
             IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISaveProductToFile writer = new SaveProductToFile();
-            ISearchProduct finder = new ProductSearch(reader);
+            ISaveProductToFile productWriter = new SaveProductToFile();
+            ISearchProduct productFinder = new ProductSearch(reader);
 
             while (true)
             {
@@ -16,7 +16,7 @@
                 Console.WriteLine();
 
                 string queryInput = UserInputPlacer.ReadCenteredText("Sök på produktnummer eller produktnamn: ");
-                var searchProductResult = finder.Search(queryInput);
+                var searchProductResult = productFinder.Search(queryInput);
 
                 if (searchProductResult.Count == 0)
                 {
@@ -139,7 +139,7 @@
                         }
 
                         products[index] = new ProductModel(productId, productName, productPrice, productPriceType);
-                        writer.SaveAll(products);
+                        productWriter.SaveAll(products);
 
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -151,14 +151,14 @@
 
                         ValidatedConsoleInput.PauseCentered();
 
-                        var afterSaveProductMenue = new ConsoleOptionsArrow();
+                        var afterSaveProductMenu = new ConsoleOptionsArrow();
                         var afterSaveProductOptions = new[]
                         {
                             "Uppdatera en till produkt",
                             "Tillbaka till produktsidan"
                         };
 
-                        int afterChoice = afterSaveProductMenue.ShowArrow("Välj:", afterSaveProductOptions);
+                        int afterChoice = afterSaveProductMenu.ShowArrow("Välj:", afterSaveProductOptions);
                         if (afterChoice == 0)
                             break;
 

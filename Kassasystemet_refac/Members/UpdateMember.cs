@@ -5,8 +5,8 @@
         public void Run()
         {
             IReadAllMembersFromFile reader = new ReadAllMembersFromFile();
-            ISaveMemberToFile writer = new SaveMemberToFile();
-            ISearchMember finder = new MemberSearch(reader);
+            ISaveMemberToFile memberWriter = new SaveMemberToFile();
+            ISearchMember memberFinder = new MemberSearch(reader);
 
 
             while (true)
@@ -17,7 +17,7 @@
                 Console.WriteLine();
 
                 string queryInput = UserInputPlacer.ReadCenteredText("Sök på medlemsnummer eller namn: ");
-                var searchMemberResult = finder.Search(queryInput);
+                var searchMemberResult = memberFinder.Search(queryInput);
 
 
                 if (searchMemberResult.Count == 0)
@@ -129,7 +129,7 @@
                         }
 
                         members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
-                        writer.SaveAll(members);
+                        memberWriter.SaveAll(members);
 
                         Console.Clear();
                         Console.ForegroundColor = ConsoleColor.Green;
@@ -147,14 +147,14 @@
                         Console.ResetColor();
                         ValidatedConsoleInput.PauseCentered();
 
-                        var afterSaveMemberMenue = new ConsoleOptionsArrow();
+                        var afterSaveMemberMenu = new ConsoleOptionsArrow();
                         var afterSaveMemberOptions = new[]
                         {
                             "Uppdatera en till medlem",
                             "Tillbaka till medlemssidan"
                         };
 
-                        int afterChoice = afterSaveMemberMenue.ShowArrow("Välj:", afterSaveMemberOptions);
+                        int afterChoice = afterSaveMemberMenu.ShowArrow("Välj:", afterSaveMemberOptions);
                         if (afterChoice == 0)
                             break;
 

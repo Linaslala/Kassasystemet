@@ -10,10 +10,10 @@
 
             CenterConsoleOutput.CenterTextToWindow(listAllProductsHeader);
 
-            IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISearchProduct finder = new ProductSearch(reader);
+            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
+            ISearchProduct productFinder = new ProductSearch(productReader);
 
-            var products = reader.ReadAll()
+            var products = productReader.ReadAll()
             .OrderBy(p => p.ProductIdNumber)
             .ToList();
 

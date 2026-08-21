@@ -5,7 +5,7 @@
         public void Run()
         {
             IReadAllMembersFromFile reader = new ReadAllMembersFromFile();
-            ISearchMember finder = new MemberSearch(reader);
+            ISearchMember memberFinder = new MemberSearch(reader);
 
             while (true)
             {
@@ -15,7 +15,7 @@
 
                 string queryInput = UserInputPlacer.ReadCenteredText("Sök på medlemsnummer eller namn (tryck enter för alla): ").Trim();
 
-                var results = finder.Search(queryInput);
+                var results = memberFinder.Search(queryInput);
 
                 if (results.Count == 0)
                 {

@@ -57,12 +57,12 @@ namespace Kassasystemet_refac
                 productIdNumbers,
                 percentOff);
 
-            IReadAllCampaignsFromFile reader = new ReadAllCampaignsFromFile();
-            ISaveCampaignToFile writer = new SaveCampaignToFile();
+            IReadAllCampaignsFromFile campaignReader = new ReadAllCampaignsFromFile();
+            ISaveCampaignToFile campaignWriter = new SaveCampaignToFile();
 
-            var campaigns = reader.ReadAll();
+            var campaigns = campaignReader.ReadAll();
             campaigns.Add(newCampaign);
-            writer.SaveAll(campaigns);
+            campaignWriter.SaveAll(campaigns);
 
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.Green;

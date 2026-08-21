@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kassasystemet_refac
+﻿namespace Kassasystemet_refac
 {
+    //En controller ska ofta ta emot input
+    //Bestämma vad som ska ske
+    //Anropa rätt service
     public class PurchaseController
     {
         public void Run()

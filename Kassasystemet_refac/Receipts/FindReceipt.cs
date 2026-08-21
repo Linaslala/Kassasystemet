@@ -6,8 +6,8 @@
         {
             Console.Clear();
 
-            IReadAllReceiptsFromFile reader = new ReadAllReceiptsFromFile();
-            IReceiptSearch finder = new ReceiptSearch(reader);
+            IReadAllReceiptsFromFile receiptReader = new ReadAllReceiptsFromFile();
+            IReceiptSearch receiptFinder = new ReceiptSearch(receiptReader);
 
             while (true)
             {
@@ -19,7 +19,7 @@
                 string query = UserInputPlacer.ReadCenteredText(
                     "Sök på kvittonummer eller kundnummer: ").Trim();
 
-                var results = finder.Search(query)
+                var results = receiptFinder.Search(query)
                     .OrderByDescending(r => r.ReceiptNumber)
                     .ToList();
 

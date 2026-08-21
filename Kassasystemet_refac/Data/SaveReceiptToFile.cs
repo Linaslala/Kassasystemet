@@ -29,25 +29,25 @@ namespace Kassasystemet_refac
             if (!string.IsNullOrWhiteSpace(receiptDirectory) && !Directory.Exists(receiptDirectory))
                 Directory.CreateDirectory(receiptDirectory);
 
-            using var writer = new StreamWriter(receiptPath, append: false, Encoding.UTF8);
+            using var receiptWriter = new StreamWriter(receiptPath, append: false, Encoding.UTF8);
 
             foreach (var receipt in onlyTodaysReceipts)
             {
-                WriteReceipt(writer, receipt);
-                writer.WriteLine();
+                WriteReceipt(receiptWriter, receipt);
+                receiptWriter.WriteLine();
             }
         }
 
-        private static void WriteReceipt(StreamWriter writer, IReceiptModel receipt)
+        private static void WriteReceipt(StreamWriter receiptWriter, IReceiptModel receipt)
         {
-            writer.WriteLine(equalsDivider);
-            writer.WriteLine($"KVITTO #{receipt.ReceiptNumber}");
-            writer.WriteLine(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
+            receiptWriter.WriteLine(equalsDivider);
+            receiptWriter.WriteLine($"KVITTO #{receipt.ReceiptNumber}");
+            receiptWriter.WriteLine(receipt.ReceiptCreatedAt.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture));
 
             if (receipt.MemberIdNumber != 0)
-                writer.WriteLine($"Medlemsnummer: {receipt.MemberIdNumber}");
+                receiptWriter.WriteLine($"Medlemsnummer: {receipt.MemberIdNumber}");
 
-            writer.WriteLine(Dash);
+            receiptWriter.WriteLine(Dash);
 
             if (receipt.ReceiptRows != null && receipt.ReceiptRows.Any())
             {
@@ -57,21 +57,21 @@ namespace Kassasystemet_refac
                     {
                         var unitPrice = row.ReceiptProductAmount / row.ReceiptProductQuantity;
 
-                        writer.WriteLine(
+                        receiptWriter.WriteLine(
                             $"{row.ReceiptProductText} {row.ReceiptProductQuantity}st*{unitPrice.ToString("0.00", CultureInfo.InvariantCulture)} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
                     }
                     else
                     {
-                        writer.WriteLine(
+                        receiptWriter.WriteLine(
                             $"{row.ReceiptProductText} {row.ReceiptProductAmount.ToString("0.00", CultureInfo.InvariantCulture)}");
                     }
                 }
             }
 
-            writer.WriteLine(Dash);
-            writer.WriteLine($"Totalt antal varor: {receipt.TotalItems}");
-            writer.WriteLine($"TOTALT: {receipt.TotalAmount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
-            writer.WriteLine(equalsDivider);
+            receiptWriter.WriteLine(Dash);
+            receiptWriter.WriteLine($"Totalt antal varor: {receipt.TotalItems}");
+            receiptWriter.WriteLine($"TOTALT: {receipt.TotalAmount.ToString("0.00", CultureInfo.InvariantCulture)} SEK");
+            receiptWriter.WriteLine(equalsDivider);
         }
     }
 }

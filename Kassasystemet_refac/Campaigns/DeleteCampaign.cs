@@ -6,9 +6,9 @@ namespace Kassasystemet_refac
     {
         public void Run()
         {
-            IReadAllCampaignsFromFile reader = new ReadAllCampaignsFromFile();
-            ISaveCampaignToFile writer = new SaveCampaignToFile();
-            ISearchCampaign finder = new CampaignSearch(reader);
+            IReadAllCampaignsFromFile campaignReader = new ReadAllCampaignsFromFile();
+            ISaveCampaignToFile campaignWriter = new SaveCampaignToFile();
+            ISearchCampaign campaignFinder = new CampaignSearch(campaignReader);
 
             IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
             var productLookup = productReader.ReadAll()
@@ -24,7 +24,7 @@ namespace Kassasystemet_refac
                 string queryInput = UserInputPlacer.ReadCenteredText(
                     "Sök på kampanjnamn, datum eller berörda produkter: ");
 
-                var searchResult = finder.Search(queryInput);
+                var searchResult = campaignFinder.Search(queryInput);
 
                 if (searchResult.Count == 0)
                 {
@@ -103,7 +103,7 @@ namespace Kassasystemet_refac
                     if (deleteChoice != 0)
                         return;
 
-                    var campaigns = reader.ReadAll();
+                    var campaigns = campaignReader.ReadAll();
 
                     int removed = campaigns.RemoveAll(c =>
                         string.Equals(c.CampaignName, campaignName, StringComparison.Ordinal) &&
@@ -122,7 +122,7 @@ namespace Kassasystemet_refac
                         return;
                     }
 
-                    writer.SaveAll(campaigns);
+                    campaignWriter.SaveAll(campaigns);
 
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;

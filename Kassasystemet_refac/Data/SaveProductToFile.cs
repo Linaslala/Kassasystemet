@@ -13,12 +13,12 @@ namespace Kassasystemet_refac
             if (!string.IsNullOrWhiteSpace(productDirectory) && !Directory.Exists(productDirectory))
                 Directory.CreateDirectory(productDirectory);
 
-            using var writer = new StreamWriter(filePath, false);
+            using var productWriter = new StreamWriter(filePath, false);
 
             foreach (var product in products)
             {
 
-                writer.WriteLine(
+                productWriter.WriteLine(
                     $"{product.ProductIdNumber};{product.ProductName};" +
                     $"{product.ProductPrice.ToString(CultureInfo.InvariantCulture)};" +
                     $"{product.ProductPriceType}"

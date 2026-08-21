@@ -34,8 +34,8 @@
 
         public static void ShowInlineProductSearchAndPresent()
         {
-            IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISearchProduct finder = new ProductSearch(reader);
+            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
+            ISearchProduct productFinder = new ProductSearch(productReader);
 
             while (true)
             {
@@ -50,7 +50,7 @@
                 if (string.IsNullOrWhiteSpace(queryInput))
                     return;
 
-                var results = finder.Search(queryInput);
+                var results = productFinder.Search(queryInput);
 
                 if (results.Count == 0)
                 {

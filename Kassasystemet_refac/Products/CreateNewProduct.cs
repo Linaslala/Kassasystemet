@@ -31,10 +31,10 @@ namespace Kassasystemet_refac
                 clearConsoleEachAttempt: false
             );
 
-            IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISaveProductToFile writer = new SaveProductToFile();
+            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
+            ISaveProductToFile productWriter = new SaveProductToFile();
 
-            var products = reader.ReadAll();
+            var products = productReader.ReadAll();
 
             int newProductId = products.Any()
                 ? products.Max(p => p.ProductIdNumber) + 1
@@ -46,7 +46,7 @@ namespace Kassasystemet_refac
                 CultureInfo.InvariantCulture);
 
             products.Add(new ProductModel(newProductId, productNameInput, productPriceDecimalInput, productPriceTypeInput));
-            writer.SaveAll(products);
+            productWriter.SaveAll(products);
 
 
             Console.Clear();

@@ -4,9 +4,9 @@
     {
         public void Run()
         {
-            IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISaveProductToFile writer = new SaveProductToFile();
-            ISearchProduct finder = new ProductSearch(reader);
+            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
+            ISaveProductToFile productWriter = new SaveProductToFile();
+            ISearchProduct productFinder = new ProductSearch(productReader);
 
             while (true)
             {
@@ -16,7 +16,7 @@
                 Console.WriteLine();
 
                 string queryInput = UserInputPlacer.ReadCenteredText("Sök på produktnummer eller produktnamn: ");
-                var searchProductResult = finder.Search(queryInput);
+                var searchProductResult = productFinder.Search(queryInput);
 
                 if (searchProductResult.Count == 0)
                 {
@@ -99,7 +99,7 @@
                         return;
                     }
 
-                    var products = reader.ReadAll();
+                    var products = productReader.ReadAll();
                     int removed = products.RemoveAll(p => p.ProductIdNumber == productId);
 
                     if (removed == 0)
@@ -112,7 +112,7 @@
                         return;
                     }
 
-                    writer.SaveAll(products);
+                    productWriter.SaveAll(products);
 
                     Console.Clear();
                     Console.ForegroundColor = ConsoleColor.Green;

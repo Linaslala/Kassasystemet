@@ -12,11 +12,11 @@ namespace Kassasystemet_refac
             if (!string.IsNullOrWhiteSpace(memberDirectory) && !Directory.Exists(memberDirectory))
                 Directory.CreateDirectory(memberDirectory);
 
-            using var writer = new StreamWriter(filePath, false);
+            using var memberWriter = new StreamWriter(filePath, false);
 
             foreach (var member in members)
             {
-                writer.WriteLine($"{member.MemberIdNumber};{member.MemberFirstName};{member.MemberLastName}");
+                memberWriter.WriteLine($"{member.MemberIdNumber};{member.MemberFirstName};{member.MemberLastName}");
             }
         }
     }

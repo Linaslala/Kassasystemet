@@ -4,11 +4,11 @@ namespace Kassasystemet_refac
 {
     public class CampaignSearch : ISearchCampaign
     {
-        private readonly IReadAllCampaignsFromFile _reader;
+        private readonly IReadAllCampaignsFromFile _campaignReader;
 
-        public CampaignSearch(IReadAllCampaignsFromFile reader)
+        public CampaignSearch(IReadAllCampaignsFromFile campaignReader)
         {
-            _reader = reader;
+            _campaignReader = campaignReader;
         }
 
         public List<ICampaignModel> Search(string searchCampaignText)
@@ -31,7 +31,7 @@ namespace Kassasystemet_refac
                 DateTimeStyles.None,
                 out DateTime searchedDate);
 
-            return _reader.ReadAll()
+            return _campaignReader.ReadAll()
                 .Where(c =>
                 {
                     if (!string.IsNullOrWhiteSpace(c.CampaignName) &&

@@ -9,8 +9,8 @@
             CenterConsoleOutput.CenterTextToWindow("== Alla medlemmar ==");
             Console.WriteLine();
 
-            IReadAllMembersFromFile reader = new ReadAllMembersFromFile();
-            var members = reader.ReadAll()
+            IReadAllMembersFromFile memberReader = new ReadAllMembersFromFile();
+            var members = memberReader.ReadAll()
                 .OrderBy(m => m.MemberIdNumber)
                 .ToList();
 

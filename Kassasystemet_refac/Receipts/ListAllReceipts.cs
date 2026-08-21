@@ -8,7 +8,7 @@ namespace Kassasystemet_refac
         {
             Console.Clear();
 
-            var reader = new ReadAllReceiptsFromFile();
+            var receiptReader = new ReadAllReceiptsFromFile();
 
             var baseDir = AppContext.BaseDirectory;
             var projectDir = Directory.GetParent(baseDir)!.Parent!.Parent!.Parent!.FullName;
@@ -23,7 +23,7 @@ namespace Kassasystemet_refac
 
             foreach (var file in allReceiptFiles)
             {
-                var receiptsFromFile = reader.ReadAllFromPath(file);
+                var receiptsFromFile = receiptReader.ReadAllFromPath(file);
                 allReceipts.AddRange(receiptsFromFile);
             }
 

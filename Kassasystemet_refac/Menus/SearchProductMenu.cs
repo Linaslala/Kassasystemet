@@ -5,7 +5,7 @@
         public void Run()
         {
             IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
-            ISearchProduct finder = new ProductSearch(reader);
+            ISearchProduct productFinder = new ProductSearch(reader);
 
             while (true)
             {
@@ -17,7 +17,7 @@
                     .ReadCenteredText("Sök på produktnummer eller produktnamn (tryck enter för alla): ")
                     .Trim();
 
-                var results = finder.Search(queryInput);
+                var results = productFinder.Search(queryInput);
 
                 if (results.Count == 0)
                 {

@@ -2,16 +2,16 @@
 {
     public class MemberSearch : ISearchMember
     {
-        private readonly IReadAllMembersFromFile _reader;
+        private readonly IReadAllMembersFromFile _memberReader;
 
-        public MemberSearch(IReadAllMembersFromFile reader)
+        public MemberSearch(IReadAllMembersFromFile memberReader)
         {
-            _reader = reader;
+            _memberReader = memberReader;
         }
 
         public List<IMemberModel> Search(string searchMemberText)
         {
-            var allMembers = _reader.ReadAll();
+            var allMembers = _memberReader.ReadAll();
 
             if (string.IsNullOrWhiteSpace(searchMemberText))
                 return allMembers;
