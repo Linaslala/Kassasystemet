@@ -26,7 +26,7 @@
             switch (index)
             {
                 case 0:
-                    new CreateNewPurchase().Run();
+                    new PurchaseController().Run();
                     return false;
 
                 case 1:

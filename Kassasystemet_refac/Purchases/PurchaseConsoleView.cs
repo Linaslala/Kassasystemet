@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Kassasystemet_refac
 {
-    internal class PurchaseViewRenderer
+    internal class PurchaseConsoleView
     {
         public static void RenderSplitPurchaseView(
                     int memberIdNumber,

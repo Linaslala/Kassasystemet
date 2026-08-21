@@ -29,7 +29,7 @@ namespace Kassasystemet_refac
                 return;
             }
 
-            new CreateNewPurchase().Run(memberIdNUmber, items);
+            new PurchaseController().Run(memberIdNUmber, items);
         }
     }
 }
