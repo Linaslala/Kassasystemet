@@ -11,5 +11,7 @@
         IReadOnlyList<int> ProductIdNumbers { get; }
 
         bool IsActive(DateTime now);
+
+        string Serialize();
     }
 }

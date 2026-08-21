@@ -1,4 +1,6 @@
-﻿namespace Kassasystemet_refac
+﻿using System.Globalization;
+
+namespace Kassasystemet_refac
 {
     public class PercentOffCampaign : ICampaignModel
     {
@@ -28,19 +30,23 @@
 
         public bool IsActive(DateTime now) => now >= CampaignStartDate && now <= CampaignEndDate;
 
-        //private static void ValidateCampaignParts(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers)
-        //{
-        //    if (string.IsNullOrWhiteSpace(campaignName))
-        //        throw new ArgumentException("Namn får inte vara tomt.", nameof(campaignName));
+        public string Serialize()
+        {
+            string typeOfCampaign = TypeOfCampaign.ToString();
+            string campaignName = Escape(CampaignName);
+            string campaignStartDate = CampaignStartDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            string campaignEndDate = CampaignEndDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+            string productIdNumbers = string.Join(",", ProductIdNumbers);
 
-        //    if (campaignEndDate < campaignStartDate)
-        //        throw new ArgumentException("Slutdatum kan inte vara före startdatum.");
+            return $"" +
+                $"{typeOfCampaign};" +
+                $"{campaignName};" +
+                $"{campaignStartDate};" +
+                $"{campaignEndDate};" +
+                $"{productIdNumbers};{PercentOff.ToString(CultureInfo.InvariantCulture)}";
 
-        //    if (productIdNumbers == null)
-        //        throw new ArgumentNullException(nameof(productIdNumbers));
-
-        //    if (!productIdNumbers.Any(i => i > 0))
-        //        throw new ArgumentException("Minst ett giltigt produkt-id krävs.", nameof(productIdNumbers));
-        //}
+        }
+        private static string Escape(string text) =>
+        (text ?? "").Replace(";", ",").Trim();
     }
 }
