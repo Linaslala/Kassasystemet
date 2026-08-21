@@ -12,6 +12,29 @@ namespace Kassasystemet_refac
             File.WriteAllText(ReceiptFilePath.ReceiptDraftPath, line);
         }
 
+        public static List<CartItemModel> LoadCartFromSavedItems(List<(int productIdNumber, int productQuantity)> savedItems)
+        {
+            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
+            var products = productReader.ReadAll();
+
+            var cart = new List<CartItemModel>();
+
+            foreach (var (productIdNumber, productQuantity) in savedItems)
+            {
+                var product = products.FirstOrDefault(p => p.ProductIdNumber == productIdNumber);
+                if (product == null) continue;
+
+                cart.Add(new CartItemModel(
+                    product.ProductIdNumber,
+                    product.ProductName,
+                    product.ProductPrice,
+                    product.ProductPriceType,
+                    productQuantity));
+            }
+
+            return cart;
+        }
+
         public static bool TryLoadReceiptDraft(out int memberIdNumber, out List<(int productIdNumber, int productQuantity)> items)
         {
             memberIdNumber = 0;

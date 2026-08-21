@@ -60,7 +60,7 @@ namespace Kassasystemet_refac
 
         public void Run(int memberIdNumber, List<(int productIdNumber, int productQuantity)> resumeItems)
         {
-            var cart = LoadCartFromSavedItems(resumeItems);
+            var cart = DraftPurchaseService.LoadCartFromSavedItems(resumeItems);
             PurchaseSplitViewLoop(ref memberIdNumber, cart);
         }
 
@@ -213,30 +213,6 @@ namespace Kassasystemet_refac
                 Console.ResetColor();
             }
         }
-               
-        private static List<CartItemModel> LoadCartFromSavedItems(List<(int productIdNumber, int productQuantity)> savedItems)
-        {
-            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
-            var products = productReader.ReadAll();
-
-            var cart = new List<CartItemModel>();
-
-            foreach (var (productIdNumber, productQuantity) in savedItems)
-            {
-                var product = products.FirstOrDefault(p => p.ProductIdNumber == productIdNumber);
-                if (product == null) continue;
-
-                cart.Add(new CartItemModel(
-                    product.ProductIdNumber,
-                    product.ProductName,
-                    product.ProductPrice,
-                    product.ProductPriceType,
-                    productQuantity));
-            }
-
-            return cart;
-        }
-               
     }
 }
 
