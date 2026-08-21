@@ -5,6 +5,7 @@ namespace Kassasystemet_refac
 {
     public class PurchaseDraftService
     {
+        //Spara köp-utkast
         public static void SavePurchaseDraft(int memberIdNumber, List<CartItemModel> cart)
         {
             string items = string.Join("\n", cart.Select(c => $"{c.ProductIdNumber},{c.ProductQuantity}"));
@@ -12,6 +13,7 @@ namespace Kassasystemet_refac
             File.WriteAllText(ReceiptFilePath.ReceiptDraftPath, line);
         }
 
+        //Ladda köp-utkast
         public static List<CartItemModel> LoadCartFromSavedItems(List<(int productIdNumber, int productQuantity)> savedItems)
         {
             IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
@@ -35,6 +37,14 @@ namespace Kassasystemet_refac
             return cart;
         }
 
+        //Rensa köp-utkast
+        public static void ClearPurchaseDraft()
+        {
+            if (File.Exists(ReceiptFilePath.ReceiptDraftPath))
+                File.Delete(ReceiptFilePath.ReceiptDraftPath);
+        }
+
+        //Bygga varukorg från sparat utkast (Frågan om jag gör detta... finns inget med cart här, bara receipt) Kolla upp!
         public static bool TryLoadReceiptDraft(out int memberIdNumber, out List<(int productIdNumber, int productQuantity)> items)
         {
             memberIdNumber = 0;
@@ -67,10 +77,6 @@ namespace Kassasystemet_refac
             return true;
         }
 
-        public static void ClearPurchaseDraft()
-        {
-            if (File.Exists(ReceiptFilePath.ReceiptDraftPath))
-                File.Delete(ReceiptFilePath.ReceiptDraftPath);
-        }
+
     }
 }
