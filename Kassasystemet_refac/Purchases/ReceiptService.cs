@@ -23,7 +23,7 @@ namespace Kassasystemet_refac
                 CenterConsoleOutput.CenterTextToWindow("Du måste ange kundnummer innan betalning.");
                 Console.ResetColor();
                 ValidatedConsoleInput.PauseCentered();
-                memberIdNumber = CreateNewPurchase.ReadMemberIdNumber();
+                memberIdNumber = PurchaseInputService.ReadMemberIdNumber();
             }
 
             var memberReader = new ReadAllMembersFromFile();
