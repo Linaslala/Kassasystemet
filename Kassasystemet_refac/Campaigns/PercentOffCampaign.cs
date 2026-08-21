@@ -14,7 +14,7 @@
 
         public PercentOffCampaign(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers, decimal percentOff)
         {
-            ValidateCampaignParts(campaignName, campaignStartDate, campaignEndDate, productIdNumbers);
+            CampaignValidationService.ValidateCampaignParts(campaignName, campaignStartDate, campaignEndDate, productIdNumbers);
 
             if (percentOff <= 0m || percentOff > 100m)
                 throw new ArgumentException("Rabattprocenten måste vara > 0 och <= 100.", nameof(percentOff));
@@ -28,19 +28,19 @@
 
         public bool IsActive(DateTime now) => now >= CampaignStartDate && now <= CampaignEndDate;
 
-        private static void ValidateCampaignParts(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers)
-        {
-            if (string.IsNullOrWhiteSpace(campaignName))
-                throw new ArgumentException("Namn får inte vara tomt.", nameof(campaignName));
+        //private static void ValidateCampaignParts(string campaignName, DateTime campaignStartDate, DateTime campaignEndDate, IEnumerable<int> productIdNumbers)
+        //{
+        //    if (string.IsNullOrWhiteSpace(campaignName))
+        //        throw new ArgumentException("Namn får inte vara tomt.", nameof(campaignName));
 
-            if (campaignEndDate < campaignStartDate)
-                throw new ArgumentException("Slutdatum kan inte vara före startdatum.");
+        //    if (campaignEndDate < campaignStartDate)
+        //        throw new ArgumentException("Slutdatum kan inte vara före startdatum.");
 
-            if (productIdNumbers == null)
-                throw new ArgumentNullException(nameof(productIdNumbers));
+        //    if (productIdNumbers == null)
+        //        throw new ArgumentNullException(nameof(productIdNumbers));
 
-            if (!productIdNumbers.Any(i => i > 0))
-                throw new ArgumentException("Minst ett giltigt produkt-id krävs.", nameof(productIdNumbers));
-        }
+        //    if (!productIdNumbers.Any(i => i > 0))
+        //        throw new ArgumentException("Minst ett giltigt produkt-id krävs.", nameof(productIdNumbers));
+        //}
     }
 }
