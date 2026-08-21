@@ -1,4 +1,2 @@
-PercentOffCampaign;25 % Rabatt!;2026-03-06;2026-03-10;1;25
-PercentOffCampaign;Vårrea;2026-03-08;2026-04-30;1;50
-PercentOffCampaign;HusKampanj;2026-03-18;2026-03-31;2;5
-PercentOffCampaign;SuperMegaRea;2026-04-01;2026-04-30;3,4;70
+PercentOffCampaign;hej;2026-08-25;2026-09-30;4;90
+PercentOffCampaign;Gratis;2026-09-01;2026-09-01;3;100
