@@ -31,13 +31,9 @@
 
                     int choice = arrowNoResult.ShowArrow("Välj:", noResultOptions, renderAboveOptions: () =>
                     {
-                        Console.Clear();
                         CenterConsoleOutput.CenterTextToWindow("== Uppdatera medlemsinformation ==");
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Medlemmen du söker finns inte i systemet.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+                        NotificationService.ShowError(
+                        "Medlemmen du söker finns inte i systemet.");
                     });
 
                     if (choice == 0)
@@ -120,22 +116,15 @@
 
                         if (index < 0)
                         {
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            CenterConsoleOutput.CenterTextToWindow("Kunde inte spara: medlem hittades inte längre i listan.");
-                            Console.ResetColor();
-                            ValidatedConsoleInput.PauseCentered();
-                            return;
+                            NotificationService.ShowError(
+                                "Kunde inte spara: Kunden finns inte");
                         }
 
                         members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
                         memberWriter.SaveAll(members);
 
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Green;
-
-                        CenterConsoleOutput.CenterTextToWindow("== Medlemsinformation uppdaterad ==");
-                        Console.WriteLine();
+                        NotificationService.ShowSuccess(
+                           "=== Medlemsinformation uppdaterad ===");
 
                         string headerRow = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
                         string dataRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";

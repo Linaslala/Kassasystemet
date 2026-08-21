@@ -29,13 +29,9 @@
 
                     int choice = arrowNoResult.ShowArrow("Välj:", noResultOptions, renderAboveOptions: () =>
                     {
-                        Console.Clear();
                         CenterConsoleOutput.CenterTextToWindow("== Uppdatera produktinformation ==");
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        CenterConsoleOutput.CenterTextToWindow("Produkten du söker finns inte i systemet.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+                        NotificationService.ShowError(
+                            "Produkten du söker finns inte i systemet");
                     });
 
                     if (choice == 0)
@@ -130,22 +126,17 @@
 
                         if (index < 0)
                         {
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            CenterConsoleOutput.CenterTextToWindow("Kunde inte spara: produkten hittades inte längre i listan.");
-                            Console.ResetColor();
-                            ValidatedConsoleInput.PauseCentered();
-                            return;
+                            NotificationService.ShowError(
+                                "Kunde inte spara: Produkten finns inte");
                         }
 
                         products[index] = new ProductModel(productId, productName, productPrice, productPriceType);
                         productWriter.SaveAll(products);
 
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        CenterConsoleOutput.CenterTextToWindow("Produktinformation uppdaterad!");
-                        Console.ResetColor();
-                        Console.WriteLine();
+
+                        NotificationService.ShowSuccess(
+                           "=== Produktinformation uppdaterad ===");
+
 
                         CenterConsoleOutput.CenterTextToWindow($"{productId} {productName} {productPrice} {productPriceType}");
 

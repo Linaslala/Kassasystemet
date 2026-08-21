@@ -17,5 +17,21 @@
             ValidatedConsoleInput
                 .PauseCentered();
         }
+
+        public static void ShowSuccess(
+            string message)
+        {
+            Console.Clear();
+            Console.ForegroundColor =
+                ConsoleColor.Green;
+
+            CenterConsoleOutput
+                .CenterTextToWindow(message);
+
+            Console.ResetColor();
+
+            ValidatedConsoleInput
+                .PauseCentered();
+        }
     }
 }

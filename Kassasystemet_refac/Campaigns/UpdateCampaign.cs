@@ -35,13 +35,11 @@ namespace Kassasystemet_refac
 
                     int choice = arrowNoResult.ShowArrow("Välj:", noResultOptions, renderAboveOptions: () =>
                     {
-                        Console.Clear();
                         CenterConsoleOutput.CenterTextToWindow("== Uppdatera kampanj ==");
-                        Console.WriteLine();
-                        Console.ForegroundColor = ConsoleColor.Red;
+                        NotificationService.ShowError(
+                       "Kampanjen du söker finns inte i systemet.");
                         CenterConsoleOutput.CenterTextToWindow("Kampanjen du söker finns inte i systemet.");
-                        Console.ResetColor();
-                        Console.WriteLine();
+
                     });
 
                     if (choice == 0)
@@ -170,12 +168,9 @@ namespace Kassasystemet_refac
 
                         if (index < 0)
                         {
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            CenterConsoleOutput.CenterTextToWindow("Kunde inte spara: kampanjen hittades inte längre i listan.");
-                            Console.ResetColor();
-                            ValidatedConsoleInput.PauseCentered();
-                            return;
+
+                            NotificationService.ShowError(
+                                "Kunde inte spara: Kampanjen finns inte");
                         }
 
                         campaigns[index] = new PercentOffCampaign(
@@ -188,11 +183,13 @@ namespace Kassasystemet_refac
 
                         campaignWriter.SaveAll(campaigns);
 
-                        Console.Clear();
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        CenterConsoleOutput.CenterTextToWindow("Kampanj uppdaterad!");
-                        Console.ResetColor();
-                        Console.WriteLine();
+                        //Console.Clear();
+                        //Console.ForegroundColor = ConsoleColor.Green;
+                        //CenterConsoleOutput.CenterTextToWindow("Kampanj uppdaterad!");
+                        //Console.ResetColor();
+                        //Console.WriteLine();
+                        NotificationService.ShowSuccess(
+                          "=== Kampanj uppdaterad ===");
 
                         CenterConsoleOutput.CenterTextToWindow($"{campaignName} ({campaignStartDate:yyyy-MM-dd} - {campaignEndDate:yyyy-MM-dd})");
                         CenterConsoleOutput.CenterTextToWindow($"Produkter: {string.Join(",", productIdNumbers)}");

@@ -1,4 +1,5 @@
-1; Banan; 123; kilopris
-2; Ananas; 60; kilopris
-3; Grovt grus; 1049.95; kilopris
-4; Hushållspapper; 19.99; styckpris
+1;Äpple;123; kilopris
+2; Ananas;60; kilopris
+3; Grovt grus;1049.95; kilopris
+4; Hushållspapper;19.99; styckpris
+5;df<dsf;12;st
