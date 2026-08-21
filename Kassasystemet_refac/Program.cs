@@ -60,7 +60,7 @@ namespace Kassasystemet_refac
 
         public void Run(int memberIdNumber, List<(int productIdNumber, int productQuantity)> resumeItems)
         {
-            var cart = DraftPurchaseService.LoadCartFromSavedItems(resumeItems);
+            var cart = PurchaseDraftService.LoadCartFromSavedItems(resumeItems);
             PurchaseSplitViewLoop(ref memberIdNumber, cart);
         }
 
@@ -150,7 +150,7 @@ namespace Kassasystemet_refac
 
                         if (footerChoice == 4)
                         {
-                            DraftPurchaseService.SavePurchaseDraft(memberIdNumber, cart);
+                            PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
                             Console.Clear();
                             Console.ForegroundColor = ConsoleColor.Green;
                             CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");

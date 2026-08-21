@@ -17,7 +17,7 @@ namespace Kassasystemet_refac
                 return;
             }
 
-            if (!DraftPurchaseService.TryLoadReceiptDraft(out int memberIdNUmber, out List<(int productIdNumber, int productQuantity)> items))
+            if (!PurchaseDraftService.TryLoadReceiptDraft(out int memberIdNUmber, out List<(int productIdNumber, int productQuantity)> items))
             {
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Red;

@@ -3,7 +3,7 @@ using System.Globalization;
 
 namespace Kassasystemet_refac
 {
-    public class DraftPurchaseService
+    public class PurchaseDraftService
     {
         public static void SavePurchaseDraft(int memberIdNumber, List<CartItemModel> cart)
         {

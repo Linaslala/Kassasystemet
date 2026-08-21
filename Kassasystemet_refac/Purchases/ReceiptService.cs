@@ -47,7 +47,7 @@ namespace Kassasystemet_refac
             }
 
             ReceiptModel receipt = CompletePayment(memberIdNumber, cart);
-            DraftPurchaseService.ClearPurchaseDraft();
+            PurchaseDraftService.ClearPurchaseDraft();
 
             Console.Clear();
             CenterConsoleOutput.CenterTextToWindow("== KVITTO ==");
