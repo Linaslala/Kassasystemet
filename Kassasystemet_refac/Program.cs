@@ -48,124 +48,124 @@ namespace Kassasystemet_refac
             }
         }
     }
-   
-    public class PurchaseController
-    {
-        public void Run()
-        {
-            int memberIdNumber = PurchaseInputService.ReadCustomerNumberOrSkip();
-            var cart = new List<CartItemModel>();
-            PurchaseSplitViewLoop(ref memberIdNumber, cart);
-        }
 
-        public void Run(int memberIdNumber, List<(int productIdNumber, int productQuantity)> resumeItems)
-        {
-            var cart = PurchaseDraftService.LoadCartFromSavedItems(resumeItems);
-            PurchaseSplitViewLoop(ref memberIdNumber, cart);
-        }
+    //public class PurchaseController
+    //{
+    //    public void Run()
+    //    {
+    //        int memberIdNumber = PurchaseInputService.ReadCustomerNumberOrSkip();
+    //        var cart = new List<CartItemModel>();
+    //        PurchaseSplitViewLoop(ref memberIdNumber, cart);
+    //    }
 
-        private void PurchaseSplitViewLoop(ref int memberIdNumber, List<CartItemModel> cart)
-        {
-            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
-            var products = productReader.ReadAll();
+    //    public void Run(int memberIdNumber, List<(int productIdNumber, int productQuantity)> resumeItems)
+    //    {
+    //        var cart = PurchaseDraftService.LoadCartFromSavedItems(resumeItems);
+    //        PurchaseSplitViewLoop(ref memberIdNumber, cart);
+    //    }
 
-            if (products == null || products.Count == 0)
-            {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Red;
-                CenterConsoleOutput.CenterTextToWindow("Det finns inga produkter registrerade. Skapa produkter först.");
-                Console.ResetColor();
-                ValidatedConsoleInput.PauseCentered();
-                return;
-            }
+    //    private void PurchaseSplitViewLoop(ref int memberIdNumber, List<CartItemModel> cart)
+    //    {
+    //        IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
+    //        var products = productReader.ReadAll();
 
-            var productById = products
-                .GroupBy(p => p.ProductIdNumber)
-                .ToDictionary(g => g.Key, g => g.First());
+    //        if (products == null || products.Count == 0)
+    //        {
+    //            Console.Clear();
+    //            Console.ForegroundColor = ConsoleColor.Red;
+    //            CenterConsoleOutput.CenterTextToWindow("Det finns inga produkter registrerade. Skapa produkter först.");
+    //            Console.ResetColor();
+    //            ValidatedConsoleInput.PauseCentered();
+    //            return;
+    //        }
 
-            var footerOptions = new[]
-            {
-                "Pay",
-                "Sök produkt (hitta Produktnummer)",
-                "Ta bort produkt från varukorgen",
-                "Ändra kundnummer",
-                "Pausa pågående köp (spara) och gå ut",
-                "Avbryt (utan att spara)"
-            };
+    //        var productById = products
+    //            .GroupBy(p => p.ProductIdNumber)
+    //            .ToDictionary(g => g.Key, g => g.First());
 
-            const string topAction = "Lägg till produkt (produktnummer + antal)";
+    //        var footerOptions = new[]
+    //        {
+    //            "Pay",
+    //            "Sök produkt (hitta Produktnummer)",
+    //            "Ta bort produkt från varukorgen",
+    //            "Ändra kundnummer",
+    //            "Pausa pågående köp (spara) och gå ut",
+    //            "Avbryt (utan att spara)"
+    //        };
 
-            int selectedIndex = 0;
+    //        const string topAction = "Lägg till produkt (produktnummer + antal)";
 
-            while (true)
-            {
-                PurchaseConsoleView.RenderSplitPurchaseView(memberIdNumber, cart, topAction, footerOptions, selectedIndex);
-                               
-                var key = Console.ReadKey(true).Key;
+    //        int selectedIndex = 0;
 
-                switch (key)
-                {
-                    case ConsoleKey.UpArrow:
-                        selectedIndex = selectedIndex <= 0 ? footerOptions.Length : selectedIndex - 1;
-                        break;
+    //        while (true)
+    //        {
+    //            PurchaseConsoleView.RenderSplitPurchaseView(memberIdNumber, cart, topAction, footerOptions, selectedIndex);
 
-                    case ConsoleKey.DownArrow:
-                        selectedIndex = selectedIndex >= footerOptions.Length ? 0 : selectedIndex + 1;
-                        break;
+    //            var key = Console.ReadKey(true).Key;
 
-                    case ConsoleKey.Enter:
-                        if (selectedIndex == 0)
-                        {
-                            CartService.AddProductPrompt(cart, productById);
-                            break;
-                        }
+    //            switch (key)
+    //            {
+    //                case ConsoleKey.UpArrow:
+    //                    selectedIndex = selectedIndex <= 0 ? footerOptions.Length : selectedIndex - 1;
+    //                    break;
 
-                        int footerChoice = selectedIndex - 1;
+    //                case ConsoleKey.DownArrow:
+    //                    selectedIndex = selectedIndex >= footerOptions.Length ? 0 : selectedIndex + 1;
+    //                    break;
 
-                        if (footerChoice == 0)
-                        {
-                            if (ReceiptService.TryPayAndShowReceipt(ref memberIdNumber, cart))
-                                return;
-                            break;
-                        }
+    //                case ConsoleKey.Enter:
+    //                    if (selectedIndex == 0)
+    //                    {
+    //                        CartService.AddProductPrompt(cart, productById);
+    //                        break;
+    //                    }
 
-                        if (footerChoice == 1)
-                        {
-                            PurchaseProductSearchService.ShowInlineProductSearchAndPresent();
-                            break;
-                        }
+    //                    int footerChoice = selectedIndex - 1;
 
-                        if (footerChoice == 2)
-                        {
-                            CartService.RemoveProductFromCart(cart);
-                            break;
-                        }
+    //                    if (footerChoice == 0)
+    //                    {
+    //                        if (ReceiptService.TryPayAndShowReceipt(ref memberIdNumber, cart))
+    //                            return;
+    //                        break;
+    //                    }
 
-                        if (footerChoice == 3)
-                        {
-                            memberIdNumber = PurchaseInputService.ReadMemberIdNumber();
-                            break;
-                        }
+    //                    if (footerChoice == 1)
+    //                    {
+    //                        PurchaseProductSearchService.ShowInlineProductSearchAndPresent();
+    //                        break;
+    //                    }
 
-                        if (footerChoice == 4)
-                        {
-                            PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
-                            Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
-                            Console.ResetColor();
-                            ValidatedConsoleInput.PauseCentered();
-                            return;
-                        }
+    //                    if (footerChoice == 2)
+    //                    {
+    //                        CartService.RemoveProductFromCart(cart);
+    //                        break;
+    //                    }
 
-                        return;
+    //                    if (footerChoice == 3)
+    //                    {
+    //                        memberIdNumber = PurchaseInputService.ReadMemberIdNumber();
+    //                        break;
+    //                    }
 
-                    default:
-                        break;
-                }
-            }
-        }
-    }
+    //                    if (footerChoice == 4)
+    //                    {
+    //                        PurchaseDraftService.SavePurchaseDraft(memberIdNumber, cart);
+    //                        Console.Clear();
+    //                        Console.ForegroundColor = ConsoleColor.Green;
+    //                        CenterConsoleOutput.CenterTextToWindow("Pågående köp sparat. Du kan återuppta senare.");
+    //                        Console.ResetColor();
+    //                        ValidatedConsoleInput.PauseCentered();
+    //                        return;
+    //                    }
+
+    //                    return;
+
+    //                default:
+    //                    break;
+    //            }
+    //        }
+    //    }
+    //}
 }
 
 
