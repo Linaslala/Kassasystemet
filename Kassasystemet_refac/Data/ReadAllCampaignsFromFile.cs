@@ -6,10 +6,12 @@
         {
             var campaigns = new List<ICampaignModel>();
 
-            if (!File.Exists(CampaignFilePath.Path))
-                return campaigns;
+            //if (!File.Exists(CampaignFilePath.Path))
+            //    return campaigns;
 
-            var lines = File.ReadAllLines(CampaignFilePath.Path);
+            //var lines = File.ReadAllLines(CampaignFilePath.Path);
+
+            var lines = FileSystemHelper.ReadLinesIfExists(CampaignFilePath.Path);
 
             foreach (var line in lines)
             {

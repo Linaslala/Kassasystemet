@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using static Kassasystemet_refac.SearchMemberMenu;
 
 namespace Kassasystemet_refac
 {
@@ -11,10 +10,12 @@ namespace Kassasystemet_refac
 
             string filePath = ProductFilePath.Path;
 
-            if (!File.Exists(filePath))
-                return products;
+            //if (!File.Exists(filePath))
+            //    return products;
 
-            var lines = File.ReadAllLines(filePath);
+            //var lines = File.ReadAllLines(filePath);
+
+            var lines = FileSystemHelper.ReadLinesIfExists(filePath);
 
             foreach (var line in lines)
             {

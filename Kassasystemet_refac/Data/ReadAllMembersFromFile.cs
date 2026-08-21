@@ -1,6 +1,4 @@
-﻿using static Kassasystemet_refac.SearchMemberMenu;
-
-namespace Kassasystemet_refac
+﻿namespace Kassasystemet_refac
 {
     public class ReadAllMembersFromFile : IReadAllMembersFromFile
     {
@@ -10,10 +8,12 @@ namespace Kassasystemet_refac
 
             string filePath = MemberFilePath.MembersPath;
 
-            if (!File.Exists(filePath))
-                return members;
+            //if (!File.Exists(filePath))
+            //    return members;
 
-            var lines = File.ReadAllLines(filePath);
+            //var lines = File.ReadAllLines(filePath);
+
+            var lines = FileSystemHelper.ReadLinesIfExists(filePath);
 
             foreach (var line in lines)
             {
