@@ -60,12 +60,36 @@
                 switch (key)
                 {
                     case ConsoleKey.UpArrow:
+
                     case ConsoleKey.DownArrow:
+
                         selectedIndex =
                             HandleNavigationKey(
                                 key,
                                 selectedIndex,
                                 footerOptions.Length);
+                        break;
+
+                    case ConsoleKey.Enter:
+
+                        if (selectedIndex == 0)
+                        {
+                            CartService.AddProductPrompt(
+                                cart,
+                                productById);
+                            break;
+                        }
+
+                        int footerChoice = selectedIndex - 1;
+
+                        if (HandleFooterChoice(
+                            footerChoice,
+                            ref memberIdNumber,
+                            cart,
+                            productById))
+                        {
+                            return;
+                        }
                         break;
                 }
             }
