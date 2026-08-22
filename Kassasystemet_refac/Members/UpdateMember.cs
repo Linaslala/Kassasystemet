@@ -2,6 +2,7 @@
 {
     public class UpdateMember
     {
+        //Run() ska bara beskriva arbetsflödet.
         public void Run()
         {
             IReadAllMembersFromFile memberReader = new ReadAllMembersFromFile();
@@ -77,7 +78,7 @@
                         RenderSelectedMember(
                              memberId,
                              memberFirstName,
-                             memberFirstName);
+                             memberLastName);
                     });
 
                     if (editChoice == 0)
@@ -98,22 +99,29 @@
                     }
                     else if (editChoice == 2)
                     {
-                        var members = memberReader.ReadAll();
-                        int index = members.FindIndex(m => m.MemberIdNumber == memberId);
+                        SaveMemberChanges(
+                            memberId,
+                            memberFirstName,
+                            memberLastName,
+                            memberReader,
+                            memberWriter);
 
-                        if (index < 0)
-                        {
-                            NotificationService.ShowError(
-                                "Kunde inte spara: Kunden finns inte");
+                        //var members = memberReader.ReadAll();
+                        //int index = members.FindIndex(m => m.MemberIdNumber == memberId);
 
-                            ValidatedConsoleInput
-                                .PauseCentered();
+                        //if (index < 0)
+                        //{
+                        //    NotificationService.ShowError(
+                        //        "Kunde inte spara: Kunden finns inte");
 
-                            return;
-                        }
+                        //    ValidatedConsoleInput
+                        //        .PauseCentered();
 
-                        members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
-                        memberWriter.SaveAll(members);
+                        //    return;
+                        //}
+
+                        //members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
+                        //memberWriter.SaveAll(members);
 
                         NotificationService.ShowSuccessHeader(
                            "=== Medlemsinformation uppdaterad ===");
@@ -187,6 +195,41 @@
                 row);
 
             Console.WriteLine();
+        }
+
+        //Metoden:
+        //1. läser alla medlemmar
+        //2. Hittar rätt medlem
+        //3. Ersätter medlemmen
+        //4.Sparar listan
+        //5. Visar resultat
+        //Returnerar true om sparningen lyckats
+        //Returnerar false om medlemmen inte hittades
+        private static bool SaveMemberChanges(
+            int memberId,
+            string memberFirstName,
+            string memberLastName,
+            IReadAllMembersFromFile memberReader,
+            ISaveMemberToFile memberWriter)
+        {
+            var members = memberReader.ReadAll();
+            int index = members.FindIndex(m => m.MemberIdNumber == memberId);
+
+            if (index < 0)
+            {
+                NotificationService.ShowError(
+                    "Kunde inte spara: Kunden finns inte");
+
+                ValidatedConsoleInput
+                    .PauseCentered();
+
+                return false;
+            }
+
+            members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
+            memberWriter.SaveAll(members);
+
+            return true;
         }
     }
 }
