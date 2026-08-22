@@ -131,14 +131,19 @@
                         NotificationService.ShowSuccessHeader(
                            "=== Medlemsinformation uppdaterad ===");
 
-                        string headerRow = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
-                        string dataRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
+                        RenderSelectedMember(
+                            memberId,
+                            memberFirstName,
+                            memberLastName);
 
-                        CenterConsoleOutput.CenterTextToWindow(headerRow);
-                        CenterConsoleOutput.CenterTextToWindow(new string('-', headerRow.Length));
-                        CenterConsoleOutput.CenterTextToWindow(dataRow);
+                        //string headerRow = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
+                        //string dataRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
 
-                        Console.ResetColor();
+                        //CenterConsoleOutput.CenterTextToWindow(headerRow);
+                        //CenterConsoleOutput.CenterTextToWindow(new string('-', headerRow.Length));
+                        //CenterConsoleOutput.CenterTextToWindow(dataRow);
+
+                        //Console.ResetColor();
                         ValidatedConsoleInput.PauseCentered();
 
                         var afterSaveMemberMenu = new ConsoleOptionsArrow();
@@ -189,6 +194,37 @@
             int index = arrow.ShowArrow("Välj Medlem:", memberDisplay);
 
             return members[index];
+        }
+
+        private static void RenderSelectedMember(
+            int memberId,
+            string firstName,
+            string lastName)
+        {
+            CenterConsoleOutput.CenterTextToWindow(
+                "Vald medlem:");
+
+            Console.WriteLine();
+
+            string header =
+                $"{"Medlemsnummer",-20}" +
+                $"{"Förnamn",-20}" +
+                $"{"Efternamn",-20}";
+
+            string row =
+                $"{memberId,-20}" +
+                $"{firstName,-20}" +
+                $"{lastName,-20}";
+
+            CenterConsoleOutput.CenterTextToWindow(header);
+
+            CenterConsoleOutput.CenterTextToWindow(
+                new string('-', header.Length));
+
+            CenterConsoleOutput.CenterTextToWindow(
+                row);
+
+            Console.WriteLine();
         }
     }
 }

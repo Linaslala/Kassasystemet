@@ -142,7 +142,13 @@
                         NotificationService.ShowSuccessHeader(
                            "=== Produktinformation uppdaterad ===");
 
-                        CenterConsoleOutput.CenterTextToWindow($"{productId} {productName} {productPrice} {productPriceType}");
+                        RenderSelectedProduct(
+                            productId,
+                            productName,
+                            productPrice,
+                            productPriceType);
+
+                        //CenterConsoleOutput.CenterTextToWindow($"{productId} {productName} {productPrice} {productPriceType}");
 
                         ValidatedConsoleInput.PauseCentered();
 
@@ -201,6 +207,40 @@
             int index = arrow.ShowArrow("Välj produkt:", productDisplay);
 
             return products[index];
+        }
+
+        private static void RenderSelectedProduct(
+           int productId,
+           string productName,
+           decimal productPrice,
+           string productPriceType)
+        {
+            CenterConsoleOutput.CenterTextToWindow(
+                "Vald produkt:");
+
+            Console.WriteLine();
+
+            string header =
+                $"{"Produktnummer",-20}" +
+                $"{"Produkt",-20}" +
+                $"{"Pris",-20}" +
+                $"{"Pristyp",-20}";
+
+            string row =
+                $"{productId,-20}" +
+                $"{productName,-20}" +
+                $"{productPrice,-20}" +
+                $"{productPriceType,-20}";
+
+            CenterConsoleOutput.CenterTextToWindow(header);
+
+            CenterConsoleOutput.CenterTextToWindow(
+                new string('-', header.Length));
+
+            CenterConsoleOutput.CenterTextToWindow(
+                row);
+
+            Console.WriteLine();
         }
     }
 }
