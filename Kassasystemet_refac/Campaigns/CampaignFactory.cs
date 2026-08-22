@@ -18,7 +18,7 @@ namespace Kassasystemet_refac
             if (campaignType == CampaignType.PercentOffCampaign)
             {
                 string campaignName = parts[1];
-                
+
                 DateTime campaignStartDate =
                     DateTime.Parse(parts[2]);
 

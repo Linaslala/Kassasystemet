@@ -82,7 +82,7 @@
                     });
 
 
-                    MemberEditResult result =
+                    EditResult result =
                         HandleEditChoice(
                             editChoice,
                             memberId,
@@ -91,17 +91,17 @@
                             memberReader,
                             memberWriter);
 
-                    if (result == MemberEditResult.Continue)
+                    if (result == EditResult.Continue)
                     {
                         continue;
                     }
 
-                    if (result == MemberEditResult.Exit)
+                    if (result == EditResult.Exit)
                     {
                         return;
                     }
 
-                    if (result == MemberEditResult.Saved)
+                    if (result == EditResult.Saved)
                     {
                         NotificationService.ShowSuccessHeader(
                         "=== Medlemsinformation uppdaterad ===");
@@ -127,8 +127,6 @@
                 }
             }
         }
-
-
 
         private static IMemberModel SelectMember(List<IMemberModel> members)
         {
@@ -232,7 +230,7 @@
         //Metoden ansvarar för att uppdatera förnamn, efternamn och spara medlem
         //samt avbryta redigeringen.
         //Returnerar ett resultat som talar om vad användaren gjorde
-        private static MemberEditResult HandleEditChoice(
+        private static EditResult HandleEditChoice(
             int editChoice,
             int memberId,
             ref string memberFirstName,
@@ -248,7 +246,7 @@
                         "Nytt förnamn: ",
                         MemberValidationService.ValidateMemberFirstName);
 
-                return MemberEditResult.Continue;
+                return EditResult.Continue;
 
             }
 
@@ -260,7 +258,7 @@
                         "Nytt efternamn: ",
                         MemberValidationService.ValidateMemberLastName);
 
-                return MemberEditResult.Continue;
+                return EditResult.Continue;
             }
 
             if (editChoice == 2)
@@ -275,14 +273,14 @@
 
                 if (saved)
                 {
-                    return MemberEditResult.Saved;
+                    return EditResult.Saved;
                 }
 
-                return MemberEditResult.Exit;
+                return EditResult.Exit;
 
             }
 
-            return MemberEditResult.Exit;
+            return EditResult.Exit;
         }
 
     }

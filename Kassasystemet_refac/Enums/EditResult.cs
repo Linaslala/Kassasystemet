@@ -2,7 +2,7 @@
 {
     //Beskriver vad som händer efter att användaren gjort ett val 
     //i redigeringsmenyn
-    public enum MemberEditResult
+    public enum EditResult
     {
         Continue,
         Exit,
