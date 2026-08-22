@@ -4,9 +4,9 @@
     {
         public void Run()
         {
-            IReadAllMembersFromFile reader = new ReadAllMembersFromFile();
+            IReadAllMembersFromFile memberReader = new ReadAllMembersFromFile();
             ISaveMemberToFile memberWriter = new SaveMemberToFile();
-            ISearchMember memberFinder = new MemberSearch(reader);
+            ISearchMember memberFinder = new MemberSearch(memberReader);
 
 
             while (true)
@@ -32,6 +32,7 @@
                     int choice = arrowNoResult.ShowArrow("Välj:", noResultOptions, renderAboveOptions: () =>
                     {
                         CenterConsoleOutput.CenterTextToWindow("== Uppdatera medlemsinformation ==");
+                        Console.WriteLine();
                         NotificationService.ShowError(
                         "Medlemmen du söker finns inte i systemet.");
                     });
@@ -57,17 +58,22 @@
                     Console.WriteLine();
                     Console.WriteLine();
 
-                    CenterConsoleOutput.CenterTextToWindow("Vald medlem:");
-                    Console.WriteLine();
+                    RenderSelectedMember(
+                      memberId,
+                      memberFirstName,
+                      memberLastName);
 
-                    string infoHeader = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
-                    string infoRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
+                    //CenterConsoleOutput.CenterTextToWindow("Vald medlem:");
+                    //Console.WriteLine();
+                    
+                    //string infoHeader = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
+                    //string infoRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
 
-                    CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                    CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                    CenterConsoleOutput.CenterTextToWindow(infoRow);
+                    //CenterConsoleOutput.CenterTextToWindow(infoHeader);
+                    //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
+                    //CenterConsoleOutput.CenterTextToWindow(infoRow);
 
-                    Console.WriteLine();
+                    //Console.WriteLine();
 
                     var arrowEdit = new ConsoleOptionsArrow();
                     var editOptions = new[]
@@ -80,17 +86,22 @@
 
                     int editChoice = arrowEdit.ShowArrow("Välj vad du vill ändra:", editOptions, renderAboveOptions: () =>
                     {
-                        CenterConsoleOutput.CenterTextToWindow("Vald medlem:");
-                        Console.WriteLine();
+                        RenderSelectedMember(
+                             memberId,
+                             memberFirstName,
+                             memberFirstName);
 
-                        string infoHeader = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
-                        string infoRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
+                        //CenterConsoleOutput.CenterTextToWindow("Vald medlem:");
+                        //Console.WriteLine();
 
-                        CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                        CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                        CenterConsoleOutput.CenterTextToWindow(infoRow);
+                        //string infoHeader = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
+                        //string infoRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
 
-                        Console.WriteLine();
+                        //CenterConsoleOutput.CenterTextToWindow(infoHeader);
+                        //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
+                        //CenterConsoleOutput.CenterTextToWindow(infoRow);
+
+                        //Console.WriteLine();
                     });
 
                     if (editChoice == 0)
@@ -111,7 +122,7 @@
                     }
                     else if (editChoice == 2)
                     {
-                        var members = reader.ReadAll();
+                        var members = memberReader.ReadAll();
                         int index = members.FindIndex(m => m.MemberIdNumber == memberId);
 
                         if (index < 0)

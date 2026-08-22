@@ -56,17 +56,23 @@
                     Console.WriteLine();
                     Console.WriteLine();
 
-                    CenterConsoleOutput.CenterTextToWindow("Vald produkt:");
-                    Console.WriteLine();
+                    RenderSelectedProduct(
+                        productId,
+                        productName,
+                        productPrice,
+                        productPriceType);
 
-                    string infoHeader = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
-                    string infoRow = $"{productId,-20} {productName,-20} {productPrice,-20} {productPriceType,-20}";
+                    //CenterConsoleOutput.CenterTextToWindow("Vald produkt:");
+                    //Console.WriteLine();
 
-                    CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                    CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                    CenterConsoleOutput.CenterTextToWindow(infoRow);
+                    //string infoHeader = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
+                    //string infoRow = $"{productId,-20} {productName,-20} {productPrice,-20} {productPriceType,-20}";
 
-                    Console.WriteLine();
+                    //CenterConsoleOutput.CenterTextToWindow(infoHeader);
+                    //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
+                    //CenterConsoleOutput.CenterTextToWindow(infoRow);
+
+                    //Console.WriteLine();
 
                     var arrowEdit = new ConsoleOptionsArrow();
                     var editOptions = new[]
@@ -80,17 +86,23 @@
 
                     int editChoice = arrowEdit.ShowArrow("Välj vad du vill ändra:", editOptions, renderAboveOptions: () =>
                     {
-                        CenterConsoleOutput.CenterTextToWindow("Vald produkt:");
-                        Console.WriteLine();
+                        RenderSelectedProduct(
+                            productId,
+                            productName,
+                            productPrice,
+                            productPriceType);
 
-                        string infoHeader = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
-                        string infoRow = $"{productId,-20} {productName,-20} {productPrice,-20} {productPriceType,-20}";
+                        //CenterConsoleOutput.CenterTextToWindow("Vald produkt:");
+                        //Console.WriteLine();
 
-                        CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                        CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                        CenterConsoleOutput.CenterTextToWindow(infoRow);
+                        //string infoHeader = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
+                        //string infoRow = $"{productId,-20} {productName,-20} {productPrice,-20} {productPriceType,-20}";
 
-                        Console.WriteLine();
+                        //CenterConsoleOutput.CenterTextToWindow(infoHeader);
+                        //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
+                        //CenterConsoleOutput.CenterTextToWindow(infoRow);
+
+                        //Console.WriteLine();
                     });
 
                     if (editChoice == 0)
