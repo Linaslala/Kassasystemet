@@ -4,9 +4,9 @@
     {
         public void Run()
         {
-            IReadAllProductsFromFile reader = new ReadAllProductsFromFile();
+            IReadAllProductsFromFile productReader = new ReadAllProductsFromFile();
             ISaveProductToFile productWriter = new SaveProductToFile();
-            ISearchProduct productFinder = new ProductSearch(reader);
+            ISearchProduct productFinder = new ProductSearch(productReader);
 
             while (true)
             {
@@ -82,54 +82,30 @@
 
                     });
 
-                    if (editChoice == 0)
+                    EditResult result =
+                    HandleEditChoice(
+                        editChoice,
+                        productId,
+                        ref productName,
+                        ref productPrice,
+                        ref productPriceType,
+                        productReader,
+                        productWriter);
+
+                    if (result == EditResult.Continue)
                     {
-                        productName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera produkt ==",
-                            "Produktnamn: ",
-                            ProductValidationService.ValidateProductName
-                         );
+                        continue;
                     }
-                    else if (editChoice == 1)
-                    {
-                        string productPriceInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera produkt ==",
-                            "Pris: ",
-                            ProductValidationService.ValidateProductPrice
-                        );
 
-                        productPrice = decimal.Parse(productPriceInput);
+                    if (result == EditResult.Exit)
+                    {
+                        return;
                     }
-                    else if (editChoice == 2)
+
+                    if (result == EditResult.Saved)
                     {
-                        productPriceType = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera produkt ==",
-                            "Pristyp: ",
-                            ProductValidationService.ValidateProductPriceType
-                        );
-                    }
-                    else if (editChoice == 3)
-                    {
-                        var products = reader.ReadAll();
-                        int index = products.FindIndex(p => p.ProductIdNumber == productId);
-
-                        if (index < 0)
-                        {
-                            NotificationService.ShowError(
-                                "Kunde inte spara: Produkten finns inte");
-
-                            ValidatedConsoleInput
-                                .PauseCentered();
-
-                            return;
-                        }
-
-                        products[index] = new ProductModel(productId, productName, productPrice, productPriceType);
-                        productWriter.SaveAll(products);
-
-
                         NotificationService.ShowSuccessHeader(
-                           "=== Produktinformation uppdaterad ===");
+                        "=== Produktinformation uppdaterad ===");
 
                         RenderSelectedProduct(
                             productId,
@@ -218,6 +194,119 @@
                     afterSaveOptions);
 
             return choice == 0;
+        }
+
+        //Hanterar användarens val i redigeringsmenyn
+        //Metoden ansvarar för att uppdatera produktnamn, pris och pristyp
+        //samt avbryta redigeringen.
+        //Returnerar ett resultat som talar om vad användaren gjorde
+        private static EditResult HandleEditChoice(
+            int editChoice,
+            int productId,
+            ref string productName,
+            ref decimal productPrice,
+            ref string productPriceType,
+            IReadAllProductsFromFile productReader,
+            ISaveProductToFile productWriter)
+        {
+            if (editChoice == 0)
+            {
+                productName = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera produkt ==",
+                        "Produktnamn: ",
+                        ProductValidationService.ValidateProductName);
+
+                return EditResult.Continue;
+            }
+
+            if (editChoice == 1)
+            {
+                string productPriceInput = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera produkt ==",
+                        "Pris: ",
+                        ProductValidationService.ValidateProductPrice);
+
+                productPrice = decimal.Parse(productPriceInput);
+
+                return EditResult.Continue;
+            }
+
+            if (editChoice == 2)
+            {
+                productPriceType = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera produkt ==",
+                        "Pristyp: ",
+                        ProductValidationService.ValidateProductPriceType);
+
+                return EditResult.Continue;
+
+            }
+
+            if (editChoice == 3)
+            {
+                bool saved =
+                     SaveProductChanges(
+                         productId,
+                         productName,
+                         productPrice,
+                         productPriceType,
+                         productReader,
+                         productWriter);
+
+                if (saved)
+                {
+                    return EditResult.Saved;
+                }
+
+                return EditResult.Exit;
+
+            }
+
+            return EditResult.Exit;
+        }
+
+        //Metoden:
+        //1. läser alla medlemmar
+        //2. Hittar rätt medlem
+        //3. Ersätter medlemmen
+        //4.Sparar listan
+        //5. Visar resultat
+        //Returnerar true om sparningen lyckats
+        //Returnerar false om medlemmen inte hittades
+        private static bool SaveProductChanges(
+            int productId,
+            string productName,
+            decimal productPrice,
+            string productPriceType,
+            IReadAllProductsFromFile productReader,
+            ISaveProductToFile productWriter)
+        {
+            var products = productReader.ReadAll();
+            int index = products.FindIndex(m => m.ProductIdNumber == productId);
+
+            if (index < 0)
+            {
+                NotificationService.ShowError(
+                    "Kunde inte spara: Produkten finns inte");
+
+                ValidatedConsoleInput
+                    .PauseCentered();
+
+                return false;
+            }
+
+            products[index] = new ProductModel(
+                productId, 
+                productName, 
+                productPrice,
+                productPriceType);
+
+            productWriter.SaveAll(products);
+
+            return true;
         }
     }
 }
