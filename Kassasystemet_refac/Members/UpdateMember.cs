@@ -81,33 +81,30 @@
                              memberLastName);
                     });
 
-                    if (editChoice == 0)
-                    {
-                        memberFirstName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera medlem ==\n",
-                            "Nytt förnamn: ",
-                            MemberValidationService.ValidateMemberFirstName
-                        );
-                    }
-                    else if (editChoice == 1)
-                    {
-                        memberLastName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera medlem ==\n",
-                            "Nytt efternamn: ",
-                            MemberValidationService.ValidateMemberLastName
-                        );
-                    }
-                    else if (editChoice == 2)
-                    {
-                        SaveMemberChanges(
+
+                    MemberEditResult result =
+                        HandleEditChoice(
+                            editChoice,
                             memberId,
-                            memberFirstName,
-                            memberLastName,
+                            ref memberFirstName,
+                            ref memberLastName,
                             memberReader,
                             memberWriter);
 
+                    if (result == MemberEditResult.Continue)
+                    {
+                        continue;
+                    }
+
+                    if (result == MemberEditResult.Exit)
+                    {
+                        return;
+                    }
+
+                    if (result == MemberEditResult.Saved)
+                    {
                         NotificationService.ShowSuccessHeader(
-                           "=== Medlemsinformation uppdaterad ===");
+                        "=== Medlemsinformation uppdaterad ===");
 
                         RenderSelectedMember(
                             memberId,
@@ -130,6 +127,8 @@
                 }
             }
         }
+
+
 
         private static IMemberModel SelectMember(List<IMemberModel> members)
         {
@@ -221,12 +220,71 @@
                 "Tillbaka till medlemssidan"
             };
 
-            int choice = 
+            int choice =
                 afterSaveMenu.ShowArrow(
-                    "Välj:", 
+                    "Välj:",
                     afterSaveOptions);
-                
+
             return choice == 0;
         }
+
+        //Hanterar användarens val i redigeringsmenyn
+        //Metoden ansvarar för att uppdatera förnamn, efternamn och spara medlem
+        //samt avbryta redigeringen.
+        //Returnerar ett resultat som talar om vad användaren gjorde
+        private static MemberEditResult HandleEditChoice(
+            int editChoice,
+            int memberId,
+            ref string memberFirstName,
+            ref string memberLastName,
+            IReadAllMembersFromFile memberReader,
+            ISaveMemberToFile memberWriter)
+        {
+            if (editChoice == 0)
+            {
+                memberFirstName = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera medlem ==\n",
+                        "Nytt förnamn: ",
+                        MemberValidationService.ValidateMemberFirstName);
+
+                return MemberEditResult.Continue;
+
+            }
+
+            if (editChoice == 1)
+            {
+                memberLastName = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera medlem ==\n",
+                        "Nytt efternamn: ",
+                        MemberValidationService.ValidateMemberLastName);
+
+                return MemberEditResult.Continue;
+            }
+
+            if (editChoice == 2)
+            {
+                bool saved =
+                     SaveMemberChanges(
+                         memberId,
+                         memberFirstName,
+                         memberLastName,
+                         memberReader,
+                         memberWriter);
+
+                if (saved)
+                {
+                    return MemberEditResult.Saved;
+                }
+
+                return MemberEditResult.Exit;
+
+            }
+
+            return MemberEditResult.Exit;
+        }
+
     }
 }
+
