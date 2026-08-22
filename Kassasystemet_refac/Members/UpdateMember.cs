@@ -63,18 +63,6 @@
                       memberFirstName,
                       memberLastName);
 
-                    //CenterConsoleOutput.CenterTextToWindow("Vald medlem:");
-                    //Console.WriteLine();
-                    
-                    //string infoHeader = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
-                    //string infoRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
-
-                    //CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                    //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                    //CenterConsoleOutput.CenterTextToWindow(infoRow);
-
-                    //Console.WriteLine();
-
                     var arrowEdit = new ConsoleOptionsArrow();
                     var editOptions = new[]
                     {
@@ -90,18 +78,6 @@
                              memberId,
                              memberFirstName,
                              memberFirstName);
-
-                        //CenterConsoleOutput.CenterTextToWindow("Vald medlem:");
-                        //Console.WriteLine();
-
-                        //string infoHeader = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
-                        //string infoRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
-
-                        //CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                        //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                        //CenterConsoleOutput.CenterTextToWindow(infoRow);
-
-                        //Console.WriteLine();
                     });
 
                     if (editChoice == 0)
@@ -109,7 +85,7 @@
                         memberFirstName = ValidatedConsoleInput.ReadValidatedCenteredText(
                             "== Uppdatera medlem ==\n",
                             "Nytt förnamn: ",
-                            ValidateMemberFirstName
+                            MemberValidationService.ValidateMemberFirstName
                         );
                     }
                     else if (editChoice == 1)
@@ -117,7 +93,7 @@
                         memberLastName = ValidatedConsoleInput.ReadValidatedCenteredText(
                             "== Uppdatera medlem ==\n",
                             "Nytt efternamn: ",
-                            ValidateMemberLastName
+                            MemberValidationService.ValidateMemberLastName
                         );
                     }
                     else if (editChoice == 2)
@@ -147,14 +123,6 @@
                             memberFirstName,
                             memberLastName);
 
-                        //string headerRow = $"{"Medlemsnummer",-20}{"Förnamn",-20}{"Efternamn",-20}";
-                        //string dataRow = $"{memberId,-20}{memberFirstName,-20}{memberLastName,-20}";
-
-                        //CenterConsoleOutput.CenterTextToWindow(headerRow);
-                        //CenterConsoleOutput.CenterTextToWindow(new string('-', headerRow.Length));
-                        //CenterConsoleOutput.CenterTextToWindow(dataRow);
-
-                        //Console.ResetColor();
                         ValidatedConsoleInput.PauseCentered();
 
                         var afterSaveMemberMenu = new ConsoleOptionsArrow();
@@ -178,23 +146,6 @@
             }
         }
 
-        private static void ValidateMemberFirstName(string memberFirstNameInput)
-        {
-            if (string.IsNullOrWhiteSpace(memberFirstNameInput))
-                throw new ArgumentException("Ogiltigt förnamn: får inte vara tomt.");
-
-            if (memberFirstNameInput.Any(char.IsDigit))
-                throw new ArgumentException("Ogiltigt förnamn: får inte innehålla siffror.");
-        }
-
-        private static void ValidateMemberLastName(string memberLastNameInput)
-        {
-            if (string.IsNullOrWhiteSpace(memberLastNameInput))
-                throw new ArgumentException("Ogiltigt efternamn: får inte vara tomt.");
-
-            if (memberLastNameInput.Any(char.IsDigit))
-                throw new ArgumentException("Ogiltigt efternamn: får inte innehålla siffror.");
-        }
         private static IMemberModel SelectMember(List<IMemberModel> members)
         {
             var memberDisplay = members

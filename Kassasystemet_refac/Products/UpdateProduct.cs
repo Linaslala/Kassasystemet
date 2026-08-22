@@ -62,18 +62,6 @@
                         productPrice,
                         productPriceType);
 
-                    //CenterConsoleOutput.CenterTextToWindow("Vald produkt:");
-                    //Console.WriteLine();
-
-                    //string infoHeader = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
-                    //string infoRow = $"{productId,-20} {productName,-20} {productPrice,-20} {productPriceType,-20}";
-
-                    //CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                    //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                    //CenterConsoleOutput.CenterTextToWindow(infoRow);
-
-                    //Console.WriteLine();
-
                     var arrowEdit = new ConsoleOptionsArrow();
                     var editOptions = new[]
                     {
@@ -92,17 +80,6 @@
                             productPrice,
                             productPriceType);
 
-                        //CenterConsoleOutput.CenterTextToWindow("Vald produkt:");
-                        //Console.WriteLine();
-
-                        //string infoHeader = $"{"Produktnummer",-20}{"Produkt",-20}{"Pris",-20}{"Pristyp",-20}";
-                        //string infoRow = $"{productId,-20} {productName,-20} {productPrice,-20} {productPriceType,-20}";
-
-                        //CenterConsoleOutput.CenterTextToWindow(infoHeader);
-                        //CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-                        //CenterConsoleOutput.CenterTextToWindow(infoRow);
-
-                        //Console.WriteLine();
                     });
 
                     if (editChoice == 0)
@@ -159,8 +136,6 @@
                             productName,
                             productPrice,
                             productPriceType);
-
-                        //CenterConsoleOutput.CenterTextToWindow($"{productId} {productName} {productPrice} {productPriceType}");
 
                         ValidatedConsoleInput.PauseCentered();
 
