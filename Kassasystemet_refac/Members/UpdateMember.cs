@@ -106,23 +106,6 @@
                             memberReader,
                             memberWriter);
 
-                        //var members = memberReader.ReadAll();
-                        //int index = members.FindIndex(m => m.MemberIdNumber == memberId);
-
-                        //if (index < 0)
-                        //{
-                        //    NotificationService.ShowError(
-                        //        "Kunde inte spara: Kunden finns inte");
-
-                        //    ValidatedConsoleInput
-                        //        .PauseCentered();
-
-                        //    return;
-                        //}
-
-                        //members[index] = new MemberModel(memberId, memberFirstName, memberLastName);
-                        //memberWriter.SaveAll(members);
-
                         NotificationService.ShowSuccessHeader(
                            "=== Medlemsinformation uppdaterad ===");
 
@@ -133,16 +116,10 @@
 
                         ValidatedConsoleInput.PauseCentered();
 
-                        var afterSaveMemberMenu = new ConsoleOptionsArrow();
-                        var afterSaveMemberOptions = new[]
+                        if (ShowAfterSaveMenu())
                         {
-                            "Uppdatera en till medlem",
-                            "Tillbaka till medlemssidan"
-                        };
-
-                        int afterChoice = afterSaveMemberMenu.ShowArrow("Välj:", afterSaveMemberOptions);
-                        if (afterChoice == 0)
                             break;
+                        }
 
                         return;
                     }
@@ -230,6 +207,26 @@
             memberWriter.SaveAll(members);
 
             return true;
+        }
+
+        //Extract Workflow Methods
+        //Visar menyn efter att en medlem sparats.
+        //Returnerar true om användaren vill uppdatera ytterligare en medlem
+        private static bool ShowAfterSaveMenu()
+        {
+            var afterSaveMenu = new ConsoleOptionsArrow();
+            var afterSaveOptions = new[]
+            {
+                "Uppdatera en till medlem",
+                "Tillbaka till medlemssidan"
+            };
+
+            int choice = 
+                afterSaveMenu.ShowArrow(
+                    "Välj:", 
+                    afterSaveOptions);
+                
+            return choice == 0;
         }
     }
 }
