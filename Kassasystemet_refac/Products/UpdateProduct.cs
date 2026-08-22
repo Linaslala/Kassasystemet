@@ -139,16 +139,10 @@
 
                         ValidatedConsoleInput.PauseCentered();
 
-                        var afterSaveProductMenu = new ConsoleOptionsArrow();
-                        var afterSaveProductOptions = new[]
+                        if (ShowAfterSaveMenu())
                         {
-                            "Uppdatera en till produkt",
-                            "Tillbaka till produktsidan"
-                        };
-
-                        int afterChoice = afterSaveProductMenu.ShowArrow("Välj:", afterSaveProductOptions);
-                        if (afterChoice == 0)
                             break;
+                        }
 
                         return;
                     }
@@ -204,6 +198,26 @@
                 row);
 
             Console.WriteLine();
+        }
+
+        //Extract Workflow Methods
+        //Visar menyn efter att en medlem sparats.
+        //Returnerar true om användaren vill uppdatera ytterligare en produkt
+        private static bool ShowAfterSaveMenu()
+        {
+            var afterSaveMenu = new ConsoleOptionsArrow();
+            var afterSaveOptions = new[]
+            {
+                "Uppdatera en till produkt",
+                "Tillbaka till produktsidan"
+            };
+
+            int choice =
+                afterSaveMenu.ShowArrow(
+                    "Välj:",
+                    afterSaveOptions);
+
+            return choice == 0;
         }
     }
 }

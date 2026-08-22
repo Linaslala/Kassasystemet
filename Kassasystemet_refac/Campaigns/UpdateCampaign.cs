@@ -196,15 +196,11 @@ namespace Kassasystemet_refac
                         CenterConsoleOutput.CenterTextToWindow($"Rabatt: {percentOff.ToString(CultureInfo.InvariantCulture)}%");
                         ValidatedConsoleInput.PauseCentered();
 
-                        var afterSaveMenu = new ConsoleOptionsArrow();
-                        var afterSaveOptions = new[]
+                        if (ShowAfterSaveMenu())
                         {
-                            "Uppdatera en till kampanj",
-                            "Tillbaka till kampanjsidan"
-                        };
+                            break;
+                        }
 
-                        int afterChoice = afterSaveMenu.ShowArrow("Välj:", afterSaveOptions);
-                        if (afterChoice == 0) break;
                         return;
                     }
                     else
@@ -352,6 +348,26 @@ namespace Kassasystemet_refac
             var arrow = new ConsoleOptionsArrow();
             int index = arrow.ShowArrow("Välj kampanj:", campaignDisplay);
             return campaigns[index];
+        }
+
+        //Extract Workflow Methods
+        //Visar menyn efter att en medlem sparats.
+        //Returnerar true om användaren vill uppdatera ytterligare en produkt
+        private static bool ShowAfterSaveMenu()
+        {
+            var afterSaveMenu = new ConsoleOptionsArrow();
+            var afterSaveOptions = new[]
+            {
+                "Uppdatera en till kampanj",
+                "Tillbaka till kampanjsidan"
+            };
+
+            int choice =
+                afterSaveMenu.ShowArrow(
+                    "Välj:",
+                    afterSaveOptions);
+
+            return choice == 0;
         }
     }
 }
