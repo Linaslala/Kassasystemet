@@ -72,7 +72,11 @@
                         "Avbryt"
                     };
 
-                    int editChoice = arrowEdit.ShowArrow("Välj vad du vill ändra:", editOptions, renderAboveOptions: () =>
+                    int editChoice = arrowEdit
+                        .ShowArrow(
+                            "Välj vad du vill ändra:", 
+                            editOptions, 
+                            renderAboveOptions: () =>
                     {
                         RenderSelectedProduct(
                             productId,
@@ -285,7 +289,8 @@
             ISaveProductToFile productWriter)
         {
             var products = productReader.ReadAll();
-            int index = products.FindIndex(m => m.ProductIdNumber == productId);
+            int index = products.FindIndex(p => 
+            p.ProductIdNumber == productId);
 
             if (index < 0)
             {

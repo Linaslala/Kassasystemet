@@ -70,7 +70,13 @@ namespace Kassasystemet_refac
                     Console.WriteLine();
                     Console.WriteLine();
 
-                    RenderSelectedCampaign(campaignName, campaignStartDate, campaignEndDate, productIdNumbers, percentOff, productLookup);
+                    RenderSelectedCampaign(
+                        campaignName,
+                        campaignStartDate,
+                        campaignEndDate,
+                        productIdNumbers,
+                        percentOff,
+                        productLookup);
 
                     var arrowEdit = new ConsoleOptionsArrow();
                     var editOptions = new[]
@@ -84,116 +90,166 @@ namespace Kassasystemet_refac
                         "Avbryt"
                     };
 
-                    int editChoice = arrowEdit.ShowArrow("Välj vad du vill ändra:", editOptions, renderAboveOptions: () =>
+                    int editChoice = arrowEdit
+                        .ShowArrow(
+                            "Välj vad du vill ändra:",
+                            editOptions,
+                            renderAboveOptions: () =>
                     {
-                        RenderSelectedCampaign(campaignName, campaignStartDate, campaignEndDate, productIdNumbers, percentOff, productLookup);
+                        RenderSelectedCampaign(
+                            campaignName,
+                            campaignStartDate,
+                            campaignEndDate,
+                            productIdNumbers,
+                            percentOff,
+                            productLookup);
                     });
-                    ;
 
-                    if (editChoice == 0)
+                    EditResult result =
+                        HandleEditChoice(
+                            editChoice,
+
+                            originalName,
+                            originalStart,
+                            originalEnd,
+                            originalProductIds,
+                            originalPercentOff,
+
+                            ref campaignName,
+                            ref campaignStartDate,
+                            ref campaignEndDate,
+                            ref productIdNumbers,
+                            ref percentOff,
+                            
+                            productLookup,
+                            campaignReader,
+                            campaignWriter);
+
+                    if (result == EditResult.Continue)
                     {
-                        campaignName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera kampanj ==",
-                            "Kampanjnamn: ",
-                            ValidateCampaignName);
+                        continue;
                     }
-                    else if (editChoice == 1)
+
+                    if (result == EditResult.Exit)
                     {
-                        string campaignStartDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera kampanj ==",
-                            "Startdatum (yyyy-MM-dd): ",
-                            ValidateCampaignDate);
-
-                        campaignStartDate = DateTime.ParseExact(campaignStartDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                        if (campaignEndDate < campaignStartDate)
-                            campaignEndDate = campaignStartDate;
+                        return;
                     }
-                    else if (editChoice == 2)
+
+                    //if (editChoice == 0)
+                    //{
+                    //    campaignName = ValidatedConsoleInput.ReadValidatedCenteredText(
+                    //        "== Uppdatera kampanj ==",
+                    //        "Kampanjnamn: ",
+                    //        ValidateCampaignName);
+                    //}
+                    //else if (editChoice == 1)
+                    //{
+                    //    string campaignStartDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
+                    //        "== Uppdatera kampanj ==",
+                    //        "Startdatum (yyyy-MM-dd): ",
+                    //        ValidateCampaignDate);
+
+                    //    campaignStartDate = DateTime.ParseExact(campaignStartDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                    //    if (campaignEndDate < campaignStartDate)
+                    //        campaignEndDate = campaignStartDate;
+                    //}
+                    //else if (editChoice == 2)
+                    //{
+                    //    string campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
+                    //        "== Uppdatera kampanj ==",
+                    //        "Slutdatum (yyyy-MM-dd): ",
+                    //        ValidateCampaignDate);
+
+                    //    campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                    //    while (campaignEndDate < campaignStartDate)
+                    //    {
+                    //        Console.Clear();
+                    //        NotificationService.ShowError(
+                    //            "Slutdatum kan inte vara före startdatum.");
+                    //        //Console.ForegroundColor = ConsoleColor.Red;
+                    //        //CenterConsoleOutput.CenterTextToWindow("Slutdatum kan inte vara före startdatum.");
+                    //        //Console.ResetColor();
+
+                    //        campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
+                    //            "== Uppdatera kampanj ==",
+                    //            "Slutdatum (yyyy-MM-dd): ",
+                    //            ValidateCampaignDate,
+                    //            clearConsoleEachAttempt: false);
+
+                    //        campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    //    }
+                    //}
+                    //else if (editChoice == 3)
+                    //{
+                    //    string productIdNumbersInput = ValidatedConsoleInput.ReadValidatedCenteredText(
+                    //        "== Uppdatera kampanj ==",
+                    //        "Produktnummer (1,2,3): ",
+                    //        ValidateProductIdNumbers);
+
+                    //    productIdNumbers = ParseProductIdNumbers(productIdNumbersInput);
+                    //}
+                    //else if (editChoice == 4)
+                    //{
+                    //    string percentOffInput = ValidatedConsoleInput.ReadValidatedCenteredText(
+                    //        "== Uppdatera kampanj ==",
+                    //        "Rabattprocent (1-100): ",
+                    //        ValidatePercent);
+
+                    //    percentOff = ParseDecimalInvariant(percentOffInput);
+                    //}
+                    //else if (editChoice == 5)
+                    //{
+                    //var campaigns = campaignReader.ReadAll();
+
+                    //int index = campaigns.FindIndex(c =>
+                    //    string.Equals(c.CampaignName, originalName, StringComparison.Ordinal) &&
+                    //    c.CampaignStartDate == originalStart &&
+                    //    c.CampaignEndDate == originalEnd &&
+                    //    SameIdNumbers(c.ProductIdNumbers, originalProductIds) &&
+                    //    (!(c is PercentOffCampaign existingPoc) || existingPoc.PercentOff == originalPercentOff)
+                    //);
+
+                    //if (index < 0)
+                    //{
+
+                    //    NotificationService.ShowError(
+                    //        "Kunde inte spara: Kampanjen finns inte");
+
+                    //    ValidatedConsoleInput
+                    //        .PauseCentered();
+
+                    //    return;
+                    //}
+
+                    //campaigns[index] = new PercentOffCampaign(
+                    //campaignName,
+                    //campaignStartDate,
+                    //campaignEndDate,
+                    //productIdNumbers,
+                    //percentOff
+                    //);
+
+                    //campaignWriter.SaveAll(campaigns);
+
+                    if (result == EditResult.Saved)
                     {
-                        string campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera kampanj ==",
-                            "Slutdatum (yyyy-MM-dd): ",
-                            ValidateCampaignDate);
-
-                        campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                        while (campaignEndDate < campaignStartDate)
-                        {
-                            Console.Clear();
-                            NotificationService.ShowError(
-                                "Slutdatum kan inte vara före startdatum.");
-                            //Console.ForegroundColor = ConsoleColor.Red;
-                            //CenterConsoleOutput.CenterTextToWindow("Slutdatum kan inte vara före startdatum.");
-                            //Console.ResetColor();
-
-                            campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                                "== Uppdatera kampanj ==",
-                                "Slutdatum (yyyy-MM-dd): ",
-                                ValidateCampaignDate,
-                                clearConsoleEachAttempt: false);
-
-                            campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                        }
-                    }
-                    else if (editChoice == 3)
-                    {
-                        string productIdNumbersInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera kampanj ==",
-                            "Produktnummer (1,2,3): ",
-                            ValidateProductIdNumbers);
-
-                        productIdNumbers = ParseProductIdNumbers(productIdNumbersInput);
-                    }
-                    else if (editChoice == 4)
-                    {
-                        string percentOffInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                            "== Uppdatera kampanj ==",
-                            "Rabattprocent (1-100): ",
-                            ValidatePercent);
-
-                        percentOff = ParseDecimalInvariant(percentOffInput);
-                    }
-                    else if (editChoice == 5)
-                    {
-                        var campaigns = campaignReader.ReadAll();
-
-                        int index = campaigns.FindIndex(c =>
-                            string.Equals(c.CampaignName, originalName, StringComparison.Ordinal) &&
-                            c.CampaignStartDate == originalStart &&
-                            c.CampaignEndDate == originalEnd &&
-                            SameIdNumbers(c.ProductIdNumbers, originalProductIds) &&
-                            (!(c is PercentOffCampaign existingPoc) || existingPoc.PercentOff == originalPercentOff)
-                        );
-
-                        if (index < 0)
-                        {
-
-                            NotificationService.ShowError(
-                                "Kunde inte spara: Kampanjen finns inte");
-
-                            ValidatedConsoleInput
-                                .PauseCentered();
-
-                            return;
-                        }
-
-                        campaigns[index] = new PercentOffCampaign(
-                        campaignName,
-                        campaignStartDate,
-                        campaignEndDate,
-                        productIdNumbers,
-                        percentOff
-                        );
-
-                        campaignWriter.SaveAll(campaigns);
 
                         NotificationService.ShowSuccessHeader(
-                          "=== Kampanj uppdaterad ===");
+                              "=== Kampanj uppdaterad ===");
 
-                        CenterConsoleOutput.CenterTextToWindow($"{campaignName} ({campaignStartDate:yyyy-MM-dd} - {campaignEndDate:yyyy-MM-dd})");
-                        CenterConsoleOutput.CenterTextToWindow($"Produkter: {string.Join(",", productIdNumbers)}");
-                        CenterConsoleOutput.CenterTextToWindow($"Rabatt: {percentOff.ToString(CultureInfo.InvariantCulture)}%");
+                        RenderSelectedCampaign(
+                             campaignName,
+                             campaignStartDate,
+                             campaignEndDate,
+                             productIdNumbers,
+                             percentOff,
+                             productLookup);
+
+                        //CenterConsoleOutput.CenterTextToWindow($"{campaignName} ({campaignStartDate:yyyy-MM-dd} - {campaignEndDate:yyyy-MM-dd})");
+                        //CenterConsoleOutput.CenterTextToWindow($"Produkter: {string.Join(",", productIdNumbers)}");
+                        //CenterConsoleOutput.CenterTextToWindow($"Rabatt: {percentOff.ToString(CultureInfo.InvariantCulture)}%");
                         ValidatedConsoleInput.PauseCentered();
 
                         if (ShowAfterSaveMenu())
@@ -369,5 +425,196 @@ namespace Kassasystemet_refac
 
             return choice == 0;
         }
+
+        private static EditResult HandleEditChoice(
+            int editChoice,
+
+            string originalName,
+            DateTime originalStart,
+            DateTime originalEnd,
+            List<int> originalProductIds,
+            decimal originalPercentOff,
+
+            ref string campaignName,
+            ref DateTime campaignStartDate,
+            ref DateTime campaignEndDate,
+            ref List<int> productIdNumbers,
+            ref decimal percentOff,
+
+            Dictionary<int, string> productLookup,
+            IReadAllCampaignsFromFile campaignReader,
+            ISaveCampaignToFile campaignWriter)
+        {
+            if (editChoice == 0)
+            {
+                campaignName = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera kampanj ==",
+                        "Kampanjnamn: ",
+                        ValidateCampaignName);
+
+                return EditResult.Continue;
+            }
+
+            if (editChoice == 1)
+            {
+                string campaignStartDateInput = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera kampanj ==",
+                        "Startdatum (yyyy-MM-dd): ",
+                        ValidateCampaignDate);
+
+                campaignStartDate = DateTime.ParseExact(campaignStartDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                if (campaignEndDate < campaignStartDate)
+                    campaignEndDate = campaignStartDate;
+
+                return EditResult.Continue;
+
+            }
+            if (editChoice == 2)
+            {
+                string campaignEndDateInput = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera kampanj ==",
+                        "Slutdatum (yyyy-MM-dd): ",
+                        ValidateCampaignDate);
+
+                campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                while (campaignEndDate < campaignStartDate)
+                {
+                    Console.Clear();
+                    NotificationService.ShowError(
+                        "Slutdatum kan inte vara före startdatum.");
+
+                    campaignEndDateInput = ValidatedConsoleInput
+                        .ReadValidatedCenteredText(
+                            "== Uppdatera kampanj ==",
+                            "Slutdatum (yyyy-MM-dd): ",
+                            ValidateCampaignDate,
+                            clearConsoleEachAttempt: false);
+
+                    campaignEndDate = DateTime
+                        .ParseExact(campaignEndDateInput.Trim(),
+                        "yyyy-MM-dd",
+                        CultureInfo.InvariantCulture);
+
+                    return EditResult.Continue;
+                }
+            }
+
+            if (editChoice == 3)
+            {
+                string productIdNumbersInput = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera kampanj ==",
+                        "Produktnummer (1,2,3): ",
+                        ValidateProductIdNumbers);
+
+                productIdNumbers = ParseProductIdNumbers(productIdNumbersInput);
+
+                return EditResult.Continue;
+            }
+
+            if (editChoice == 4)
+            {
+                string percentOffInput = ValidatedConsoleInput
+                    .ReadValidatedCenteredText(
+                        "== Uppdatera kampanj ==",
+                        "Rabattprocent (1-100): ",
+                        ValidatePercent);
+
+                percentOff = ParseDecimalInvariant(percentOffInput);
+
+                return EditResult.Continue;
+            }
+
+            if (editChoice == 5)
+            {
+                bool saved =
+                    SaveCampaignChanges(
+                    originalName,
+                    originalStart,
+                    originalEnd,
+                    originalProductIds,
+                    originalPercentOff,
+
+                    campaignName,
+                    campaignStartDate,
+                    campaignEndDate,
+                    productIdNumbers,
+                    percentOff,
+                    
+                    campaignReader,
+                    campaignWriter);
+
+                if (saved)
+                {
+                    return EditResult.Saved;
+                }
+
+                return EditResult.Exit;
+            }
+            return EditResult.Exit;
+        }
+
+        private static bool SaveCampaignChanges(
+            string originalName,
+            DateTime originalStart,
+            DateTime originalEnd,
+            List<int> originalProductIds,
+            decimal originalPercentOff,
+
+            string campaignName,
+            DateTime campaignStartDate,
+            DateTime campaignEndDate,
+            List<int> productIdNumbers,
+            decimal percentOff,
+            
+            IReadAllCampaignsFromFile campaignReader,
+            ISaveCampaignToFile campaignWriter)
+
+        {
+            var campaigns = campaignReader.ReadAll();
+
+            int index = campaigns.FindIndex(c =>
+                string.Equals(c.CampaignName, originalName, StringComparison.Ordinal) &&
+                c.CampaignStartDate == originalStart &&
+                c.CampaignEndDate == originalEnd &&
+                SameIdNumbers(c.ProductIdNumbers, originalProductIds) &&
+                (!(c is PercentOffCampaign existingPoc) || existingPoc.PercentOff == originalPercentOff)
+            );
+
+            if (index < 0)
+            {
+
+                NotificationService.ShowError(
+                    "Kunde inte spara: Kampanjen finns inte");
+
+                ValidatedConsoleInput
+                    .PauseCentered();
+
+                return false;
+            }
+
+            campaigns[index] = new PercentOffCampaign(
+                campaignName,
+                campaignStartDate,
+                campaignEndDate,
+                productIdNumbers,
+                percentOff);
+
+            campaignWriter.SaveAll(campaigns);
+
+            return true;
+
+        }
     }
 }
+
+
+
+
+
+
