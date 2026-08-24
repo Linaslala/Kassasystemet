@@ -54,11 +54,6 @@ namespace Kassasystemet_refac
             NotificationService.ShowSuccessHeader(
                  "=== Ny produkt sparad ===");
 
-            //Console.ForegroundColor = ConsoleColor.Green;
-
-            //CenterConsoleOutput.CenterTextToWindow("== Ny produkt sparad ==");
-            //Console.WriteLine();
-
             string infoHeader =
                 $"{"Produktnummer",-12}{"Produktnamn",-25}{"Pris",-12}{"Pristyp",-15}";
 

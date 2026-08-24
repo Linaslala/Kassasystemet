@@ -11,13 +11,13 @@
             string memberFirstNameInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                 memberHeader,
                 memberFirstNamePrompt,
-                ValidateMemberFirstName
+                MemberValidationService.ValidateMemberFirstName
             );
 
             string memberLastNameInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                 memberHeader,
                 memberLastNamePrompt,
-                ValidateMemberLastName,
+                MemberValidationService.ValidateMemberLastName,
                 clearConsoleEachAttempt: false
             );
 
@@ -67,24 +67,6 @@
                 return;
             }
             return;
-        }
-
-        private static void ValidateMemberFirstName(string memberFirstNameInput)
-        {
-            if (string.IsNullOrWhiteSpace(memberFirstNameInput))
-                throw new ArgumentException("Ogiltigt förnamn: får inte vara tomt.");
-
-            if (memberFirstNameInput.Any(char.IsDigit))
-                throw new ArgumentException("Ogiltigt förnamn: får inte innehålla siffror.");
-        }
-
-        private static void ValidateMemberLastName(string memberLastNameInput)
-        {
-            if (string.IsNullOrWhiteSpace(memberLastNameInput))
-                throw new ArgumentException("Ogiltigt efternamn: får inte vara tomt.");
-
-            if (memberLastNameInput.Any(char.IsDigit))
-                throw new ArgumentException("Ogiltigt efternamn: får inte innehålla siffror.");
         }
     }
 }

@@ -135,104 +135,6 @@ namespace Kassasystemet_refac
                         return;
                     }
 
-                    //if (editChoice == 0)
-                    //{
-                    //    campaignName = ValidatedConsoleInput.ReadValidatedCenteredText(
-                    //        "== Uppdatera kampanj ==",
-                    //        "Kampanjnamn: ",
-                    //        ValidateCampaignName);
-                    //}
-                    //else if (editChoice == 1)
-                    //{
-                    //    string campaignStartDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                    //        "== Uppdatera kampanj ==",
-                    //        "Startdatum (yyyy-MM-dd): ",
-                    //        ValidateCampaignDate);
-
-                    //    campaignStartDate = DateTime.ParseExact(campaignStartDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                    //    if (campaignEndDate < campaignStartDate)
-                    //        campaignEndDate = campaignStartDate;
-                    //}
-                    //else if (editChoice == 2)
-                    //{
-                    //    string campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                    //        "== Uppdatera kampanj ==",
-                    //        "Slutdatum (yyyy-MM-dd): ",
-                    //        ValidateCampaignDate);
-
-                    //    campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-                    //    while (campaignEndDate < campaignStartDate)
-                    //    {
-                    //        Console.Clear();
-                    //        NotificationService.ShowError(
-                    //            "Slutdatum kan inte vara före startdatum.");
-                    //        //Console.ForegroundColor = ConsoleColor.Red;
-                    //        //CenterConsoleOutput.CenterTextToWindow("Slutdatum kan inte vara före startdatum.");
-                    //        //Console.ResetColor();
-
-                    //        campaignEndDateInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                    //            "== Uppdatera kampanj ==",
-                    //            "Slutdatum (yyyy-MM-dd): ",
-                    //            ValidateCampaignDate,
-                    //            clearConsoleEachAttempt: false);
-
-                    //        campaignEndDate = DateTime.ParseExact(campaignEndDateInput.Trim(), "yyyy-MM-dd", CultureInfo.InvariantCulture);
-                    //    }
-                    //}
-                    //else if (editChoice == 3)
-                    //{
-                    //    string productIdNumbersInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                    //        "== Uppdatera kampanj ==",
-                    //        "Produktnummer (1,2,3): ",
-                    //        ValidateProductIdNumbers);
-
-                    //    productIdNumbers = ParseProductIdNumbers(productIdNumbersInput);
-                    //}
-                    //else if (editChoice == 4)
-                    //{
-                    //    string percentOffInput = ValidatedConsoleInput.ReadValidatedCenteredText(
-                    //        "== Uppdatera kampanj ==",
-                    //        "Rabattprocent (1-100): ",
-                    //        ValidatePercent);
-
-                    //    percentOff = ParseDecimalInvariant(percentOffInput);
-                    //}
-                    //else if (editChoice == 5)
-                    //{
-                    //var campaigns = campaignReader.ReadAll();
-
-                    //int index = campaigns.FindIndex(c =>
-                    //    string.Equals(c.CampaignName, originalName, StringComparison.Ordinal) &&
-                    //    c.CampaignStartDate == originalStart &&
-                    //    c.CampaignEndDate == originalEnd &&
-                    //    SameIdNumbers(c.ProductIdNumbers, originalProductIds) &&
-                    //    (!(c is PercentOffCampaign existingPoc) || existingPoc.PercentOff == originalPercentOff)
-                    //);
-
-                    //if (index < 0)
-                    //{
-
-                    //    NotificationService.ShowError(
-                    //        "Kunde inte spara: Kampanjen finns inte");
-
-                    //    ValidatedConsoleInput
-                    //        .PauseCentered();
-
-                    //    return;
-                    //}
-
-                    //campaigns[index] = new PercentOffCampaign(
-                    //campaignName,
-                    //campaignStartDate,
-                    //campaignEndDate,
-                    //productIdNumbers,
-                    //percentOff
-                    //);
-
-                    //campaignWriter.SaveAll(campaigns);
-
                     if (result == EditResult.Saved)
                     {
 
@@ -247,9 +149,6 @@ namespace Kassasystemet_refac
                              percentOff,
                              productLookup);
 
-                        //CenterConsoleOutput.CenterTextToWindow($"{campaignName} ({campaignStartDate:yyyy-MM-dd} - {campaignEndDate:yyyy-MM-dd})");
-                        //CenterConsoleOutput.CenterTextToWindow($"Produkter: {string.Join(",", productIdNumbers)}");
-                        //CenterConsoleOutput.CenterTextToWindow($"Rabatt: {percentOff.ToString(CultureInfo.InvariantCulture)}%");
                         ValidatedConsoleInput.PauseCentered();
 
                         if (ShowAfterSaveMenu())
