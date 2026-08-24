@@ -34,10 +34,6 @@
             memberWriter.SaveAll(members);
 
             Console.Clear();
-            //Console.ForegroundColor = ConsoleColor.Green;
-
-            //CenterConsoleOutput.CenterTextToWindow("Ny medlem sparad:");
-            //Console.WriteLine();
 
             NotificationService.ShowSuccessHeader(
                 "=== Ny medlem sparad ===");

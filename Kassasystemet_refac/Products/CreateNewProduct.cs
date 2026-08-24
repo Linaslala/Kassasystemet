@@ -14,20 +14,20 @@ namespace Kassasystemet_refac
             string productNameInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                 productHeader,
                 productNamePrompt,
-                ValidateProductName
+                ProductValidationService.ValidateProductName
             );
 
             string productPriceInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                 productHeader,
                 productPricePrompt,
-                ValidateProductPrice,
+                ProductValidationService.ValidateProductPrice,
                 clearConsoleEachAttempt: false
             );
 
             string productPriceTypeInput = ValidatedConsoleInput.ReadValidatedCenteredText(
                 productHeader,
                 productPriceTypePrompt,
-                ValidateProductPriceType,
+                ProductValidationService.ValidateProductPriceType,
                 clearConsoleEachAttempt: false
             );
 
@@ -84,29 +84,6 @@ namespace Kassasystemet_refac
                 return;
             }
             return;
-        }
-
-        private static void ValidateProductName(string productNameInput)
-        {
-            if (string.IsNullOrWhiteSpace(productNameInput))
-                throw new ArgumentException("Ogiltigt produktnamn: får inte vara tomt.");
-        }
-
-        private static void ValidateProductPrice(string productPriceInput)
-        {
-            if (string.IsNullOrWhiteSpace(productPriceInput))
-                throw new ArgumentException("Ogiltigt produktpris: får inte vara tomt.");
-
-            if (productPriceInput.Any(char.IsLetter))
-                throw new ArgumentException("Ogiltigt produktpris: får inte innehålla bokstäver.");
-        }
-        private static void ValidateProductPriceType(string productPriceTypeInput)
-        {
-            if (string.IsNullOrWhiteSpace(productPriceTypeInput))
-                throw new ArgumentException("Ogiltigt produkttyp: får inte vara tomt.");
-
-            if (productPriceTypeInput.Any(char.IsDigit))
-                throw new ArgumentException("Ogiltig produktpristyp: måste ange styckpris eller kilopris");
         }
     }
 }
