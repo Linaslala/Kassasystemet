@@ -114,8 +114,11 @@ namespace Kassasystemet_refac
                 .ToList();
 
             RenderCreatedCampaign(
-            newCampaign
-            /*campaignProducts*/);
+            newCampaign);
+
+            RenderCampaignProducts(
+                campaignProducts,
+                percentOff);
 
             //var percentCampaign = newCampaign as PercentOffCampaign;
 
@@ -232,6 +235,22 @@ namespace Kassasystemet_refac
             //{
             //    CenterConsoleOutput.CenterTextToWindow("OBS: Inga matchande produkter hittades för angivna produktnummer.");
             //}
+        }
+
+        private static void RenderCampaignProducts(
+            IEnumerable<IProductModel> campaignProducts,
+            decimal pecentOff)
+        {
+            if (campaignProducts.Any())
+            {
+                CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
+                Console.WriteLine();
+            }
+            else
+            {
+                CenterConsoleOutput.CenterTextToWindow(
+                    "OBS: Inga matchande produkter hittades för angivna produktnummer.");
+            }
         }
     }
 }
