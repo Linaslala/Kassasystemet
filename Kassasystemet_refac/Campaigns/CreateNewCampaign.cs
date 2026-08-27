@@ -179,11 +179,12 @@ namespace Kassasystemet_refac
 
             CenterConsoleOutput.CenterTextToWindow(
                     $"Kampanj: " +
-                    $"{campaign.CampaignName} "
-                    /*$"({newCampaign.TypeOfCampaign})"*/);
+                    $"{campaign.CampaignName} " +
+                    $"({campaign.TypeOfCampaign})");
 
             CenterConsoleOutput.CenterTextToWindow(
-                $"Gäller: {campaign.CampaignStartDate:yyyy-MM-dd} till {campaign.CampaignEndDate:yyyy-MM-dd}"
+                $"Gäller: {campaign.CampaignStartDate:yyyy-MM-dd} " +
+                $"till {campaign.CampaignEndDate:yyyy-MM-dd}"
             );
 
             //Console.WriteLine();
