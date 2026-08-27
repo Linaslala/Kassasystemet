@@ -41,6 +41,11 @@
             NotificationService.ShowSuccessHeader(
                 "=== Ny medlem sparad ===");
 
+            //Run() vet bara "Visa den skapade medlemmen"
+            //Jag skickar in den data metoden behöver
+            //Metoden får datan via sina parametrar
+            //newMemberIdNumber, memberFirstNameInput, memberLastNameInput är ARGUMENT
+            //Vid metodanrop: ARGUMENT skickas in här ("ARGUMENT SKICKAS IN TILL PARAMETRAR")
             RenderCreatedMember(
                 newMemberIdNumber,
                 memberFirstNameInput,
@@ -84,6 +89,10 @@
             return;
         }
 
+        //RenderCreatedMember() vet "Hur medlemmen visas"
+        //memberId, firstName, lastName är PARAMETRAR
+        //Metoden får datan från argumenten i metodanropet.
+        //Metoden använder parametrarna för att visa medlemmen
         public static void RenderCreatedMember(
             int memberId,
             string firstName,

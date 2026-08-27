@@ -58,24 +58,12 @@ namespace Kassasystemet_refac
             NotificationService.ShowSuccessHeader(
                  "=== Ny produkt sparad ===");
 
-            string infoHeader =
-                $"{"Produktnummer",-12}" +
-                $"{"Produktnamn",-25}" +
-                $"{"Pris",-12}" +
-                $"{"Pristyp",-15}";
-
-            string infoRow =
-                $"{newProductId,-12}" +
-                $"{productNameInput,-25}" +
-                $"{productPriceDecimalInput.ToString(
-                        "0.00", CultureInfo.CurrentCulture) + " kr",-12}" +
-                $"{productPriceTypeInput,-15}";
-
-            // Skriv ut header, avskiljare och data
-            CenterConsoleOutput.CenterTextToWindow(infoHeader);
-            CenterConsoleOutput.CenterTextToWindow(new string('-', infoHeader.Length));
-            CenterConsoleOutput.CenterTextToWindow(infoRow);
-
+            RenderCreatedProduct(
+                newProductId, 
+                productNameInput, 
+                productPriceDecimalInput, 
+                productPriceTypeInput);
+                    
             Console.ResetColor();
             ValidatedConsoleInput.PauseCentered(
                 "Tryck valfri tangent för att fortsätta...");
@@ -98,6 +86,33 @@ namespace Kassasystemet_refac
                 return;
             }
             return;
+        }
+
+        public static void RenderCreatedProduct(
+            int productId,
+            string productName,
+            decimal productPrice,
+            string productPriceType)
+        {
+
+            string header =
+               $"{"Produktnummer",-12}" +
+               $"{"Produktnamn",-25}" +
+               $"{"Pris",-12}" +
+               $"{"Pristyp",-15}";
+
+            string row =
+                $"{productId,-12}" +
+                $"{productName,-25}" +
+                $"{productPrice.ToString(
+                        "0.00", CultureInfo.CurrentCulture) + " kr",-12}" +
+                $"{productPriceType,-15}";
+
+            // Skriv ut header, avskiljare och data
+            CenterConsoleOutput.CenterTextToWindow(header);
+            CenterConsoleOutput.CenterTextToWindow(new string('-', header.Length));
+            CenterConsoleOutput.CenterTextToWindow(row);
+                  
         }
     }
 }
