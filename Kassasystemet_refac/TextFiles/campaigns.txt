@@ -1,3 +1,5 @@
 PercentOffCampaign;Gratis;2026-08-31;2026-09-01;3;100
 PercentOffCampaign;jdfif;2026-09-15;2026-10-23;1,7,3;5
 PercentOffCampaign;Jobbrea;2026-08-29;2026-08-30;1,8,3,2;25
+PercentOffCampaign;Kram;2026-08-30;2026-09-30;1,3,2;2
+PercentOffCampaign;Testar;2026-09-10;2026-10-01;1,2,3;90
