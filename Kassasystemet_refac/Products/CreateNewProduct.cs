@@ -45,8 +45,12 @@ namespace Kassasystemet_refac
                 decimal.Parse(productPriceInput.Replace(',', '.'),
                 CultureInfo.InvariantCulture);
 
-            products.Add(new ProductModel(newProductId, productNameInput, productPriceDecimalInput, productPriceTypeInput));
-            productWriter.SaveAll(products);
+            products.Add(new ProductModel(
+                newProductId, 
+                productNameInput, 
+                productPriceDecimalInput, 
+                productPriceTypeInput));
+                productWriter.SaveAll(products);
 
 
             Console.Clear();
@@ -55,10 +59,16 @@ namespace Kassasystemet_refac
                  "=== Ny produkt sparad ===");
 
             string infoHeader =
-                $"{"Produktnummer",-12}{"Produktnamn",-25}{"Pris",-12}{"Pristyp",-15}";
+                $"{"Produktnummer",-12}" +
+                $"{"Produktnamn",-25}" +
+                $"{"Pris",-12}" +
+                $"{"Pristyp",-15}";
 
             string infoRow =
-                $"{newProductId,-12}{productNameInput,-25}{productPriceDecimalInput.ToString("0.00", CultureInfo.CurrentCulture) + " kr",-12}" +
+                $"{newProductId,-12}" +
+                $"{productNameInput,-25}" +
+                $"{productPriceDecimalInput.ToString(
+                        "0.00", CultureInfo.CurrentCulture) + " kr",-12}" +
                 $"{productPriceTypeInput,-15}";
 
             // Skriv ut header, avskiljare och data
@@ -67,7 +77,8 @@ namespace Kassasystemet_refac
             CenterConsoleOutput.CenterTextToWindow(infoRow);
 
             Console.ResetColor();
-            ValidatedConsoleInput.PauseCentered("Tryck valfri tangent för att fortsätta...");
+            ValidatedConsoleInput.PauseCentered(
+                "Tryck valfri tangent för att fortsätta...");
 
 
             var afterSaveMenu = new ConsoleOptionsArrow();
@@ -77,7 +88,10 @@ namespace Kassasystemet_refac
                 "Tillbaka till produktsidan"
             };
 
-            int choice = afterSaveMenu.ShowArrow("Välj:", afterSaveOptions);
+            int choice = afterSaveMenu.ShowArrow(
+                "Välj:", 
+                afterSaveOptions);
+
             if (choice == 0)
             {
                 Run();

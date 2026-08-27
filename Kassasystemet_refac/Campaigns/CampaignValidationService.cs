@@ -44,9 +44,6 @@ namespace Kassasystemet_refac
             {
                 throw new ArgumentException("Fel format. Ex: 2026-03-03");
             }
-
-            //if (campaignEndDateInput < campaignStartDateInput)
-            //    throw new ArgumentException("Slutdatum kan inte vara före startdatum.");
         }
         public static void ValidateProductIdNumbers(string productIdNumbersInput)
         {

@@ -1,3 +1,4 @@
 3;Äling;Larsson
 4; Franz; Kafka
 5;Lina;Samuelsson
+6;Hasse;Hund
