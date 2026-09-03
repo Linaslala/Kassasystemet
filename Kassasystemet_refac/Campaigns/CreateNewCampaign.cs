@@ -92,19 +92,6 @@ namespace Kassasystemet_refac
             NotificationService.ShowSuccessHeader(
              "=== Ny kampanj skapad ===");
 
-
-
-            //CenterConsoleOutput.CenterTextToWindow(
-            //    $"Kampanj: " +
-            //    $"{newCampaign.CampaignName} " +
-            //    $"({newCampaign.TypeOfCampaign})");
-
-            //CenterConsoleOutput.CenterTextToWindow(
-            //    $"Gäller: {campaignStartDate:yyyy-MM-dd} till {campaignEndDate:yyyy-MM-dd}"
-            //);
-
-            //Console.WriteLine();
-
             var productReader = new ReadAllProductsFromFile();
             var allProducts = productReader.ReadAll();
 
@@ -119,40 +106,6 @@ namespace Kassasystemet_refac
             RenderCampaignProducts(
                 campaignProducts,
                 percentOff);
-
-            //var percentCampaign = newCampaign as PercentOffCampaign;
-
-            //if (campaignProducts.Any())
-            //{
-            //    CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
-            //    Console.WriteLine();
-
-            //    int tableWidth = 60;
-            //    int leftPadding = (Console.WindowWidth - tableWidth) / 2;
-            //    string indent = new string(' ', Math.Max(0, leftPadding));
-
-            //    Console.WriteLine(
-            //        indent + $"{"Produktnummer",-15}" +
-            //        $"{"Produktnamn",-30}" +
-            //        $"{"Rabattprocent",-15}"
-            //    );
-
-            //    Console.WriteLine(indent + new string('-', 60));
-
-            //    foreach (var product in campaignProducts)
-            //    {
-            //        Console.WriteLine(indent + 
-            //            $"{product.ProductIdNumber,-15}" +
-            //            $"{product.ProductName,-30}" +
-            //            $"{percentOff + " %",-15}");
-            //    }
-            //}
-
-            ////Syns detta i konsolfönstret?
-            //else
-            //{
-            //    CenterConsoleOutput.CenterTextToWindow("OBS: Inga matchande produkter hittades för angivna produktnummer.");
-            //}
 
             Console.ResetColor();
             ValidatedConsoleInput.PauseCentered(
@@ -176,8 +129,7 @@ namespace Kassasystemet_refac
         }
 
         public static void RenderCreatedCampaign(
-            ICampaignModel campaign
-            /*IEnumerable<IProductModel> campaignProducts*/)
+            ICampaignModel campaign)
         {
 
             CenterConsoleOutput.CenterTextToWindow(
@@ -189,57 +141,15 @@ namespace Kassasystemet_refac
                 $"Gäller: {campaign.CampaignStartDate:yyyy-MM-dd} " +
                 $"till {campaign.CampaignEndDate:yyyy-MM-dd}"
             );
-
-            //Console.WriteLine();
-
-            //var productReader = new ReadAllProductsFromFile();
-            //var allProducts = productReader.ReadAll();
-
-            //var campaignProducts = allProducts
-            //    .Where(p => productIdNumbers.Contains(p.ProductIdNumber))
-            //    .OrderBy(p => p.ProductIdNumber)
-            //    .ToList();
-
-            //var percentCampaign = newCampaign as PercentOffCampaign;
-
-            //if (campaignProducts.Any())
-            //{
-            //    CenterConsoleOutput.CenterTextToWindow("Produkter i kampanjen:");
-            //    Console.WriteLine();
-            //}
-
-
-            //    int tableWidth = 60;
-            //    int leftPadding = (Console.WindowWidth - tableWidth) / 2;
-            //    string indent = new string(' ', Math.Max(0, leftPadding));
-
-            //    Console.WriteLine(
-            //        indent + $"{"Produktnummer",-15}" +
-            //                $"{"Produktnamn",-30}" +
-            //                $"{"Rabattprocent",-15}"
-            //            );
-
-            //    Console.WriteLine(indent + new string('-', 60));
-
-            //    foreach (var product in campaignProducts)
-            //    {
-            //        Console.WriteLine(indent +
-            //            $"{product.ProductIdNumber,-15}" +
-            //            $"{product.ProductName,-30}" +
-            //            $"{percentOff + " %",-15}");
-            //    }
-            //}
-
-            //Syns detta i konsolfönstret?
-            //else
-            //{
-            //    CenterConsoleOutput.CenterTextToWindow("OBS: Inga matchande produkter hittades för angivna produktnummer.");
-            //}
         }
 
         private static void RenderCampaignProducts(
+            //Parameter 1
+            //Innehåller alla produkter som ska visas
             IEnumerable<IProductModel> campaignProducts,
-            decimal pecentOff)
+            //Parameter 2
+            //Innehåller rabatten som ska visas
+            decimal percentOff)
         {
             if (campaignProducts.Any())
             {
@@ -251,6 +161,31 @@ namespace Kassasystemet_refac
                 CenterConsoleOutput.CenterTextToWindow(
                     "OBS: Inga matchande produkter hittades för angivna produktnummer.");
             }
+
+            int tableWidth = 60;
+
+            int leftPadding =
+                (Console.WindowWidth - tableWidth) / 2;
+
+            string indent =
+                new string(' ', Math.Max(0, leftPadding));
+
+            Console.WriteLine(
+                indent + $"{"Produktnummer",-15}" +
+                $"{"Produktnamn",-30}" +
+                $"{"Rabattprocent",-15}"
+            );
+
+            Console.WriteLine(indent + new string('-', 60));
+
+            foreach (var product in campaignProducts)
+            {
+                Console.WriteLine(indent +
+                    $"{product.ProductIdNumber,-15}" +
+                    $"{product.ProductName,-30}" +
+                    $"{percentOff + " %",-15}");
+            }
         }
     }
 }
+
