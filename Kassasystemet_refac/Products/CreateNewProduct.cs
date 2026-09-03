@@ -68,24 +68,11 @@ namespace Kassasystemet_refac
             ValidatedConsoleInput.PauseCentered(
                 "Tryck valfri tangent för att fortsätta...");
 
-
-            var afterSaveMenu = new ConsoleOptionsArrow();
-            var afterSaveOptions = new[]
-            {
-                "Registrera ny produkt",
-                "Tillbaka till produktsidan"
-            };
-
-            int choice = afterSaveMenu.ShowArrow(
-                "Välj:", 
-                afterSaveOptions);
-
-            if (choice == 0)
+            if (ShowAfterCreateMenu())
             {
                 Run();
                 return;
             }
-            return;
         }
 
         public static void RenderCreatedProduct(
@@ -114,5 +101,25 @@ namespace Kassasystemet_refac
             CenterConsoleOutput.CenterTextToWindow(row);
                   
         }
+
+        //Returnerar true om användaren vill skapa ytterligare en produkt.
+        private static bool ShowAfterCreateMenu()
+        {
+            var menu = new ConsoleOptionsArrow();
+
+            var options = new[]
+            {
+                "Skapa ny produkt",
+                "Tillbaka till produktsidan"
+            };
+
+            int choice = menu.ShowArrow(
+                "Välj:",
+                options);
+
+            return choice == 0;
+
+        }
     }
+
 }

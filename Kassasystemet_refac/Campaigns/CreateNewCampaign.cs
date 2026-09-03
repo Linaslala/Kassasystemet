@@ -111,30 +111,11 @@ namespace Kassasystemet_refac
             ValidatedConsoleInput.PauseCentered(
                 "Tryck valfri tangent för att fortsätta...");
 
-            //var afterSavedCampaignMenu = new ConsoleOptionsArrow();
-
-            //var afterSavedCampaignOptions = new[]
-            //{
-            //    "Skapa ny kampanj",
-            //    "Tillbaka till kampanjmenyn"
-            //};
-
-            //int choice = afterSavedCampaignMenu.ShowArrow(
-            //    "Välj:", 
-            //    afterSavedCampaignOptions);
-
-            //if (choice == 0)
-            //{
-            //    Run();
-            //    return;
-            //}
-
-            if (ShowAfterCreateMenu())
+             if (ShowAfterCreateMenu())
             {
                 Run();
                 return;
             }
-
         }
 
         public static void RenderCreatedCampaign(

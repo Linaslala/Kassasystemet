@@ -70,23 +70,11 @@
                 "Tryck valfri tangent för att fortsätta...");
 
 
-            var afterSaveMemberMenu = new ConsoleOptionsArrow();
-            var afterSaveMemberOptions = new[]
-            {
-                "Registrera ny medlem",
-                "Tillbaka till medlemssidan"
-            };
-
-            int choice = afterSaveMemberMenu.ShowArrow(
-                "Välj:",
-                afterSaveMemberOptions);
-
-            if (choice == 0)
+            if (ShowAfterCreateMenu())
             {
                 Run();
                 return;
             }
-            return;
         }
 
         //RenderCreatedMember() vet "Hur medlemmen visas"
@@ -111,6 +99,25 @@
             CenterConsoleOutput.CenterTextToWindow(header);
             CenterConsoleOutput.CenterTextToWindow(new string('-', row.Length));
             CenterConsoleOutput.CenterTextToWindow(row);
+        }
+
+        //Returnerar true om användaren vill registrera ytterligare en medlem.
+        private static bool ShowAfterCreateMenu()
+        {
+            var menu = new ConsoleOptionsArrow();
+
+            var options = new[]
+            {
+                "Registrera ny medlem",
+                "Tillbaka till medlemssidan"
+            };
+
+            int choice = menu.ShowArrow(
+                "Välj:",
+                options);
+
+            return choice == 0;
+
         }
     }
 }

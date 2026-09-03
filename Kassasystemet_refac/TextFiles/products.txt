@@ -4,3 +4,4 @@
 4; Hushållspapper;19.99; styckpris
 5;df<dsf;12;st
 6;Jordgubbar;50;kilopris
+7;Linser;15;kilopris
